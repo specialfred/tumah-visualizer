@@ -73,7 +73,7 @@ join in the house). The rules, in the order they apply:
 | Overshadowing in the open | מאהיל | Outside a tent, tumah defiles what is directly above and below it, up to anything that blocks | 9:1, 14:5 |
 | Compressed tumah | טומאה רצוצה | No tefach of air around it: it breaks through up to the sky and down to the depths. It does not enter tents it passes. | 7:1, 12:6, 14:7, 15:1 |
 | Vessels do not block | עושין אהל לטמא ולא לטהר | A vessel (or person, or something resting on them) roofing a tamei tent counts as full of tumah, which overshadows up and down | 6:1, 9:2 |
-| Halves of a wall | מחצה על מחצה | Tumah or a vessel inside a building element belongs to the nearer side; in the middle, to both | 6:3, 6:4 |
+| Halves of a wall | מחצה על מחצה | Tumah or a vessel inside a building element belongs to the nearer side; in the middle, to both. A closed space whose only ways out are closed doors into another tent (a cupboard in the wall) is seen as solid | 6:3, 6:4, 6:7 |
 | The floor is the house | ארצו של בית כמוהו | A closed gap under a house belongs to it, in both directions | 3:7, 15:5 |
 | Goes out, not in | דרך הטומאה לצאת | Tumah in a closed space goes out into the space around it; tumah outside does not enter | 3:7, 4:1, 8:6 |
 | No way out | | A closed space with only sub-tefach outlets breaks out through the building into the nearest spaces above and below it | 3:7, 6:5 |
@@ -186,6 +186,10 @@ either resolved by a distinction the model now encodes, or open.
    way out and the other tent carries the tumah, and only outward (from a tent to where it
    meets the open air). Rabbi Eliezer, for whom the projection joins in both directions, would
    need 14:1's "a projection brings at any width".
+11. **Tumah inside a table's square** (15:2, Bartenura, vs 6:1). Bartenura: tumah within the
+   bottomless frame a table sits on is kept in by it. But the table top over it is a vessel,
+   which counts as full of tumah and brings it down under its overhang (6:1, 9:2). *Open*: the
+   engine follows 6:1; no scenario asserts Bartenura's reading.
 
 ## Roadmap
 

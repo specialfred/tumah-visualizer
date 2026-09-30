@@ -99,8 +99,8 @@ export const RULES: Record<string, RuleDef> = Object.fromEntries(
       'chatzi-kotel',
       'Halves of a wall',
       'כותל המשמש את הבית נידון מחצה על מחצה',
-      'Tumah (or a vessel) inside the thickness of a building element belongs to the space on its nearer side; in the exact middle it belongs to both.',
-      ['6:3', '6:4', '4:1'],
+      'Tumah (or a vessel) inside the thickness of a building element belongs to the space on its nearer side; in the exact middle it belongs to both. A closed cupboard in the wall is seen as solid.',
+      ['6:3', '6:4', '6:7', '4:1'],
     ),
     r(
       'karka-habayis',

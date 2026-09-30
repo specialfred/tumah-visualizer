@@ -5,9 +5,9 @@ mishna’s ruling; the engine must reproduce the ruling from its general rules.
 
 🟢 modeled · 🟡 partly modeled · ⚪ not yet modeled · 🔵 not spatial (tracked as data)
 
-**22** modeled, **23** partly modeled, **50** not yet modeled, **39** not spatial — of 134 mishnayos.
+**25** modeled, **20** partly modeled, **50** not yet modeled, **39** not spatial — of 134 mishnayos.
 
-Scenarios: **143** passing, **0** failing, **3** pending.
+Scenarios: **152** passing, **0** failing, **3** pending.
 
 ## Chapter 1
 
@@ -71,12 +71,12 @@ Scenarios: **143** passing, **0** failing, **3** pending.
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
 | 6:1 | 🟡 partial | ✅ 6:1/people/tumah-below<br>✅ 6:1/people/tumah-above<br>✅ 6:1/dung-vessels/tumah-below<br>✅ 6:1/stones/tumah-below<br>✅ 6:1/stones/tumah-above | Supports modeled. Not yet: Rabbi Eliezer; “any living creature” as support. |
-| 6:2 | 🟡 partial | ✅ 6:2/door-stands<br>✅ 6:2/door-on-key | A door standing by itself or held up by its key modeled. Not yet: a barrel of figs in a window, and jars plastered into a partition. |
+| 6:2 | 🟢 modeled | ✅ 6:2/figs-stand<br>✅ 6:2/figs-in-barrel<br>✅ 6:2/jars-plaster-stands<br>✅ 6:2/jars-plaster-on-jars<br>✅ 6:2/door-stands<br>✅ 6:2/door-on-key | The straw basket follows the barrel of figs. |
 | 6:3 | 🟢 modeled | ✅ 6:3/inner-half<br>✅ 6:3/outer-half<br>✅ 6:3/middle/chachamim<br>✅ 6:3/middle/meir<br>✅ 6:3/outer-half/yehuda |  |
 | 6:4 | 🟢 modeled | ✅ 6:4/lower-half<br>✅ 6:4/upper-half<br>✅ 6:4/middle<br>✅ 6:4/lower-half/yehuda<br>✅ 6:4/vessel-lower-half/tumah-below<br>✅ 6:4/vessel-lower-half/tumah-above<br>✅ 6:4/vessel-middle/tumah-above | Vessels in a wall between two houses (first half of the mishna) follow the same rule; no separate scenario yet. |
 | 6:5 | 🟢 modeled | ✅ 6:5/tefach<br>✅ 6:5/small<br>✅ 6:5/seen/tefach<br>✅ 6:5/seen/small | Per Rabbi Yehuda (all the plaster belongs to the upper story), as Bartenura reads the mishna. |
 | 6:6 | 🟡 partial | ✅ 6:6/under-pillar | Tumah under a pillar modeled. Not yet: a house serving a wall (tomb niches) with a covering thin as garlic skin. |
-| 6:7 | 🟡 partial | ✅ 6:7/under-pillar<br>✅ 6:7/under-pillar/yochanan-ben-nuri<br>✅ 6:7/under-capital/tefach<br>✅ 6:7/under-capital/small | The capital of a pillar modeled, with Rabbi Yochanan ben Nuri. Not yet: two wall-cupboards, one opened. |
+| 6:7 | 🟢 modeled | ✅ 6:7/under-pillar<br>✅ 6:7/under-pillar/yochanan-ben-nuri<br>✅ 6:7/under-capital/tefach<br>✅ 6:7/under-capital/small<br>✅ 6:7/cupboard-open<br>✅ 6:7/cupboards-closed/inner<br>✅ 6:7/cupboards-closed/outer | Cupboards one above the other follow the same rule as side by side. |
 
 ## Chapter 7
 
@@ -188,7 +188,7 @@ Scenarios: **143** passing, **0** failing, **3** pending.
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
 | 15:1 | 🟢 modeled | ✅ 15:1/cloak-low<br>✅ 15:1/cloak-raised<br>✅ 15:1/wood<br>✅ 15:1/marble<br>✅ 15:1/folded-low<br>✅ 15:1/folded-high |  |
-| 15:2 | 🟡 partial | ✅ 15:2/corners | Tablets touching at their corners modeled. Not yet: a table, which brings only if it extends a tefach beyond its frame. |
+| 15:2 | 🟢 modeled | ✅ 15:2/corners<br>✅ 15:2/table/tefach<br>✅ 15:2/table/narrow | Not yet: Bartenura’s note that tumah inside the square is kept in (DESIGN tension 11). |
 | 15:3 | ⚪ todo | — | Jars touching one another in the open. |
 | 15:4 | 🟢 modeled | ✅ 15:4/tumah-in-house<br>✅ 15:4/tumah-behind<br>✅ 15:4/behind/tefach<br>✅ 15:4/behind/small | Modeled with boards from the side; boards or curtains under the beams follow the same rule. |
 | 15:5 | 🟢 modeled | ✅ 15:5/gap-tefach/tumah-below<br>✅ 15:5/gap-small/tumah-below<br>✅ 15:5/gap-tefach/tumah-in-house<br>✅ 15:5/gap-small/tumah-in-house |  |
