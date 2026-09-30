@@ -125,23 +125,27 @@ function Capsule({ a, b, r, mesh, mat }: { a: Vec3; b: Vec3; r: number } & PartP
 
 /** A standing person: legs, torso, arms and head, shoulders across W. */
 function Figure({ h, W, D, mesh, mat }: { h: number; W: number; D: number } & PartProps) {
-  const rh = Math.min(0.065 * h, 0.42 * W);
-  const neck = h - 1.8 * rh;
+  const rh = Math.min(0.065 * h, 0.25 * W, 0.6 * D);
+  const neck = h - 1.85 * rh;
   const hip = 0.48 * h;
-  const rt = Math.min(0.3 * W, 0.48 * D);
-  const rl = Math.min(0.13 * W, 0.35 * D);
-  const ra = Math.min(0.09 * W, 0.3 * D);
-  const shoulder = neck - rt;
+  // The torso is wider across the shoulders than it is deep: a round capsule stretched sideways.
+  const tw = 0.25 * W;
+  const td = Math.min(0.4 * D, tw);
+  const rl = Math.min(0.08 * W, 0.3 * D);
+  const ra = Math.min(0.06 * W, 0.25 * D);
+  const shoulder = neck - td;
   const p = { mesh, mat };
   return (
     <group>
       {[-1, 1].map((s) => (
         <group key={s}>
-          <Capsule a={[s * 0.2 * W, 0, rl]} b={[s * 0.17 * W, 0, hip]} r={rl} {...p} />
-          <Capsule a={[s * (rt + ra), 0, shoulder]} b={[s * (rt + ra * 1.4), 0, hip]} r={ra} {...p} />
+          <Capsule a={[s * 0.1 * W, 0, rl]} b={[s * 0.1 * W, 0, hip]} r={rl} {...p} />
+          <Capsule a={[s * (tw + ra * 0.6), 0, shoulder]} b={[s * (tw + ra * 1.2), 0, hip - 0.04 * h]} r={ra} {...p} />
         </group>
       ))}
-      <Capsule a={[0, 0, hip + rt * 0.6]} b={[0, 0, shoulder]} r={rt} {...p} />
+      <group scale={[tw / td, 1, 1]}>
+        <Capsule a={[0, 0, hip]} b={[0, 0, shoulder]} r={td} {...p} />
+      </group>
       <mesh {...mesh} position={[0, 0, h - rh]}>
         <sphereGeometry args={[rh, 20, 14]} />
         {mat}
