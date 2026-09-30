@@ -14,7 +14,51 @@ function beamScene(width: number): SceneObject[] {
   ];
 }
 
+// 12:5 — roof beams of a house and of its upper story, with no plaster over them. Lower beams a
+// tefach wide with a tefach between them, six tefachim up; upper beams three tefachim above.
+function beams(staggered: boolean, where: 'under' | 'between'): SceneObject[] {
+  const objs: SceneObject[] = [
+    solid('wall-a', 'Wall', 'structure', 'stone', [-1, -1, 0], [1, 10, 10]),
+    solid('wall-b', 'Wall', 'structure', 'stone', [9, -1, 0], [1, 10, 10]),
+  ];
+  for (let n = 0; n < 4; n++) {
+    objs.push(solid(`lower${n}`, 'Lower beam', 'structure', 'wood', [-1, 2 * n, 6], [11, 1, 0.5]));
+    objs.push(solid(`upper${n}`, 'Upper beam', 'structure', 'wood', [-1, 2 * n + (staggered ? 1 : 0), 9], [11, 1, 0.5]));
+  }
+  objs.push(
+    where === 'under' ? kezayis('tumah', [2, 2.25, 0]) : kezayis('tumah', [2, 2.25, 6.5]),
+    kli('v-same', [6, 2.25, 0], 'Vessel under the same lower beam'),
+    kli('v-other', [6, 4.25, 0], 'Vessel under another lower beam'),
+    kli('v-between', [6, 2.25, 6.5], 'Vessel on the same lower beam, under the upper one'),
+  );
+  return objs;
+}
+
 export const ch12: Scenario[] = [
+  {
+    id: '12:5/aligned/under',
+    ref: '12:5',
+    title: { en: 'Beams in line, without plaster — tumah under one', he: 'קורות הבית והעלייה' },
+    clause: { en: 'If there is uncleanness beneath one of them, all beneath that one becomes unclean.' },
+    scene: () => ({ objects: beams(false, 'under') }),
+    expect: { 'v-same': 'tamei', 'v-other': 'tahor', 'v-between': 'tahor' },
+  },
+  {
+    id: '12:5/aligned/between',
+    ref: '12:5',
+    title: { en: 'Beams in line — tumah between a lower and an upper beam' },
+    clause: { en: 'If it is between a lower and an upper [beam] what is between them becomes unclean.' },
+    scene: () => ({ objects: beams(false, 'between') }),
+    expect: { 'v-between': 'tamei', 'v-same': 'tahor' },
+  },
+  {
+    id: '12:5/staggered/under',
+    ref: '12:5',
+    title: { en: 'Upper beams over the gaps — tumah under one' },
+    clause: { en: 'Where the upper [roof beams] were [over the gaps] between the lower: If there is uncleanness beneath one of them, what is beneath all of them becomes unclean.' },
+    scene: () => ({ objects: beams(true, 'under') }),
+    expect: { 'v-same': 'tamei', 'v-other': 'tamei' },
+  },
   {
     id: '12:6/tefach-wide',
     ref: '12:6',

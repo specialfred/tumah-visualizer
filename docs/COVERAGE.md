@@ -5,9 +5,9 @@ mishna’s ruling; the engine must reproduce the ruling from its general rules.
 
 🟢 modeled · 🟡 partly modeled · ⚪ not yet modeled · 🔵 not spatial (tracked as data)
 
-**10** modeled, **9** partly modeled, **76** not yet modeled, **39** not spatial — of 134 mishnayos.
+**12** modeled, **12** partly modeled, **71** not yet modeled, **39** not spatial — of 134 mishnayos.
 
-Scenarios: **57** passing, **0** failing, **1** pending.
+Scenarios: **75** passing, **0** failing, **1** pending.
 
 ## Chapter 1
 
@@ -43,7 +43,7 @@ Scenarios: **57** passing, **0** failing, **1** pending.
 | 3:3 | ⚪ todo | — | Blood poured on a slope or into a hollow; on a threshold. Hair, teeth and nails. |
 | 3:4 | ⚪ todo | — | A corpse outside with its hair inside; flesh on bones partly inside (connected parts). |
 | 3:5 | 🔵 catalog | — | What is “mixed blood”. |
-| 3:6 | ⚪ todo | — | Exit sizes are implemented (a tefach for an olive’s bulk, 4×4 for a corpse); needs scenarios. |
+| 3:6 | 🟡 partial | ✅ 3:6/kezayis-window<br>✅ 3:6/corpse-window<br>✅ 3:6/corpse-big-window | Modeled with intent to take the tumah out by a window (Bartenura). Not yet: an open window without intent, which the engine treats like an open door. |
 | 3:7 | 🟡 partial | ✅ 3:7/space-outlet/tumah-in-drain<br>✅ 3:7/space-outlet/tumah-in-house<br>✅ 3:7/space-no-outlet/tumah-in-drain<br>✅ 3:7/space-no-outlet/tumah-in-house<br>✅ 3:7/no-space/tumah-in-drain<br>✅ 3:7/no-space/tumah-in-house | Drain cases modeled. Natural cavities and Rabbi Yehuda’s dispute not yet. |
 
 ## Chapter 4
@@ -73,7 +73,7 @@ Scenarios: **57** passing, **0** failing, **1** pending.
 | 6:1 | 🟡 partial | ✅ 6:1/people/tumah-below<br>✅ 6:1/people/tumah-above<br>✅ 6:1/dung-vessels/tumah-below<br>✅ 6:1/stones/tumah-below<br>✅ 6:1/stones/tumah-above | Supports modeled. Not yet: Rabbi Eliezer; “any living creature” as support. |
 | 6:2 | ⚪ todo | — | A door that stands by itself; a barrel of figs in a window; plastered jars as a partition. |
 | 6:3 | 🟢 modeled | ✅ 6:3/inner-half<br>✅ 6:3/outer-half<br>✅ 6:3/middle/chachamim<br>✅ 6:3/middle/meir<br>✅ 6:3/outer-half/yehuda |  |
-| 6:4 | 🟡 partial | ✅ 6:4/lower-half<br>✅ 6:4/upper-half<br>✅ 6:4/middle<br>✅ 6:4/lower-half/yehuda | Tumah in walls and plaster modeled; vessels inside the wall and plaster need scenarios. |
+| 6:4 | 🟢 modeled | ✅ 6:4/lower-half<br>✅ 6:4/upper-half<br>✅ 6:4/middle<br>✅ 6:4/lower-half/yehuda<br>✅ 6:4/vessel-lower-half/tumah-below<br>✅ 6:4/vessel-lower-half/tumah-above<br>✅ 6:4/vessel-middle/tumah-above | Vessels in a wall between two houses (first half of the mishna) follow the same rule; no separate scenario yet. |
 | 6:5 | ⚪ todo | — | Tumah among roof beams under a covering thin as garlic skin. |
 | 6:6 | ⚪ todo | — | A house serving a wall (garlic skin); tumah under a pillar. |
 | 6:7 | ⚪ todo | — | Under the capital of a pillar; two wall-cupboards. |
@@ -84,7 +84,7 @@ Scenarios: **57** passing, **0** failing, **1** pending.
 | --- | --- | --- | --- |
 | 7:1 | ⚪ todo | — | Tumah in a tefach space in a wall and the stories above it; a solid monument (closed grave). |
 | 7:2 | ⚪ todo | — | Sloping tent sides; touching a tent from inside vs outside. |
-| 7:3 | ⚪ todo | — | Doors and intention are implemented; needs scenarios, and Beis Shammai/Beis Hillel on timing. |
+| 7:3 | 🟡 partial | ✅ 7:3/all-closed<br>✅ 7:3/one-open<br>✅ 7:3/intent | Doors, an opened door and intent modeled. Not yet: Beis Shammai/Beis Hillel on when intent works, and a blocked doorway being reopened. |
 | 7:4 | 🔵 catalog | — | A woman in difficult labor carried between houses. |
 | 7:5 | 🔵 catalog | — | Twins, one stillborn. |
 | 7:6 | 🔵 catalog | — | Saving the mother’s life. |
@@ -137,8 +137,8 @@ Scenarios: **57** passing, **0** failing, **1** pending.
 
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
-| 11:1 | ⚪ todo | — | A split house (Beis Shammai: 4 tefachim; Beis Hillel: any size). |
-| 11:2 | ⚪ todo | — | A split portico; a leg or a reed over the split. |
+| 11:1 | 🟡 partial | ✅ 11:1/tumah-outer<br>✅ 11:1/tumah-inner/beis-hillel | Beis Hillel (a split of any size) modeled. Not yet: Beis Shammai (4 tefachim) and Rabbi Yose (a tefach). |
+| 11:2 | 🟡 partial | ✅ 11:2/split<br>✅ 11:2/leg | The split and a leg over it modeled. Not yet: a reed, which joins only a tefach off the ground. |
 | 11:3 | ⚪ todo | — | A thick cloak or block a tefach off the ground; a person under the split (אדם חלול). |
 | 11:4 | ⚪ todo | — | A person leaning out of a window over a funeral. |
 | 11:5 | ⚪ todo | — | A person lying on a threshold. |
@@ -155,7 +155,7 @@ Scenarios: **57** passing, **0** failing, **1** pending.
 | 12:2 | ⚪ todo | — | Netting over an oven with a sealed lid. |
 | 12:3 | ⚪ todo | — | A board projecting from the ends of an old oven; a betach. |
 | 12:4 | ⚪ todo | — | The shoe of a cradle through a hole in the ceiling. |
-| 12:5 | ⚪ todo | — | Roof beams of a house and upper story without plaster, aligned or staggered. |
+| 12:5 | 🟢 modeled | ✅ 12:5/aligned/under<br>✅ 12:5/aligned/between<br>✅ 12:5/staggered/under |  |
 | 12:6 | 🟢 modeled | ✅ 12:6/tefach-wide<br>✅ 12:6/narrow | Round beams (circumference three tefachim) not yet: the grid models square cross-sections. |
 | 12:7 | ⚪ todo | — | A column lying in the open (circumference 24 tefachim). |
 | 12:8 | ⚪ todo | — | An olive’s bulk stuck to the threshold or lintel; touching the threshold. |
@@ -187,7 +187,7 @@ Scenarios: **57** passing, **0** failing, **1** pending.
 
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
-| 15:1 | 🟡 partial | ✅ 15:1/wood<br>✅ 15:1/marble | Tablets modeled; thick cloaks and folded garments need scenarios. |
+| 15:1 | 🟡 partial | ✅ 15:1/cloak-low<br>✅ 15:1/cloak-raised<br>✅ 15:1/wood<br>✅ 15:1/marble | Tablets and a thick cloak modeled; garments folded one above another need a scenario. |
 | 15:2 | ⚪ todo | — | Tablets touching at their corners; a table. |
 | 15:3 | ⚪ todo | — | Jars touching one another in the open. |
 | 15:4 | ⚪ todo | — | A house partitioned by boards or curtains from the sides or the beams. |

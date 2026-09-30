@@ -28,7 +28,42 @@ function raisedFloor(gap: number, tumahBelow: boolean): SceneObject[] {
   ];
 }
 
+// 15:1 — a thick woolen cloak (a garment, which can become tamei), lying low or raised a tefach.
+function cloak(raised: boolean): SceneObject[] {
+  const z = raised ? 1 : 0.5; // low: less than a tefach up, touching nothing
+  const stones = raised
+    ? [
+        [0, 0],
+        [3.5, 0],
+        [0, 3.5],
+        [3.5, 3.5],
+      ].map(([x, y], n) => solid(`stone${n + 1}`, 'Stone', 'misc', 'stone', [x, y, 0], [0.5, 0.5, 1]))
+    : [];
+  return [
+    solid('cloak', { en: 'Thick woolen cloak', he: 'סגוס עבה' }, 'vessel', 'cloth', [0, 0, z], [4, 4, 0.25]),
+    ...stones,
+    kezayis('tumah', [1, 1, 0], 1, [0.25, 0.25, 0.25]),
+    kli('kli-under', [2.75, 2.75, 0], 'Vessel under the cloak, away from the tumah', [0.25, 0.25, 0.25]),
+  ];
+}
+
 export const ch15: Scenario[] = [
+  {
+    id: '15:1/cloak-low',
+    ref: '15:1',
+    title: { en: 'A thick cloak lying low over tumah', he: 'סגוס עבה' },
+    clause: { en: 'A thick woolen jacket or a thick wooden block does not bring uncleanness until they are one handbreadth high off the ground.' },
+    scene: () => ({ objects: cloak(false) }),
+    expect: { 'kli-under': 'tahor' },
+  },
+  {
+    id: '15:1/cloak-raised',
+    ref: '15:1',
+    title: { en: 'A thick cloak raised a tefach over tumah' },
+    clause: { en: '...until they are one handbreadth high off the ground.' },
+    scene: () => ({ objects: cloak(true) }),
+    expect: { 'kli-under': 'tamei' },
+  },
   {
     id: '15:1/wood',
     ref: '15:1',

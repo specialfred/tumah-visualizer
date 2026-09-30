@@ -8,7 +8,7 @@ export const GROUND = -2;
 
 /** Depth of earth modeled below z = 0. Everything under it is "the depths". */
 const GROUND_DEPTH = 2 * TEFACH;
-const MARGIN = 2 * TEFACH;
+const MARGIN = 3 * TEFACH;
 
 export interface Analysis {
   scene: Scene;
