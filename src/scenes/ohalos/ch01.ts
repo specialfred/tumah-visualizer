@@ -1,5 +1,9 @@
 import { corpse, kli, person } from '../../engine/build';
+import type { Vec3 } from '../../engine/types';
 import type { Scenario } from '../types';
+
+// Vessels here are pots three tefachim on a side, so they read at the scale of a person.
+const POT: Vec3 = [3, 3, 3];
 
 // Chains of contact. The corpse lies in the open so that only touching matters.
 export const ch01: Scenario[] = [
@@ -25,10 +29,11 @@ export const ch01: Scenario[] = [
     scene: () => ({
       objects: [
         corpse('corpse', [0, 0, 0]),
-        kli('k1', [18, 0, 0], 'First vessel'),
-        kli('k2', [18.5, 0, 0], 'Second vessel'),
-        person('p', [19, 0, 0], 'Person touching the second vessel'),
-        kli('k3', [18.5, 0.5, 0], 'Vessel touching the second vessel'),
+        kli('k1', [18, 0, 0], 'First vessel', POT),
+        kli('k2', [21, 0, 0], 'Second vessel', POT),
+        person('p', [24, 0, 0], 'Person touching the second vessel'),
+        // Narrower, so it touches only the second vessel and not the person beside it.
+        kli('k3', [21, 3, 0], 'Vessel touching the second vessel', [2.5, 3, 3]),
       ],
     }),
     expect: { k1: 'tamei7', k2: 'tamei7', p: 'tameiErev', k3: 'tameiErev' },
@@ -43,10 +48,10 @@ export const ch01: Scenario[] = [
     scene: () => ({
       objects: [
         corpse('corpse', [0, 0, 0]),
-        kli('k1', [18, 0, 0], 'Vessel touching the corpse'),
-        person('p1', [18.5, 0, 0], 'Person touching the vessel'),
-        kli('k2', [24.5, 0, 0], 'Vessel touching the person'),
-        person('p2', [25, 0, 0], 'Fourth: a person'),
+        kli('k1', [18, 0, 0], 'Vessel touching the corpse', POT),
+        person('p1', [21, 0, 0], 'Person touching the vessel'),
+        kli('k2', [27, 0, 0], 'Vessel touching the person', POT),
+        person('p2', [30, 0, 0], 'Fourth: a person'),
       ],
     }),
     expect: { k1: 'tamei7', p1: 'tamei7', k2: 'tamei7', p2: 'tameiErev' },
@@ -62,8 +67,8 @@ export const ch01: Scenario[] = [
       objects: [
         corpse('corpse', [0, 0, 0]),
         person('p', [18, 0, 0], 'Person touching the corpse'),
-        kli('k', [24, 0, 0], 'Vessel touching him'),
-        kli('k2', [24.5, 0, 0], 'Third: a vessel'),
+        kli('k', [24, 0, 0], 'Vessel touching him', POT),
+        kli('k2', [27, 0, 0], 'Third: a vessel', POT),
       ],
     }),
     expect: { p: 'tamei7', k: 'tamei7', k2: 'tameiErev' },
