@@ -107,6 +107,47 @@ function earthHouse(): SceneObject[] {
   ];
 }
 
+// 15:10 — a person standing between a corpse and a pot, 3 tefachim on a side, each arm reaching
+// over one of them. `hand` says whether each hand touches what is below it or only overshadows
+// it; `width` is how wide his hands are.
+type Reach = 'touch' | 'over';
+function reaching(toCorpse: Reach, toPot: Reach, width: number): SceneObject[] {
+  const arm = (x: number, len: number, reach: Reach) => box([x, 1.5 - width / 2, reach === 'touch' ? 3 : 5], [len, width, 0.75]);
+  return [
+    {
+      id: 'person',
+      label: { en: 'A person reaching out with both hands', he: 'אדם' },
+      kind: 'person',
+      material: 'flesh',
+      parts: [box([12, 0, 0], [3, 3, 18]), arm(4, 8, toCorpse), arm(15, 7, toPot)],
+    },
+    // The corpse lies under his right hand: its top at 3 tefachim, so a hand at 3 touches it.
+    solid('tumah', { en: 'Corpse', he: 'מת' }, 'tumah', 'flesh', [-10, -1.5, 1], [18, 6, 2], { tumah: { kind: 'meis' } }),
+    kli('pot', [18, 0, 0], 'Pot under his left hand', [3, 3, 3]),
+  ];
+}
+
+// 15:10 — two houses side by side, each with half an olive's bulk, windows facing each other. A
+// person stands between them with a hand through each window.
+function twoHouses(width: number): SceneObject[] {
+  const hand = (x: number, len: number) => box([x, 3 - width / 2, 3], [len, width, 1.25]);
+  return [
+    ...room({ id: 'house-a', label: { en: 'First house', he: 'בית ראשון' }, at: [0, 0], size: [6, 6, 6], openings: [{ side: 'x+', offset: 2, width: 2, height: 2, sill: 2 }] }),
+    ...room({ id: 'house-b', label: { en: 'Second house', he: 'בית שני' }, at: [16, 0], size: [6, 6, 6], openings: [{ side: 'x-', offset: 2, width: 2, height: 2, sill: 2 }] }),
+    {
+      id: 'person',
+      label: { en: 'A person with a hand in each house', he: 'אדם' },
+      kind: 'person',
+      material: 'flesh',
+      parts: [box([9.5, 1.5, 0], [3, 3, 18]), hand(4, 5.5), hand(12.5, 5.5)],
+    },
+    kezayis('tumah-a', [1, 1, 0], 0.5),
+    kezayis('tumah-b', [20, 1, 0], 0.5),
+    kli('v-a', [1, 4.5, 0], 'Vessel in the first house'),
+    kli('v-b', [20, 4.5, 0], 'Vessel in the second house'),
+  ];
+}
+
 // 15:5 — a floor of boards laid over the floor of a house, with a closed space beneath it.
 function raisedFloor(gap: number, tumahBelow: boolean): SceneObject[] {
   return [
@@ -296,5 +337,63 @@ export const ch15: Scenario[] = [
     clause: { en: 'Even if the uncleanness is by the side of the vessels, the uncleanness cleaves upwards and downwards.' },
     scene: () => ({ objects: earthHouse() }),
     expect: { 'kli-beside': 'tahor', 'kli-over': 'tamei' },
+  },
+  {
+    id: '15:10/touch-touch',
+    ref: '15:10',
+    title: { en: 'Touching a corpse with one hand and a pot with the other', he: 'הנוגע במת ונוגע בכלים' },
+    clause: { en: 'One who touches a corpse and touches vessels... they [the vessels] are unclean.' },
+    scene: () => ({ objects: reaching('touch', 'touch', 0.5) }),
+    expect: { pot: 'tamei7' },
+  },
+  {
+    id: '15:10/over-touch',
+    ref: '15:10',
+    title: { en: 'Overshadowing a corpse and touching a pot' },
+    clause: { en: 'One who overshadows a corpse and touches vessels, they [the vessels] are unclean.' },
+    scene: () => ({ objects: reaching('over', 'touch', 0.5) }),
+    expect: { pot: 'tamei7' },
+  },
+  {
+    id: '15:10/over-over',
+    ref: '15:10',
+    title: { en: 'Overshadowing both a corpse and a pot, with narrow hands' },
+    clause: { en: 'One who overshadows a corpse and overshadows vessels... they [the vessels] are clean.' },
+    scene: () => ({ objects: reaching('over', 'over', 0.5) }),
+    expect: { pot: 'tahor' },
+  },
+  {
+    id: '15:10/touch-over',
+    ref: '15:10',
+    title: { en: 'Touching a corpse and overshadowing a pot, with narrow hands' },
+    clause: { en: 'One who touches a corpse and overshadows vessels, they [the vessels] are clean.' },
+    scene: () => ({ objects: reaching('touch', 'over', 0.5) }),
+    expect: { pot: 'tahor' },
+  },
+  {
+    id: '15:10/over-over/tefach',
+    ref: '15:10',
+    title: { en: 'Overshadowing both a corpse and a pot, with hands a tefach wide' },
+    clause: { en: 'If his hands are a handbreadth wide, they are unclean.' },
+    notes: 'His hand over the corpse is a tent over it, and he, being a person, does not block: he is full of tumah, and his other hand brings it onto the pot (Bartenura).',
+    scene: () => ({ objects: reaching('over', 'over', 1) }),
+    expect: { pot: 'tamei' },
+  },
+  {
+    id: '15:10/two-houses/tefach',
+    ref: '15:10',
+    title: { en: 'Half an olive in each of two houses, a hand a tefach wide in each', he: 'שני בתים' },
+    clause: { en: 'Two houses, and in each there is a half an olive’s worth of corpse and he puts one hand into each house: if his hands are a handbreadth wide, he brings uncleanness.' },
+    notes: 'His hands and body join the two houses into one tent, and the two halves combine (Bartenura).',
+    scene: () => ({ objects: twoHouses(1) }),
+    expect: { 'v-a': 'tamei', 'v-b': 'tamei' },
+  },
+  {
+    id: '15:10/two-houses/narrow',
+    ref: '15:10',
+    title: { en: 'Half an olive in each of two houses, narrow hands' },
+    clause: { en: 'But if not, he does not bring uncleanness.' },
+    scene: () => ({ objects: twoHouses(0.75) }),
+    expect: { 'v-a': 'tahor', 'v-b': 'tahor' },
   },
 ];

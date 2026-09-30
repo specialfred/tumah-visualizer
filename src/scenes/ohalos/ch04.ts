@@ -1,4 +1,4 @@
-import { container, kezayis, kli, room } from '../../engine/build';
+import { box, boxesMinus, container, kezayis, kli, room } from '../../engine/build';
 import type { SceneObject } from '../../engine/types';
 import type { Scenario } from '../types';
 
@@ -18,6 +18,18 @@ function cupboardInHouse(gap: number, extra: SceneObject[]): SceneObject[] {
       volumeSeah: 40,
     }),
     ...extra,
+  ];
+}
+
+// 4:2 — a drawer of the cupboard: a closed box of 40 se'ah holding a tefach cube of space, whose
+// only outlet is a half-tefach hole facing into the house.
+function drawer(tumahInside: boolean): SceneObject[] {
+  const d = container({ id: 'drawer', label: { en: 'Drawer of the cupboard', he: 'תיבת המגדל' }, material: 'wood', at: [4, 3, 1], size: [1.5, 1.5, 1.5], wall: 0.25, mouth: 'none', volumeSeah: 40 });
+  return [
+    ...room({ id: 'house', at: [0, 0], size: [8, 8, 6], openings: [{ side: 'y-', offset: 3, width: 2, height: 5 }] }),
+    { ...d, parts: boxesMinus(d.parts, [box([4, 3.5, 1.5], [0.25, 0.5, 0.5])]) },
+    tumahInside ? kezayis('tumah', [4.5, 3.5, 1.25], 1, [0.25, 0.25, 0.25]) : kezayis('tumah', [1, 6, 0]),
+    tumahInside ? kli('kli-house', [1, 6, 0], 'Vessel in the house') : kli('kli-drawer', [4.75, 4, 1.25], 'Vessel in the drawer', [0.25, 0.25, 0.25]),
   ];
 }
 
@@ -65,5 +77,31 @@ export const ch04: Scenario[] = [
       objects: cupboardInHouse(0.5, [kezayis('tumah', [5, 5, 0], 1, [0.25, 0.25, 0.25]), kli('kli-house', [1, 1, 0], 'Vessel in the house')]),
     }),
     expect: { 'kli-house': 'tamei' },
+  },
+  {
+    id: '4:2/tumah-inside',
+    ref: '4:2',
+    title: { en: 'A drawer with a small outlet — tumah inside', he: 'תיבת המגדל' },
+    clause: { en: 'If there is uncleanness inside it, the house becomes unclean.' },
+    notes: 'In the end the tumah will come out, even through the small outlet, so it goes out now (Bartenura).',
+    scene: () => ({ objects: drawer(true) }),
+    expect: { 'kli-house': 'tamei' },
+  },
+  {
+    id: '4:2/tumah-in-house',
+    ref: '4:2',
+    title: { en: 'A drawer with a small outlet — tumah in the house' },
+    clause: { en: 'But if there is uncleanness in the house, that which is within [the drawer] remains clean, for the manner of uncleanness is to go out and not to go in.' },
+    scene: () => ({ objects: drawer(false) }),
+    expect: { 'kli-drawer': 'tahor' },
+  },
+  {
+    id: '4:2/tumah-inside/yose',
+    ref: '4:2',
+    title: { en: 'A drawer with a small outlet — tumah inside (Rabbi Yose)' },
+    clause: { en: 'Rabbi Yose declares [the house] clean, since he can remove [the uncleanness] by halves or burn it where it stands.' },
+    shittos: { 'drawer-halves': 'yose' },
+    scene: () => ({ objects: drawer(true) }),
+    expect: { 'kli-house': 'tahor' },
   },
 ];

@@ -615,8 +615,11 @@ class Ctx {
         if (v === GROUND || separatesCell(a, v)) break;
         if (a.scene.objects[v].kind === 'tumah') continue;
         if (a.brings[v]) {
-          // A roof that is part of the tumah's own tent is already tamei with it.
-          if (!this.solidPerson(v) && !a.objCells[v].some((i) => a.region[i] && a.region[i] === a.region[tcells[0]])) filled.add(v);
+          // A roof that is part of the tumah's own tent is already tamei with it; a vessel guarding
+          // its inside is not a roof over it (4:2).
+          const own = a.region[tcells[0]];
+          const ownRoof = this.interiorOf[own] === v || a.objCells[v].some((i) => a.region[i] && a.region[i] === own);
+          if (!this.solidPerson(v) && !ownRoof) filled.add(v);
           break;
         }
       }
@@ -657,7 +660,8 @@ class Ctx {
         if (separatesCell(a, v)) break;
         if (a.scene.objects[v].kind === 'tumah') continue;
         if (a.brings[v]) {
-          if (!this.solidPerson(v)) filled.add(v);
+          // A vessel guarding its own inside is not a roof over it: tumah there goes out (4:1, 4:2).
+          if (!this.solidPerson(v) && this.interiorOf[r] !== v) filled.add(v);
           break;
         }
       }
@@ -684,6 +688,9 @@ class Ctx {
     // Tumah inside a closed vessel goes out into the space around the vessel (8:6, 4:1).
     const c = this.interiorOf[r];
     if (c >= 0) {
+      // 4:2, Rabbi Yose: tumah in a closed space whose only outlet is small need not come out
+      // through it; it can be taken out in halves or burnt where it is.
+      if (shitah(this.shittos, 'drawer-halves') === 'yose' && this.hasOutlet(r)) return;
       const around = new Set<number>();
       for (const i of a.objCells[c])
         for (const j of neighbors6(a, i)) if (a.ohel[j] && a.region[j] !== r) around.add(a.region[j]);
@@ -767,6 +774,14 @@ class Ctx {
       }
     }
     return out;
+  }
+
+  /** Space `r` has an opening to the air around it (necessarily smaller than a tefach). */
+  hasOutlet(r: number): boolean {
+    const { a } = this;
+    return this.regionCells[r].some((i) =>
+      neighbors6(a, i).some((j) => a.region[j] !== r && a.cells[j] === AIR && !this.isInterior(j)),
+    );
   }
 
   /** Beis Shammai: a person is not hollow, so he is never "full of tumah" (11:3–11:6). */

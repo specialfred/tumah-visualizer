@@ -108,7 +108,7 @@ export const DISPUTES: Dispute[] = [
       o('yose', 'Rabbi Yose', 'רבי יוסי', 'The house stays tahor, since the tumah can be removed in halves or burnt in place.'),
     ],
     defaultOption: 'tanna-kamma',
-    modeled: false,
+    modeled: true,
   },
   {
     id: 'natural-ohel',
