@@ -2,28 +2,26 @@ import { box, container, kezayis, kli, person, room, solid } from '../../engine/
 import type { SceneObject } from '../../engine/types';
 import type { Scenario } from '../types';
 
-// 6:1 — a large flat stone (נדבך, per Bartenura) held up by different supports. The stone is
-// 4×4 tefachim, a quarter-tefach thick, twelve tefachim up.
+// 6:1 — a large flat stone (נדבך, per Bartenura) held up by different supports at its four
+// corners. The stone is 10×10 tefachim, a quarter-tefach thick, twelve tefachim up.
 type Support = 'people' | 'dung-vessels' | 'stones';
 function stoneOn(support: Support, tumahBelow: boolean): SceneObject[] {
   const h = 12;
-  const corners: [number, number][] = [
-    [0, 0],
-    [3, 0],
-    [0, 3],
-    [3, 3],
-  ];
-  const supports = corners.map(([x, y], n): SceneObject => {
+  const S = 10;
+  const supports = [0, 1, 2, 3].map((n): SceneObject => {
     const id = `support${n + 1}`;
-    if (support === 'people') return person(id, [x - 0.25, y, 0], 'Bearer', h);
+    const [w, d] = support === 'people' ? [4, 1.5] : [1, 1];
+    const x = n % 2 ? S - w : 0;
+    const y = n < 2 ? 0 : S - d;
+    if (support === 'people') return person(id, [x, y, 0], 'Bearer', h);
     if (support === 'stones') return solid(id, 'Stone', 'misc', 'stone', [x, y, 0], [1, 1, h]);
     return container({ id, label: 'Dung vessel', material: 'dung', at: [x, y, 0], size: [1, 1, h], wall: 0.25 });
   });
   return [
-    solid('stone', { en: 'Large stone', he: 'נדבך' }, 'misc', 'stone', [0, 0, h], [4, 4, 0.25]),
+    solid('stone', { en: 'Large stone', he: 'נדבך' }, 'misc', 'stone', [0, 0, h], [S, S, 0.25]),
     ...supports,
-    tumahBelow ? kezayis('tumah', [1.75, 1.75, 0]) : kezayis('tumah', [1.75, 1.75, h + 0.25]),
-    tumahBelow ? kli('kli-top', [2.75, 2.75, h + 0.25], 'Vessel on the stone') : kli('kli-below', [2.75, 2.75, 0], 'Vessel under the stone'),
+    tumahBelow ? kezayis('tumah', [4.75, 4.75, 0]) : kezayis('tumah', [4.75, 4.75, h + 0.25]),
+    tumahBelow ? kli('kli-top', [7, 5, h + 0.25], 'Vessel on the stone') : kli('kli-below', [7, 5, 0], 'Vessel under the stone'),
   ];
 }
 

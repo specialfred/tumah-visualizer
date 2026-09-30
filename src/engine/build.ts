@@ -71,8 +71,9 @@ export const kezayis = (id: string, at: Vec3, amount = 1, size: Vec3 = [0.5, 0.5
 export const corpse = (id: string, at: Vec3, length = 18) =>
   solid(id, 'Corpse', 'tumah', 'flesh', at, [length, 2, 1], { tumah: { kind: 'meis' } });
 
-export const person = (id: string, at: Vec3, label: string | Text = 'Person', height = 16) =>
-  solid(id, label, 'person', 'flesh', at, [1.5, 1, height]);
+/** A standing person: 4 tefachim across the shoulders (x) and 1½ front to back (y). */
+export const person = (id: string, at: Vec3, label: string | Text = 'Person', height = 16, footprint: [number, number] = [4, 1.5]) =>
+  solid(id, label, 'person', 'flesh', at, [footprint[0], footprint[1], height]);
 
 export interface ContainerSpec {
   id: string;
