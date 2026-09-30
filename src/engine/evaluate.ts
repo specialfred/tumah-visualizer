@@ -78,7 +78,7 @@ interface Exposures {
 }
 
 export function evaluate(scene: Scene, shittos: ShittosSelection = {}): Evaluation {
-  const a = analyze(scene);
+  const a = analyze(scene, shittos);
   const ctx = new Ctx(a, shittos);
   return ctx.run();
 }
@@ -207,6 +207,9 @@ class Ctx {
       return [...keys];
     }
     for (const i of a.objCells[oi]) cells.push(i);
+    // Something solid that can become tamei (a person, per Beis Shammai) is in the tents around it.
+    if (a.blocks[oi] && p.susceptible)
+      for (const i of a.objCells[oi]) for (const j of neighbors6(a, i)) if (a.ohel[j]) keys.add(`r${a.region[j]}`);
     const pockets = new Set<number>();
     for (const i of cells) {
       const r = a.region[i];
@@ -613,7 +616,7 @@ class Ctx {
         if (a.scene.objects[v].kind === 'tumah') continue;
         if (a.brings[v]) {
           // A roof that is part of the tumah's own tent is already tamei with it.
-          if (!a.objCells[v].some((i) => a.region[i] && a.region[i] === a.region[tcells[0]])) filled.add(v);
+          if (!this.solidPerson(v) && !a.objCells[v].some((i) => a.region[i] && a.region[i] === a.region[tcells[0]])) filled.add(v);
           break;
         }
       }
@@ -654,7 +657,7 @@ class Ctx {
         if (separatesCell(a, v)) break;
         if (a.scene.objects[v].kind === 'tumah') continue;
         if (a.brings[v]) {
-          filled.add(v);
+          if (!this.solidPerson(v)) filled.add(v);
           break;
         }
       }
@@ -741,7 +744,8 @@ class Ctx {
    */
   through(cells: number[], from: number): Set<number> {
     const { a } = this;
-    const movable = (v: number) => v >= 0 && a.blocks[v] && !isStructural(a, v) && a.scene.objects[v].kind !== 'door';
+    // A person (solid, per Beis Shammai) is not a partition that lets tumah out through it.
+    const movable = (v: number) => v >= 0 && a.blocks[v] && !isStructural(a, v) && !['door', 'person'].includes(a.scene.objects[v].kind);
     const seen = new Set<number>();
     const stack: number[] = [];
     const out = new Set<number>();
@@ -763,6 +767,11 @@ class Ctx {
       }
     }
     return out;
+  }
+
+  /** Beis Shammai: a person is not hollow, so he is never "full of tumah" (11:3–11:6). */
+  solidPerson(v: number): boolean {
+    return this.a.blocks[v] && this.a.scene.objects[v].kind === 'person';
   }
 
   adjacentDoors(r: number): number[] {
