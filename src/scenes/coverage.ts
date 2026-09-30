@@ -28,7 +28,7 @@ export const COVERAGE: MishnaCoverage[] = [
   c('3:7', 'partial', 'Drain cases modeled. Natural cavities and Rabbi Yehuda’s dispute not yet.'),
   // Chapter 4 — cupboards.
   c('4:1', 'partial', 'Modeled: cupboard in a house, gaps under it. Not yet: niches in its walls, the cupboard in the open, Rabbi Yose’s halves.'),
-  c('4:2', 'todo', 'A drawer with a tefach space and a small opening (Rabbi Yose: removable in halves).'),
+  c('4:2', 'modeled'),
   c('4:3', 'todo', 'A cupboard standing in a doorway opening outward; its base under the lintel.'),
   // Chapter 5 — ovens and hatches.
   c('5:1', 'todo', 'An oven in a house with its mouth outside (Beis Shammai, Beis Hillel, Rabbi Akiva).'),
@@ -40,7 +40,7 @@ export const COVERAGE: MishnaCoverage[] = [
   c('5:7', 'todo', 'A basket on pegs outside a wall; a pot hanging from a beam (Rabbi Akiva vs Sages).'),
   // Chapter 6.
   c('6:1', 'partial', 'Supports modeled. Not yet: Rabbi Eliezer; “any living creature” as support.'),
-  c('6:2', 'todo', 'A door that stands by itself; a barrel of figs in a window; plastered jars as a partition.'),
+  c('6:2', 'partial', 'A door standing by itself or held up by its key modeled. Not yet: a barrel of figs in a window, and jars plastered into a partition.'),
   c('6:3', 'modeled'),
   c('6:4', 'modeled', 'Vessels in a wall between two houses (first half of the mishna) follow the same rule; no separate scenario yet.'),
   c('6:5', 'todo', 'Tumah among roof beams under a covering thin as garlic skin.'),
@@ -48,7 +48,7 @@ export const COVERAGE: MishnaCoverage[] = [
   c('6:7', 'partial', 'The capital of a pillar modeled, with Rabbi Yochanan ben Nuri. Not yet: two wall-cupboards, one opened.'),
   // Chapter 7.
   c('7:1', 'partial', 'One upper story over two houses modeled. Not yet: a wall serving many stories (all tamei), a beach wall, and a solid monument (touching a closed grave).'),
-  c('7:2', 'todo', 'Sloping tent sides; touching a tent from inside vs outside.'),
+  c('7:2', 'partial', 'Sloping sides modeled. Not yet: touching the tent from inside or outside, a side trailing on the ground, and a tent over a hatch (Rabbi Yose vs Rabbi Shimon).'),
   c('7:3', 'partial', 'Doors, an opened door and intent modeled. Not yet: Beis Shammai/Beis Hillel on when intent works, and a blocked doorway being reopened.'),
   c('7:4', 'catalog', 'A woman in difficult labor carried between houses.'),
   c('7:5', 'catalog', 'Twins, one stillborn.'),
@@ -91,7 +91,7 @@ export const COVERAGE: MishnaCoverage[] = [
   c('12:4', 'todo', 'The shoe of a cradle through a hole in the ceiling.'),
   c('12:5', 'modeled'),
   c('12:6', 'modeled', 'Round beams (circumference three tefachim) not yet: the grid models square cross-sections.'),
-  c('12:7', 'todo', 'A column lying in the open (circumference 24 tefachim).'),
+  c('12:7', 'modeled'),
   c('12:8', 'todo', 'An olive’s bulk stuck to the threshold or lintel; touching the threshold.'),
   // Chapter 13 — windows.
   c('13:1', 'todo', 'Minimum sizes of windows by purpose (light, air, use): opening sizes that depend on intent.'),
@@ -118,7 +118,7 @@ export const COVERAGE: MishnaCoverage[] = [
   c('15:7', 'partial', 'Earth filling a house modeled. Not yet: a tefach of space around the tumah, which makes it a closed grave defiling all around by touch.'),
   c('15:8', 'todo', 'The courtyard of a tomb; a beam used as a tomb’s covering stone.'),
   c('15:9', 'todo', 'A sealed jar or an animal used as a covering stone.'),
-  c('15:10', 'todo', 'Touching and overshadowing combined; hands a tefach wide.'),
+  c('15:10', 'modeled'),
   // Chapter 16.
   c('16:1', 'todo', 'Movable things convey tumah: to one carrying them at an ox-goad’s thickness, to others at a tefach (Rabbi Akiva).'),
   c('16:2', 'todo', 'A spindle stuck in a wall; a yoke over a grave. Mounds near a city (catalog).'),

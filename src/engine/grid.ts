@@ -30,6 +30,8 @@ export interface Analysis {
   cells: Int32Array;
   /** Cell has a roof-capable object somewhere above it. */
   covered: Uint8Array;
+  /** The nearest roof above each covered cell: an object index, or GROUND. */
+  roofOf: Int32Array;
   /** Cell is part of an ohel: covered, connected air (vessels count as air) inside a tefach cube. */
   ohel: Uint8Array;
   /** Region label per cell: ohalim (1..n) then pockets (n+1..). 0 = none. */
@@ -102,6 +104,7 @@ export function analyze(scene: Scene, shittos: ShittosSelection = {}): Analysis 
     dims,
     cells,
     covered: new Uint8Array(n),
+    roofOf: new Int32Array(n).fill(AIR),
     ohel: new Uint8Array(n),
     region: new Int32Array(n),
     ohelCount: 0,
@@ -196,12 +199,15 @@ function computeCovered(a: Analysis) {
   const [dx, dy, dz] = a.dims;
   for (let y = 0; y < dy; y++)
     for (let x = 0; x < dx; x++) {
-      let roof = false;
+      let roof = AIR;
       for (let z = dz - 1; z >= 0; z--) {
         const i = idx(a, x, y, z);
         const v = a.cells[i];
-        if (roof) a.covered[i] = 1;
-        if (v === GROUND || (v >= 0 && a.brings[v])) roof = true;
+        if (roof !== AIR) {
+          a.covered[i] = 1;
+          a.roofOf[i] = roof;
+        }
+        if (v === GROUND || (v >= 0 && a.brings[v])) roof = v;
       }
     }
 }
@@ -350,6 +356,57 @@ function labelRegions(a: Analysis) {
   const isPocket = (j: number) => !a.ohel[j] && a.covered[j] === 1 && passable(a, a.cells[j]);
   for (let i = 0; i < n; i++) if (isPocket(i) && a.region[i] === 0) flood(i, ++label, isPocket);
   a.regionCount = label;
+  joinSlopes(a);
+}
+
+/**
+ * 7:2: "all the slopes of tents are like tents". A gap too low for a tefach cube, beside a tent and
+ * under the very roof that roofs that tent (the sloping side coming down toward the ground), is
+ * part of the tent.
+ */
+function joinSlopes(a: Analysis) {
+  const n = a.cells.length;
+  const [dx, dy] = a.dims;
+  const cellsOf = new Map<number, number[]>();
+  for (let i = 0; i < n; i++) {
+    const r = a.region[i];
+    if (r > a.ohelCount) {
+      const c = cellsOf.get(r);
+      if (c) c.push(i);
+      else cellsOf.set(r, [i]);
+    }
+  }
+  // Only a tent's outer skin slopes: a roof that is itself inside a tent under something else (a
+  // cloak under a portico, a hand through a window) is not the side of a tent.
+  const inTent = new Set<number>();
+  for (let i = 0; i < n; i++) if (a.ohel[i] && a.cells[i] >= 0 && a.roofOf[i] !== a.cells[i]) inTent.add(a.cells[i]);
+  for (const [, cells] of cellsOf) {
+    // Tents met sideways, air to air, under the same roof as the gap.
+    const matched = new Map<number, Set<number>>();
+    for (const i of cells) {
+      const x = i % dx;
+      const y = Math.floor(i / dx) % dy;
+      const side = [x > 0 ? i - 1 : -1, x < dx - 1 ? i + 1 : -1, y > 0 ? i - dx : -1, y < dy - 1 ? i + dx : -1];
+      for (const j of side) {
+        if (j < 0 || !a.ohel[j] || a.cells[j] !== AIR || a.roofOf[j] !== a.roofOf[i]) continue;
+        let set = matched.get(a.region[j]);
+        if (!set) matched.set(a.region[j], (set = new Set()));
+        set.add(a.roofOf[i]);
+      }
+    }
+    const roofs = new Set(cells.map((i) => a.roofOf[i]));
+    if (roofs.has(GROUND) || [...roofs].some((o) => inTent.has(o))) continue;
+    // A gap between two tents is a small opening between them, not the slope of either.
+    const around = new Set<number>();
+    for (const i of cells) for (const j of neighbors6(a, i)) if (a.ohel[j]) around.add(a.region[j]);
+    if (around.size !== 1) continue;
+    const tent = [...matched].find(([, set]) => [...roofs].every((o) => set.has(o)))?.[0];
+    if (tent === undefined) continue;
+    for (const i of cells) {
+      a.region[i] = tent;
+      a.ohel[i] = 1;
+    }
+  }
 }
 
 export function neighbors6(a: Analysis, i: number): number[] {

@@ -22,8 +22,8 @@ export const RULES: Record<string, RuleDef> = Object.fromEntries(
       'ohel',
       'Tent of the dead',
       'אהל המת',
-      'Tumah in an air space at least a tefach cube, under a roof at least a tefach wide, defiles every susceptible thing in that space.',
-      ['3:7', '12:6', '15:1', '15:2'],
+      'Tumah in an air space at least a tefach cube, under a roof at least a tefach wide, defiles every susceptible thing in that space. The low space under a tent’s sloping side is part of the tent.',
+      ['3:7', '7:2', '12:6', '12:7', '15:1', '15:2', '15:10'],
     ),
     r(
       'tefach-opening',

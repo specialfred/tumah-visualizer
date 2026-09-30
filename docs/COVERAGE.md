@@ -5,9 +5,9 @@ mishna’s ruling; the engine must reproduce the ruling from its general rules.
 
 🟢 modeled · 🟡 partly modeled · ⚪ not yet modeled · 🔵 not spatial (tracked as data)
 
-**17** modeled, **21** partly modeled, **57** not yet modeled, **39** not spatial — of 134 mishnayos.
+**20** modeled, **23** partly modeled, **52** not yet modeled, **39** not spatial — of 134 mishnayos.
 
-Scenarios: **119** passing, **0** failing, **3** pending.
+Scenarios: **135** passing, **0** failing, **3** pending.
 
 ## Chapter 1
 
@@ -51,7 +51,7 @@ Scenarios: **119** passing, **0** failing, **3** pending.
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
 | 4:1 | 🟡 partial | ✅ 4:1/in-house/tumah-inside<br>✅ 4:1/in-house/tumah-in-house<br>✅ 4:1/gap-tefach/vessels-under<br>✅ 4:1/gap-small/vessels-under<br>✅ 4:1/gap-small/tumah-under | Modeled: cupboard in a house, gaps under it. Not yet: niches in its walls, the cupboard in the open, Rabbi Yose’s halves. |
-| 4:2 | ⚪ todo | — | A drawer with a tefach space and a small opening (Rabbi Yose: removable in halves). |
+| 4:2 | 🟢 modeled | ✅ 4:2/tumah-inside<br>✅ 4:2/tumah-in-house<br>✅ 4:2/tumah-inside/yose |  |
 | 4:3 | ⚪ todo | — | A cupboard standing in a doorway opening outward; its base under the lintel. |
 
 ## Chapter 5
@@ -71,7 +71,7 @@ Scenarios: **119** passing, **0** failing, **3** pending.
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
 | 6:1 | 🟡 partial | ✅ 6:1/people/tumah-below<br>✅ 6:1/people/tumah-above<br>✅ 6:1/dung-vessels/tumah-below<br>✅ 6:1/stones/tumah-below<br>✅ 6:1/stones/tumah-above | Supports modeled. Not yet: Rabbi Eliezer; “any living creature” as support. |
-| 6:2 | ⚪ todo | — | A door that stands by itself; a barrel of figs in a window; plastered jars as a partition. |
+| 6:2 | 🟡 partial | ✅ 6:2/door-stands<br>✅ 6:2/door-on-key | A door standing by itself or held up by its key modeled. Not yet: a barrel of figs in a window, and jars plastered into a partition. |
 | 6:3 | 🟢 modeled | ✅ 6:3/inner-half<br>✅ 6:3/outer-half<br>✅ 6:3/middle/chachamim<br>✅ 6:3/middle/meir<br>✅ 6:3/outer-half/yehuda |  |
 | 6:4 | 🟢 modeled | ✅ 6:4/lower-half<br>✅ 6:4/upper-half<br>✅ 6:4/middle<br>✅ 6:4/lower-half/yehuda<br>✅ 6:4/vessel-lower-half/tumah-below<br>✅ 6:4/vessel-lower-half/tumah-above<br>✅ 6:4/vessel-middle/tumah-above | Vessels in a wall between two houses (first half of the mishna) follow the same rule; no separate scenario yet. |
 | 6:5 | ⚪ todo | — | Tumah among roof beams under a covering thin as garlic skin. |
@@ -83,7 +83,7 @@ Scenarios: **119** passing, **0** failing, **3** pending.
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
 | 7:1 | 🟡 partial | ✅ 7:1/one-upper-story | One upper story over two houses modeled. Not yet: a wall serving many stories (all tamei), a beach wall, and a solid monument (touching a closed grave). |
-| 7:2 | ⚪ todo | — | Sloping tent sides; touching a tent from inside vs outside. |
+| 7:2 | 🟡 partial | ✅ 7:2/tumah-in-tent<br>✅ 7:2/tumah-under-slope | Sloping sides modeled. Not yet: touching the tent from inside or outside, a side trailing on the ground, and a tent over a hatch (Rabbi Yose vs Rabbi Shimon). |
 | 7:3 | 🟡 partial | ✅ 7:3/all-closed<br>✅ 7:3/one-open<br>✅ 7:3/intent | Doors, an opened door and intent modeled. Not yet: Beis Shammai/Beis Hillel on when intent works, and a blocked doorway being reopened. |
 | 7:4 | 🔵 catalog | — | A woman in difficult labor carried between houses. |
 | 7:5 | 🔵 catalog | — | Twins, one stillborn. |
@@ -157,7 +157,7 @@ Scenarios: **119** passing, **0** failing, **3** pending.
 | 12:4 | ⚪ todo | — | The shoe of a cradle through a hole in the ceiling. |
 | 12:5 | 🟢 modeled | ✅ 12:5/aligned/under<br>✅ 12:5/aligned/between<br>✅ 12:5/staggered/under |  |
 | 12:6 | 🟢 modeled | ✅ 12:6/tefach-wide<br>✅ 12:6/narrow | Round beams (circumference three tefachim) not yet: the grid models square cross-sections. |
-| 12:7 | ⚪ todo | — | A column lying in the open (circumference 24 tefachim). |
+| 12:7 | 🟢 modeled | ✅ 12:7/24-around<br>✅ 12:7/18-around |  |
 | 12:8 | ⚪ todo | — | An olive’s bulk stuck to the threshold or lintel; touching the threshold. |
 
 ## Chapter 13
@@ -196,7 +196,7 @@ Scenarios: **119** passing, **0** failing, **3** pending.
 | 15:7 | 🟡 partial | ✅ 15:7/earth | Earth filling a house modeled. Not yet: a tefach of space around the tumah, which makes it a closed grave defiling all around by touch. |
 | 15:8 | ⚪ todo | — | The courtyard of a tomb; a beam used as a tomb’s covering stone. |
 | 15:9 | ⚪ todo | — | A sealed jar or an animal used as a covering stone. |
-| 15:10 | ⚪ todo | — | Touching and overshadowing combined; hands a tefach wide. |
+| 15:10 | 🟢 modeled | ✅ 15:10/touch-touch<br>✅ 15:10/over-touch<br>✅ 15:10/over-over<br>✅ 15:10/touch-over<br>✅ 15:10/over-over/tefach<br>✅ 15:10/two-houses/tefach<br>✅ 15:10/two-houses/narrow |  |
 
 ## Chapter 16
 

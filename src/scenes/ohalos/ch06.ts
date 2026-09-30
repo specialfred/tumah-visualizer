@@ -93,6 +93,22 @@ function capital(overhang: number, tumah: 'under-pillar' | 'under-capital'): Sce
   ];
 }
 
+// 6:2 — a house whose doorway opens onto a roofed porch, where a corpse is carried past. The door
+// is shut: standing in the doorway by itself, or held up only by its key, which is a vessel.
+function porchDoor(standsAlone: boolean): SceneObject[] {
+  const lift = standsAlone ? 0 : 0.25;
+  return [
+    ...room({ id: 'house', at: [0, 0], size: [8, 6, 6], openings: [{ side: 'y-', offset: 3, width: 2, height: 4 }] }),
+    { id: 'door', label: { en: 'Door', he: 'דלת' }, kind: 'door', material: 'wood', parts: [box([3, -0.25, lift], [2, 0.25, 4 - lift])] },
+    ...(standsAlone ? [] : [kli('key', [3.75, -0.25, 0], { en: 'Key holding the door up', he: 'מפתח' }, [0.5, 0.25, 0.25])]),
+    solid('porch', { en: 'Porch roof', he: 'אכסדרה' }, 'structure', 'stone', [-1, -8, 6], [10, 7, 1]),
+    solid('pillar1', 'Pillar', 'structure', 'stone', [-1, -8, 0], [1, 1, 6]),
+    solid('pillar2', 'Pillar', 'structure', 'stone', [8, -8, 0], [1, 1, 6]),
+    solid('tumah', { en: 'Corpse carried through the porch', he: 'המת' }, 'tumah', 'flesh', [-4, -6, 3], [18, 3, 1.5], { tumah: { kind: 'meis' } }),
+    kli('kli-house', [1, 4, 0], 'Vessel in the house'),
+  ];
+}
+
 export const ch06: Scenario[] = [
   {
     id: '6:1/people/tumah-below',
@@ -275,5 +291,22 @@ export const ch06: Scenario[] = [
     clause: { en: 'If not, they remain clean.' },
     scene: () => ({ objects: capital(0.75, 'under-capital') }),
     expect: { 'kli-under': 'tahor' },
+  },
+  {
+    id: '6:2/door-stands',
+    ref: '6:2',
+    title: { en: 'A door that stands by itself, shut against a funeral in the porch', he: 'הגיף את הדלת' },
+    clause: { en: 'If the door can remain in its position on its own, [the contents of the house] remain clean.' },
+    scene: () => ({ objects: porchDoor(true) }),
+    expect: { 'kli-house': 'tahor' },
+  },
+  {
+    id: '6:2/door-on-key',
+    ref: '6:2',
+    title: { en: 'A door held up only by its key' },
+    clause: { en: 'But if not, they become unclean.' },
+    notes: 'Whatever rests on vessels does not block tumah (6:1); the key is a vessel (Bartenura).',
+    scene: () => ({ objects: porchDoor(false) }),
+    expect: { 'kli-house': 'tamei' },
   },
 ];

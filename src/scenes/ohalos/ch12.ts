@@ -1,4 +1,5 @@
 import { kezayis, kli, solid } from '../../engine/build';
+import { ETZBA, TEFACH, type Box } from '../../engine/types';
 import type { SceneObject } from '../../engine/types';
 import type { Scenario } from '../types';
 
@@ -32,6 +33,28 @@ function beams(staggered: boolean, where: 'under' | 'between'): SceneObject[] {
     kli('v-between', [6, 2.25, 6.5], 'Vessel on the same lower beam, under the upper one'),
   );
   return objs;
+}
+
+// 12:7 — a round stone pillar lying on its side in a garden, along x, `diameter` tefachim across.
+// Its round section is built from etzba-thin slices. Tumah lies under its side, where the curve
+// rises off the ground, and a vessel lies further along under the same side.
+function lyingPillar(diameter: number): SceneObject[] {
+  const r = (diameter * TEFACH) / 2; // in etzbaos
+  const parts: Box[] = [];
+  for (let k = 0; k < 2 * r; k++) {
+    // The slice k etzbaos up spans the chord of the circle at its middle height, rounded out to
+    // whole etzbaos so that the stone fills every cell its curve passes through.
+    const dz = k + 0.5 - r;
+    const half = Math.ceil(Math.sqrt(r * r - dz * dz));
+    if (half > 0) parts.push({ min: [0, -half, k * ETZBA], size: [12 * TEFACH, 2 * half, ETZBA] });
+  }
+  // Just inside the edge of the pillar's shadow, where the space under the curve is tallest.
+  const y = diameter / 2 - 0.5;
+  return [
+    { id: 'pillar', label: { en: `Round pillar, ${diameter * 3} tefachim around`, he: 'עמוד מוטל' }, kind: 'structure', material: 'stone', parts },
+    kezayis('tumah', [2, y, 0], 1, [0.25, 0.25, 0.25]),
+    kli('kli-under', [9, y, 0], 'Vessel under the side of the pillar, away from the tumah', [0.25, 0.25, 0.25]),
+  ];
 }
 
 export const ch12: Scenario[] = [
@@ -74,5 +97,22 @@ export const ch12: Scenario[] = [
     clause: { en: 'If it is not [one handbreadth wide], the uncleanness cleaves upwards and downwards.' },
     scene: () => ({ objects: beamScene(0.75) }),
     expect: { 'kli-under': 'tahor', 'kli-over': 'tamei' },
+  },
+  {
+    id: '12:7/24-around',
+    ref: '12:7',
+    title: { en: 'A pillar lying in the open, 24 tefachim around — tumah under its side', he: 'עמוד שהוא מוטל באויר' },
+    clause: { en: 'If its circumference is twenty-four handbreadths, it brings uncleanness to everything under its side.' },
+    notes: 'Eight tefachim across: a tefach cube fits between its curve and the ground at the side (Bartenura). The measure is reckoned with the Sages’ approximations; by exact geometry a pillar about seven tefachim across would already fit one.',
+    scene: () => ({ objects: lyingPillar(8) }),
+    expect: { 'kli-under': 'tamei' },
+  },
+  {
+    id: '12:7/18-around',
+    ref: '12:7',
+    title: { en: 'A pillar lying in the open, 18 tefachim around — tumah under its side' },
+    clause: { en: 'But if it is not, the uncleanness cleaves upwards and downwards.' },
+    scene: () => ({ objects: lyingPillar(6) }),
+    expect: { 'kli-under': 'tahor' },
   },
 ];

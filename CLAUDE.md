@@ -25,3 +25,33 @@ mishna with Bartenura, build one scenario per ruling in `src/scenes/ohalos/chNN.
 the engine pass it by changing a *general* rule, never a scenario-specific one. When no general
 rule fits, mark the scenario `pending` with a note and record the tension in DESIGN.md. Keep
 `src/scenes/coverage.ts` in step.
+
+## Practical notes for building scenes
+
+- Where objects overlap, the earlier one in the list wins (tumah always takes its cells). Put a
+  vessel buried in straw or earth *before* the filling, or it will have no cells.
+- Check that a vessel or person doesn't accidentally touch something tamei: contact chains
+  (ch. 1) will make it tamei and the scenario will pass for the wrong reason. Leave a quarter
+  tefach (one etzba) of air.
+- Units in `build.ts` helpers are tefachim, in quarters (one etzba = 0.25).
+- To see *why* an object is tamei, print `evaluate(scene, shittos).objects[id].reasons`; a quick
+  `vite-node` script over `SCENARIOS` is the fastest way to debug.
+- After a rule change, run the whole suite: rules interact (e.g. the slope rule of 7:2 first
+  swallowed a hatch, a cloak under a portico and a drawer's outlet).
+
+## Where things stand (Sept 2026)
+
+See docs/COVERAGE.md for the full list. Deferred, each needing a new idea in the engine:
+
+- **12:8** — which part of a doorway beyond the doorposts counts as the house (the lintel does,
+  except per Rabbi Yose; the threshold is disputed; touching the threshold below a tefach).
+- **9:16, 15:3** — a jar or jars in the open: an earthenware vessel shelters what is inside its
+  belly only where there is an interruption between its inside air and the air outside.
+- **10:4 / 10:5 pending** — a board in the lower hatch "seen as if in the upper" (DESIGN tension 8).
+- **Chapter 5** (pots and ovens over hatches), **chapter 9** (the beehive), **chapter 13** (window
+  sizes by purpose, DESIGN tension 4), **16:1** (carrying), **3:1–3:4** (combining measures,
+  connected parts).
+
+Good next candidates that fit the current rules: 6:5 (tumah among roof beams under a thin
+covering), 14:1/14:3/14:4 (projections and rods over doorways), 11:4's agreed cases (a dressed
+person; two people one above the other), 7:1's wall serving many stories.

@@ -1,4 +1,4 @@
-import { box, boxesMinus, corpse, kezayis, kli, room, type OpeningSpec } from '../../engine/build';
+import { box, boxesMinus, corpse, kezayis, kli, room, solid, type OpeningSpec } from '../../engine/build';
 import type { SceneObject } from '../../engine/types';
 import type { Scenario } from '../types';
 
@@ -48,7 +48,50 @@ function wallUnderStories(): SceneObject[] {
   ];
 }
 
+// 7:2 — a cloth tent on four poles, 6×6 and 6 high, with one side sloping down in steps of a
+// tefach to half a tefach off the ground.
+function slopingTent(tumahUnderSlope: boolean): SceneObject[] {
+  const steps = [5, 4, 3, 2, 1, 0.5];
+  const parts = [box([0, 0, 6], [6, 6, 0.25])];
+  steps.forEach((z, k) => {
+    const x = 6 + k;
+    parts.push(box([x, 0, z], [1, 6, 0.25]));
+    // A riser closing the step to the one above it.
+    const above = k === 0 ? 6 : steps[k - 1];
+    parts.push(box([x, 0, z + 0.25], [0.25, 6, above - z]));
+  });
+  const pole = (id: string, x: number, y: number) => solid(id, 'Pole', 'misc', 'wood', [x, y, 0], [0.25, 0.25, 6]);
+  return [
+    { id: 'tent', label: { en: 'Tent', he: 'אהל' }, kind: 'vessel', material: 'cloth', parts },
+    pole('pole1', 0, 0),
+    pole('pole2', 0, 5.75),
+    pole('pole3', 5.75, 0),
+    pole('pole4', 5.75, 5.75),
+    tumahUnderSlope ? kezayis('tumah', [11.5, 3, 0], 1, [0.25, 0.25, 0.25]) : kezayis('tumah', [2, 3, 0]),
+    tumahUnderSlope
+      ? kli('kli-tent', [3, 1, 0], 'Vessel in the tent')
+      : kli('kli-slope', [11.5, 3, 0], 'Vessel under the lowest part of the slope', [0.25, 0.25, 0.25]),
+  ];
+}
+
 export const ch07: Scenario[] = [
+  {
+    id: '7:2/tumah-in-tent',
+    ref: '7:2',
+    title: { en: 'A tent sloping down to near the ground — tumah in the tent', he: 'כל שפועי אהלים כאהלים' },
+    clause: { en: 'A ‘tent’ [whose sides] sloped downwards and finished off one fingerbreadth [from the ground]: if there is uncleanness in the ‘tent’, vessels beneath the slope become unclean.' },
+    notes: 'The lowest part of the slope is too low for a tefach cube, but it is under the tent’s own side, so it is part of the tent.',
+    scene: () => ({ objects: slopingTent(false) }),
+    expect: { 'kli-slope': 'tamei' },
+  },
+  {
+    id: '7:2/tumah-under-slope',
+    ref: '7:2',
+    title: { en: 'A tent sloping down to near the ground — tumah under the slope' },
+    clause: { en: 'If there is uncleanness beneath the slope, vessels in the ‘tent’ become unclean.' },
+    scene: () => ({ objects: slopingTent(true) }),
+    expect: { 'kli-tent': 'tamei' },
+  },
   {
     id: '7:1/one-upper-story',
     ref: '7:1',
