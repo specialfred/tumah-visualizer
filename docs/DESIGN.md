@@ -76,8 +76,9 @@ join in the house). The rules, in the order they apply:
 | Halves of a wall | מחצה על מחצה | Tumah or a vessel inside a building element belongs to the nearer side; in the middle, to both | 6:3, 6:4 |
 | The floor is the house | ארצו של בית כמוהו | A closed gap under a house belongs to it, in both directions | 3:7, 15:5 |
 | Goes out, not in | דרך הטומאה לצאת | Tumah in a closed space goes out into the space around it; tumah outside does not enter | 3:7, 4:1, 8:6 |
-| No way out | | A closed space with only sub-tefach outlets sends its tumah up into the space above | 3:7 |
+| No way out | | A closed space with only sub-tefach outlets breaks out through the building into the nearest spaces above and below it | 3:7, 6:5 |
 | The way out | דרך יציאת הטומאה | The closed doors of a tent with tumah are tamei, unless an opening big enough for this tumah (a tefach for an exact olive's bulk, 4×4 for a corpse) is open or intended | 3:6, 7:3 |
+| Going out under a roof | דרך הטומאה לצאת | Where a tent with tumah meets the open air, a roof over that edge that also makes a tent of its own beside it carries the tumah into that tent, even without a tefach between them. Only outward: tumah in that tent does not come back in | 14:4 |
 | Tightly sealed | צמיד פתיל | See "guards its interior" | 5:3, 8:6 |
 | Contact | מגע | Chains of chapter 1, as a state machine over touching objects | 1:1–1:4 |
 | The tent is not counted | האהל אינו מן המנין | What roofs the tumah is tamei, but what touches it is as if it touched the dead | 1:3, 15:2 |
@@ -85,7 +86,7 @@ join in the house). The rules, in the order they apply:
 | Pillars | | A building element with the same tent on opposite sides is not a wall: tumah under it breaks up and down | 6:6, 6:7 |
 | Slopes of tents | כל שפועי אהלים כאהלים | A gap too low for a tefach cube, beside a tent and under that tent's own outer side, is part of the tent | 7:2 |
 | Removable in halves | | Rabbi Yose: tumah in a closed space whose only outlet is small does not go out, since it can be taken out in halves | 4:2 |
-| A person is hollow | אדם חלול | A person's body is open space under his skin, so it can be the tent that brings tumah (Beis Hillel). Beis Shammai: the body is solid; tumah does not pass through it, and he is never "full of tumah", though he still does not block what is above or below him | 11:3–11:6 |
+| A person is hollow | אדם חלול | A person's body is open space under his skin, so it can be the tent that brings tumah (Beis Hillel). Beis Shammai: the body is solid; tumah does not spread through it, so he is never "full of tumah" as a whole, but he does not block: tumah under him breaks straight up through him (two people one above the other bring the tumah, 11:4) | 11:3–11:6 |
 
 Small gaps are classified by what bounds them:
 
@@ -178,6 +179,13 @@ either resolved by a distinction the model now encodes, or open.
    modeled as part of the building, so a vessel packed in it with no tefach around it belongs to
    the house (15:6). Boards set up as a partition are modeled as movable, so tumah behind them
    goes out into the house (15:4). A case where the same filling must be both is not yet known.
+10. **Going out under a roof** (14:4 vs 15:2). The tumah in a house goes out under a
+   projection only three etzbaos wide over the doorway into the projection's tent, though the
+   two spaces meet through less than a tefach. Tablets meeting at their edges (15:2) must not
+   join the same way. *Resolved* provisionally: only a roof that is one object over both the
+   way out and the other tent carries the tumah, and only outward (from a tent to where it
+   meets the open air). Rabbi Eliezer, for whom the projection joins in both directions, would
+   need 14:1's "a projection brings at any width".
 
 ## Roadmap
 

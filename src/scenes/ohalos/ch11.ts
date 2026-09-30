@@ -87,6 +87,38 @@ function leaningOut(): SceneObject[] {
   ];
 }
 
+// 11:4 — where Beis Shammai agree: the person leaning out is dressed, his cloak hanging loose a
+// tefach below his body, or a second person leans out beneath him, a tefach lower. The window is
+// taller here (3 tefachim, a tefach off the floor) so there is room for both.
+function leaningOutAgreed(what: 'dressed' | 'two'): SceneObject[] {
+  const lower: SceneObject =
+    what === 'dressed'
+      ? {
+          id: 'cloak',
+          label: { en: 'His cloak, hanging loose below him', he: 'לבוש בכליו' },
+          kind: 'vessel',
+          material: 'cloth',
+          parts: [box([3, -4, 1.25], [2, 4.5, 0.25]), box([3, -4, 1.5], [0.25, 4.5, 1]), box([4.75, -4, 1.5], [0.25, 4.5, 1])],
+        }
+      : solid('person2', { en: 'A second person leaning out below him', he: 'שנים זה על גבי זה' }, 'person', 'flesh', [3.25, -4, 1.25], [1.5, 4.25, 0.5]);
+  return [
+    ...room({ id: 'house', at: [0, 0], size: [8, 6, 6], openings: [
+      { side: 'y-', offset: 3, width: 2, height: 3, sill: 1 },
+      { side: 'x-', offset: 2, width: 2, height: 4 },
+    ] }),
+    {
+      id: 'person',
+      label: { en: 'A person leaning out of the window', he: 'הניבט מן החלון' },
+      kind: 'person',
+      material: 'flesh',
+      parts: [box([3.25, 0.5, 1], [1.5, 1.5, what === 'dressed' ? 1.5 : 1.75]), box([3.25, -4, what === 'dressed' ? 2.5 : 2.75], [1.5, 6, 1.25])],
+    },
+    lower,
+    solid('tumah', { en: 'Corpse carried past', he: 'המת' }, 'tumah', 'flesh', [-4, -4, 0], [18, 2.5, 0.75], { tumah: { kind: 'meis' } }),
+    kli('v-house', [6, 4, 0], 'Vessel in the house'),
+  ];
+}
+
 // 11:5–11:6 — a person lying on the threshold of an open doorway, half in the house and half out.
 function onThreshold(tumahInHouse: boolean): SceneObject[] {
   const out: SceneObject[] = [
@@ -192,6 +224,26 @@ export const ch11: Scenario[] = [
     shittos: { 'adam-chalul': 'beis-shammai' },
     scene: () => ({ objects: leaningOut() }),
     expect: { 'v-house': 'tahor', person: 'tamei' },
+  },
+  {
+    id: '11:4/dressed/beis-shammai',
+    ref: '11:4',
+    title: { en: 'A dressed person leaning out over a funeral — Beis Shammai agree' },
+    clause: { en: 'They agree that if he was dressed in his clothes... they bring the uncleanness.' },
+    notes: 'His cloak is a vessel: it roofs the corpse but cannot block, so it is full of tumah, which rises into the space between the cloak and his body, and that space runs into the house through the window.',
+    shittos: { 'adam-chalul': 'beis-shammai' },
+    scene: () => ({ objects: leaningOutAgreed('dressed') }),
+    expect: { 'v-house': 'tamei' },
+  },
+  {
+    id: '11:4/two/beis-shammai',
+    ref: '11:4',
+    title: { en: 'Two people leaning out, one above the other — Beis Shammai agree' },
+    clause: { en: '...or if there were two persons, one above the other, they bring the uncleanness.' },
+    notes: 'For Beis Shammai the lower one\'s body is solid, but he does not block: the tumah breaks straight up through him into the space between the two, which runs into the house through the window.',
+    shittos: { 'adam-chalul': 'beis-shammai' },
+    scene: () => ({ objects: leaningOutAgreed('two') }),
+    expect: { 'v-house': 'tamei' },
   },
   {
     id: '11:5/beis-hillel',

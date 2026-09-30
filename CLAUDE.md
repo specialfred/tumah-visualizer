@@ -52,6 +52,12 @@ See docs/COVERAGE.md for the full list. Deferred, each needing a new idea in the
   sizes by purpose, DESIGN tension 4), **16:1** (carrying), **3:1–3:4** (combining measures,
   connected parts).
 
-Good next candidates that fit the current rules: 6:5 (tumah among roof beams under a thin
-covering), 14:1/14:3/14:4 (projections and rods over doorways), 11:4's agreed cases (a dressed
-person; two people one above the other), 7:1's wall serving many stories.
+- **7:1** — a wall serving many stories: a closed tefach space in a wall defiles every story the
+  wall serves (a closed grave, like the solid monument), but the engine only breaks tumah up and
+  down.
+- **14:1, 14:3** — a projection sloping down over a doorway brings tumah at any width within 12
+  tefachim; needs a notion of what roofs a doorway rather than a tefach opening.
+
+Good next candidates that fit the current rules: 15:2's table (brings only if it extends a tefach
+beyond its frame), 6:2's barrel in a window, 6:7's two wall-cupboards, 4:3 (a cupboard in a
+doorway), 11:1's other shittos (a split of 4 tefachim or a tefach).

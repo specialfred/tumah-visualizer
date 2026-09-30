@@ -661,13 +661,24 @@ class Ctx {
         if (a.scene.objects[v].kind === 'tumah') continue;
         if (a.brings[v]) {
           // A vessel guarding its own inside is not a roof over it: tumah there goes out (4:1, 4:2).
-          if (!this.solidPerson(v) && this.interiorOf[r] !== v) filled.add(v);
+          if (this.interiorOf[r] !== v) filled.add(v);
           break;
         }
       }
     }
     for (const v of filled) {
       ex.roofs.add(v);
+      if (this.solidPerson(v)) {
+        // Beis Shammai: a person's body is solid, so the tumah does not spread through it; but he
+        // does not block either, so it breaks straight up through him over the tent (11:4, the
+        // lower of two people one above the other).
+        const cells = a.objCells[v].filter((i) => {
+          const [x, y] = coords(a, i);
+          return tops.has(`${x},${y}`);
+        });
+        this.overshadow(cells, via, defileRegion, add, ex, v);
+        continue;
+      }
       add(`o${v}`, reason('kelim-einam-chotzetzim', 'It roofs the tamei tent below it but cannot block, so it counts as full of tumah.', via));
       this.overshadow(a.objCells[v], via, defileRegion, add, ex, v);
     }
@@ -701,6 +712,11 @@ class Ctx {
     }
 
     if (this.openTo(r, TEFACH)) {
+      // On its way out into the open air, the tumah passes under whatever roofs its way out; if
+      // that roof makes a tent of its own beside the way out, the tumah goes out into it even
+      // without a tefach between them (14:4: the way of tumah is to go out).
+      for (const s of this.atMouth(r))
+        defileRegion(s, reason('derech-yetzia', 'The tumah goes out of its tent under a roof that also makes this tent, so it goes out into it.', via));
       // Tumah leaves through the opening. Closed doors are saved only by an opening big enough
       // to carry out this tumah (3:6, 7:3).
       if (this.openTo(r, exitSize(o))) return;
@@ -726,23 +742,25 @@ class Ctx {
       return;
     }
 
-    // No way out at all: the tumah rises into the space above (3:7).
-    const above = new Set<number>();
+    // No way out at all: the tumah breaks through the building up and down into the nearest
+    // spaces above and below it (3:7 under a house, 6:5 among the beams of a ceiling).
+    const around = new Set<number>();
     for (const i of this.regionCells[r]) {
-      let [x, y, z] = coords(a, i);
-      for (z = z + 1; z < a.dims[2]; z++) {
-        const j = idx(a, x, y, z);
-        if (a.region[j] === r) continue;
-        if (a.ohel[j]) {
-          above.add(a.region[j]);
-          break;
+      const [x, y, z0] = coords(a, i);
+      for (const dz of [1, -1])
+        for (let z = z0 + dz; z >= 0 && z < a.dims[2]; z += dz) {
+          const j = idx(a, x, y, z);
+          if (a.region[j] === r) continue;
+          if (a.ohel[j]) {
+            around.add(a.region[j]);
+            break;
+          }
+          const v = a.cells[j];
+          if (!(isStructural(a, v) || (a.region[j] > a.ohelCount && passable(a, v)))) break;
         }
-        const v = a.cells[j];
-        if (!(isStructural(a, v) || (a.region[j] > a.ohelCount && passable(a, v)))) break;
-      }
     }
-    for (const s of above)
-      defileRegion(s, reason('no-exit', 'The space holding the tumah has no opening of a tefach to let it out, so it rises into the space above.', via));
+    for (const s of around)
+      defileRegion(s, reason('no-exit', 'The space holding the tumah has no opening of a tefach to let it out, so it breaks through into the spaces above and below it.', via));
   }
 
   /**
@@ -771,6 +789,24 @@ class Ctx {
           seen.add(j);
           stack.push(j);
         }
+      }
+    }
+    return out;
+  }
+
+  /**
+   * Other tents under the same roof as tent `r` where `r` meets the open air: the roof over the
+   * way its tumah goes out also makes these tents.
+   */
+  atMouth(r: number): Set<number> {
+    const { a } = this;
+    const out = new Set<number>();
+    for (const i of this.regionCells[r]) {
+      const ns = neighbors6(a, i);
+      if (!ns.some((j) => !a.covered[j] && passable(a, a.cells[j]))) continue;
+      for (const j of ns) {
+        const s = a.region[j];
+        if (s && s !== r && a.ohel[j] && a.roofOf[j] === a.roofOf[i] && a.roofOf[i] >= 0 && !this.isInterior(j)) out.add(s);
       }
     }
     return out;
