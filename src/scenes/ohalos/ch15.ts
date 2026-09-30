@@ -179,6 +179,26 @@ function cloak(raised: boolean): SceneObject[] {
   ];
 }
 
+// 15:2 — a table top 6×6, 3 tefachim up, on its "square": a bottomless frame (Bartenura) set in
+// from the edges by `overhang`. A frame with no receptacle is not a vessel and cannot become
+// tamei, so it separates. Tumah is under the overhang on one side, a vessel under the other.
+function table(overhang: number): SceneObject[] {
+  const s = 6 - 2 * overhang;
+  const [a, b] = [overhang, overhang + s - 0.25];
+  return [
+    solid('table', { en: 'Table', he: 'שלחן' }, 'vessel', 'wood', [0, 0, 3], [6, 6, 0.25]),
+    {
+      id: 'square',
+      label: { en: 'Its square (a bottomless frame)', he: 'ריבוע' },
+      kind: 'misc',
+      material: 'wood',
+      parts: [box([a, a, 0], [s, 0.25, 3]), box([a, b, 0], [s, 0.25, 3]), box([a, a + 0.25, 0], [0.25, s - 0.5, 3]), box([b, a + 0.25, 0], [0.25, s - 0.5, 3])],
+    },
+    kezayis('tumah', [0.25, 2.75, 0], 1, [0.25, 0.25, 0.25]),
+    kli('kli-far', [5.5, 2.75, 0], 'Vessel under the other side of the table', [0.25, 0.25, 0.25]),
+  ];
+}
+
 export const ch15: Scenario[] = [
   {
     id: '15:1/cloak-low',
@@ -271,6 +291,23 @@ export const ch15: Scenario[] = [
     notes: 'The tablet over the tumah is the tent, and the tent does not count as a link (1:3, Bartenura here): the second tablet is as if it touched the dead, so one who touches it is tamei for seven days.',
     scene: () => ({ objects: cornerTablets() }),
     expect: { 'kli-a': 'tamei', 'kli-b': 'tahor', person: 'tamei7' },
+  },
+  {
+    id: '15:2/table/tefach',
+    ref: '15:2',
+    title: { en: 'A table extending a tefach beyond its square', he: 'השלחן' },
+    clause: { en: 'A table does not bring uncleanness unless it contains a square of at least one handbreadth.' },
+    notes: 'Bartenura: the table must extend a tefach beyond the frame it sits on; the space under the overhang then runs all round the frame.',
+    scene: () => ({ objects: table(1) }),
+    expect: { 'kli-far': 'tamei' },
+  },
+  {
+    id: '15:2/table/narrow',
+    ref: '15:2',
+    title: { en: 'A table extending less than a tefach beyond its square' },
+    clause: { en: 'A table does not bring uncleanness unless it contains a square of at least one handbreadth.' },
+    scene: () => ({ objects: table(0.75) }),
+    expect: { 'kli-far': 'tahor' },
   },
   {
     id: '15:4/tumah-in-house',

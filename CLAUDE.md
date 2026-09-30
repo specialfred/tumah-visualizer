@@ -58,6 +58,6 @@ See docs/COVERAGE.md for the full list. Deferred, each needing a new idea in the
 - **14:1, 14:3** — a projection sloping down over a doorway brings tumah at any width within 12
   tefachim; needs a notion of what roofs a doorway rather than a tefach opening.
 
-Good next candidates that fit the current rules: 15:2's table (brings only if it extends a tefach
-beyond its frame), 6:2's barrel in a window, 6:7's two wall-cupboards, 4:3 (a cupboard in a
-doorway), 11:1's other shittos (a split of 4 tefachim or a tefach).
+Good next candidates: 4:3 (a cupboard in a doorway opening outward; its wheeled base), 11:1's
+other shittos (a split of 4 tefachim or a tefach, which need the inner part's way out to run
+through the outer part), 4:1's remaining cases (niches, the cupboard in the open).

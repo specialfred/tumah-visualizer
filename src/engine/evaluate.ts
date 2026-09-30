@@ -435,6 +435,11 @@ class Ctx {
           const i = idx(a, x, y, z);
           if (selfSet.has(i)) continue;
           const v = a.cells[i];
+          // A closed cupboard in the wall is seen as if it were solid (6:7).
+          if (a.ohel[i] && this.closedCupboard(a.region[i])) {
+            dist++;
+            continue;
+          }
           if (a.ohel[i]) {
             if (dist < best[d].dist) best[d] = { dist, side: { kind: 'ohel', region: a.region[i], dir: d } };
             return;
@@ -495,6 +500,26 @@ class Ctx {
     if (s === 'yehuda' && up && down) return { sides: [up], tie: false, rule: 'chatzi-kotel' };
     const rule = winners.length === 1 && winners[0].dir === 5 && !down ? 'karka-habayis' : 'chatzi-kotel';
     return { sides: winners, tie: winners.length > 1, rule };
+  }
+
+  private cupboardMemo = new Map<number, boolean>();
+  /**
+   * A closed space whose only ways out are closed doors into another tent, like a cupboard in the
+   * wall of a house: for halves it is seen as if it were solid (6:7 רואין את הפרדסקין כאילו הן אטם).
+   */
+  closedCupboard(r: number): boolean {
+    let m = this.cupboardMemo.get(r);
+    if (m === undefined) {
+      const { a } = this;
+      const doors = this.adjacentDoors(r);
+      m =
+        doors.length > 0 &&
+        !this.openTo(r, TEFACH) &&
+        doors.every((d) => a.objCells[d].some((i) => neighbors6(a, i).some((j) => a.ohel[j] && a.region[j] !== r))) &&
+        doors.every((d) => a.objCells[d].every((i) => neighbors6(a, i).every((j) => a.region[j] === r || a.cells[j] !== AIR || a.covered[j])));
+      this.cupboardMemo.set(r, m);
+    }
+    return m;
   }
 
   /** Compressed tumah breaks up to the sky and down to the depths. It does not enter tents. */

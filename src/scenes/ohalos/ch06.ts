@@ -127,6 +127,67 @@ function porchDoor(standsAlone: boolean): SceneObject[] {
   ];
 }
 
+// 6:2 — two houses sharing a wall 2 tefachim thick, with a window 2×2 between them. An
+// earthenware barrel of dried figs lies in the window, its mouth toward the tumah. The figs are
+// spoiled and left there for good (Bartenura), so they are not food that can become tamei. If
+// they can stand on their own, they fill the rest of the window beyond the barrel and rest on the
+// sill; if not, the barrel fills the window and the figs rest only on it.
+function barrelInWindow(standsAlone: boolean): SceneObject[] {
+  const barrel = container({ id: 'barrel', label: { en: 'Barrel of dried figs', he: 'חבית של גרוגרות' }, material: 'earthenware', at: [6, 2, 1], size: [standsAlone ? 1 : 2, 2, 2], mouth: 'x-' });
+  const window = { offset: 2, width: 2, height: 2, sill: 1 };
+  return [
+    ...room({ id: 'house', at: [0, 0], size: [6, 6, 6], openings: [{ side: 'x-', offset: 2, width: 2, height: 4 }, { side: 'x+', ...window }] }),
+    ...room({ id: 'house2', label: { en: 'Second house', he: 'בית שני' }, at: [8, 0], size: [6, 6, 6], openings: [{ side: 'x+', offset: 2, width: 2, height: 4 }, { side: 'x-', ...window }] }),
+    barrel,
+    {
+      id: 'figs',
+      label: { en: 'Dried figs', he: 'גרוגרות' },
+      kind: 'misc',
+      material: 'food',
+      parts: [barrel.container!.interior, ...(standsAlone ? [box([7, 2, 1], [1, 2, 2])] : [])],
+    },
+    kezayis('tumah', [2, 3, 0]),
+    kli('kli-house2', [11, 1, 0], 'Vessel in the second house'),
+  ];
+}
+
+// 6:2 — a house partitioned by a wall of earthenware jars, their mouths toward the tumah, and
+// plastered with clay on the far side. The plaster stands on the floor, or hangs on the jars,
+// resting on the lip of the bottom row.
+function jarPartition(standsAlone: boolean): SceneObject[] {
+  const jars: SceneObject[] = [];
+  for (let y = 0; y < 3; y++)
+    for (let z = 0; z < 3; z++)
+      jars.push(container({ id: `jar${y + 1}${z + 1}`, label: { en: 'Jar', he: 'קנקן' }, material: 'earthenware', at: [6, 2 * y, 2 * z], size: [z === 0 && !standsAlone ? 1.25 : 1, 2, 2], mouth: 'x-' }));
+  return [
+    ...room({ id: 'house', at: [0, 0], size: [13, 6, 6], openings: [{ side: 'x-', offset: 2, width: 2, height: 4 }] }),
+    ...jars,
+    solid('plaster', { en: 'Plaster on the jars', he: 'טיח' }, 'misc', 'plaster', [7, 0, standsAlone ? 0 : 0.25], [0.25, 6, standsAlone ? 6 : 5.75]),
+    kezayis('tumah', [2, 3, 0]),
+    kli('kli-beyond', [10, 3, 0], 'Vessel beyond the partition'),
+  ];
+}
+
+// 6:7 — a house whose back wall is 4 tefachim thick, with two cupboards (פרדסקים) set side by side
+// in it, each 2×3½ and 2 high, with doors toward the house. Tumah is in the solid wall under the
+// first cupboard (Bartenura), in the inner or outer half of the wall.
+function wallCupboards(firstOpen: boolean, half: 'inner' | 'outer'): SceneObject[] {
+  const [house, ...doors] = room({ id: 'house', at: [0, 0], size: [8, 6, 6], openings: [{ side: 'x-', offset: 2, width: 2, height: 4 }] });
+  const first = box([1, 6, 1], [2, 3.5, 2]);
+  const second = box([5, 6, 1], [2, 3.5, 2]);
+  const door = (id: string, x: number) => solid(id, { en: 'Cupboard door', he: 'דלת' }, 'door', 'wood', [x, 6, 1], [2, 0.25, 2]);
+  return [
+    { ...house, parts: boxesMinus([...house.parts, box([-1, 7, 0], [10, 3, 6])], [first, second]) },
+    ...doors,
+    ...(firstOpen ? [] : [door('door-first', 1)]),
+    door('door-second', 5),
+    kezayis('tumah', [1.75, half === 'inner' ? 7 : 8.75, 0.5], 1, [0.5, 0.25, 0.25]),
+    kli('kli-first', [2.25, 8.5, 1], 'Vessel in the first cupboard'),
+    kli('kli-second', [5.75, 7, 1], 'Vessel in the second cupboard'),
+    kli('kli-house', [4, 2, 0], 'Vessel in the house'),
+  ];
+}
+
 export const ch06: Scenario[] = [
   {
     id: '6:1/people/tumah-below',
@@ -307,6 +368,40 @@ export const ch06: Scenario[] = [
     expect: { 'kli-lower': 'tamei' },
   },
   {
+    id: '6:2/figs-stand',
+    ref: '6:2',
+    title: { en: 'A barrel of dried figs in a window — the figs stand by themselves', he: 'חבית של גרוגרות בחלון' },
+    clause: { en: 'If the dried figs or the straw can remain in their position on their own, [the contents of the room] remain clean.' },
+    notes: 'The barrel is a vessel and does not block, but the figs, spoiled and left there, are like earth: they block, since they do not rest only on the barrel.',
+    scene: () => ({ objects: barrelInWindow(true) }),
+    expect: { 'kli-house2': 'tahor' },
+  },
+  {
+    id: '6:2/figs-in-barrel',
+    ref: '6:2',
+    title: { en: 'A barrel of dried figs in a window — the figs held up by the barrel' },
+    clause: { en: 'But if not they become unclean.' },
+    notes: 'Whatever rests on vessels does not block (6:1); the barrel\'s mouth faces the tumah, so the barrel does not block either (Bartenura).',
+    scene: () => ({ objects: barrelInWindow(false) }),
+    expect: { 'kli-house2': 'tamei' },
+  },
+  {
+    id: '6:2/jars-plaster-stands',
+    ref: '6:2',
+    title: { en: 'A house partitioned by plastered jars — the plaster stands by itself', he: 'בית שחצצו בקנקנים' },
+    clause: { en: 'If the clay can remain in its position on its own, [the space partitioned off] remains clean.' },
+    scene: () => ({ objects: jarPartition(true) }),
+    expect: { 'kli-beyond': 'tahor' },
+  },
+  {
+    id: '6:2/jars-plaster-on-jars',
+    ref: '6:2',
+    title: { en: 'A house partitioned by plastered jars — the plaster held up by the jars' },
+    clause: { en: 'But if not, it becomes unclean.' },
+    scene: () => ({ objects: jarPartition(false) }),
+    expect: { 'kli-beyond': 'tamei' },
+  },
+  {
     id: '6:6/under-pillar',
     ref: '6:6',
     title: { en: 'Tumah under a pillar in a house', he: 'טומאה תחת העמוד' },
@@ -347,6 +442,32 @@ export const ch06: Scenario[] = [
     clause: { en: 'If not, they remain clean.' },
     scene: () => ({ objects: capital(0.75, 'under-capital') }),
     expect: { 'kli-under': 'tahor' },
+  },
+  {
+    id: '6:7/cupboard-open',
+    ref: '6:7',
+    title: { en: 'Two cupboards in the wall, one opened — tumah under it', he: 'שני פרדסקים' },
+    clause: { en: 'If one of them was opened, both it and the house become unclean, but its companion remains clean.' },
+    notes: 'The tumah is in the outer half of the wall, yet the house is tamei: the tumah breaks up into the open cupboard, which is part of the house (Bartenura).',
+    scene: () => ({ objects: wallCupboards(true, 'outer') }),
+    expect: { 'kli-first': 'tamei', 'kli-house': 'tamei', 'kli-second': 'tahor' },
+  },
+  {
+    id: '6:7/cupboards-closed/inner',
+    ref: '6:7',
+    title: { en: 'Two closed cupboards in the wall — tumah in the inner half' },
+    clause: { en: 'The wall-cupboard is considered as if it is plugged up, and it is subject to the principle of halves for conveying uncleanness into the house.' },
+    scene: () => ({ objects: wallCupboards(false, 'inner') }),
+    expect: { 'kli-house': 'tamei', 'kli-second': 'tahor' },
+  },
+  {
+    id: '6:7/cupboards-closed/outer',
+    ref: '6:7',
+    title: { en: 'Two closed cupboards in the wall — tumah in the outer half' },
+    clause: { en: 'The wall-cupboard is considered as if it is plugged up, and it is subject to the principle of halves for conveying uncleanness into the house.' },
+    notes: 'The closed cupboard over the tumah counts as solid wall, so the tumah is nearer the outside than the house.',
+    scene: () => ({ objects: wallCupboards(false, 'outer') }),
+    expect: { 'kli-house': 'tahor', 'kli-first': 'tahor' },
   },
   {
     id: '6:2/door-stands',

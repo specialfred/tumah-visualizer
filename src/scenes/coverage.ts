@@ -40,12 +40,12 @@ export const COVERAGE: MishnaCoverage[] = [
   c('5:7', 'todo', 'A basket on pegs outside a wall; a pot hanging from a beam (Rabbi Akiva vs Sages).'),
   // Chapter 6.
   c('6:1', 'partial', 'Supports modeled. Not yet: Rabbi Eliezer; “any living creature” as support.'),
-  c('6:2', 'partial', 'A door standing by itself or held up by its key modeled. Not yet: a barrel of figs in a window, and jars plastered into a partition.'),
+  c('6:2', 'modeled', 'The straw basket follows the barrel of figs.'),
   c('6:3', 'modeled'),
   c('6:4', 'modeled', 'Vessels in a wall between two houses (first half of the mishna) follow the same rule; no separate scenario yet.'),
   c('6:5', 'modeled', 'Per Rabbi Yehuda (all the plaster belongs to the upper story), as Bartenura reads the mishna.'),
   c('6:6', 'partial', 'Tumah under a pillar modeled. Not yet: a house serving a wall (tomb niches) with a covering thin as garlic skin.'),
-  c('6:7', 'partial', 'The capital of a pillar modeled, with Rabbi Yochanan ben Nuri. Not yet: two wall-cupboards, one opened.'),
+  c('6:7', 'modeled', 'Cupboards one above the other follow the same rule as side by side.'),
   // Chapter 7.
   c('7:1', 'partial', 'One upper story over two houses modeled. Not yet: a wall serving many stories (all tamei), a beach wall, and a solid monument (touching a closed grave).'),
   c('7:2', 'partial', 'Sloping sides modeled. Not yet: touching the tent from inside or outside, a side trailing on the ground, and a tent over a hatch (Rabbi Yose vs Rabbi Shimon).'),
@@ -110,7 +110,7 @@ export const COVERAGE: MishnaCoverage[] = [
   c('14:7', 'partial', 'Two curtains, the lower a tefach off the ground.'),
   // Chapter 15.
   c('15:1', 'modeled'),
-  c('15:2', 'partial', 'Tablets touching at their corners modeled. Not yet: a table, which brings only if it extends a tefach beyond its frame.'),
+  c('15:2', 'modeled', 'Not yet: Bartenura’s note that tumah inside the square is kept in (DESIGN tension 11).'),
   c('15:3', 'todo', 'Jars touching one another in the open.'),
   c('15:4', 'modeled', 'Modeled with boards from the side; boards or curtains under the beams follow the same rule.'),
   c('15:5', 'modeled'),
