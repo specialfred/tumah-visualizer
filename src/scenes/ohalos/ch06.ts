@@ -1,4 +1,4 @@
-import { box, container, kezayis, kli, person, room, solid } from '../../engine/build';
+import { box, boxesMinus, container, kezayis, kli, person, room, solid } from '../../engine/build';
 import type { SceneObject } from '../../engine/types';
 import type { Scenario } from '../types';
 
@@ -67,6 +67,24 @@ function vesselInPlaster(offset: number, tumahUpstairs: boolean): SceneObject[] 
     ...room({ id: 'lower', label: { en: 'House', he: 'בית' }, at: [0, 0, 0], size: [6, 6, 6], roof: 2, openings: [{ side: 'y-', offset: 2, width: 2, height: 4 }] }),
     ...room({ id: 'upper', label: { en: 'Upper story', he: 'עלייה' }, at: [0, 0, 8], size: [6, 6, 6], openings: [{ side: 'y-', offset: 2, width: 2, height: 4 }] }),
     tumahUpstairs ? kezayis('tumah', [1, 1, 8]) : kezayis('tumah', [1, 1, 0]),
+  ];
+}
+
+// 6:5 — a house whose ceiling is beams (a space `gap` tefachim high between them) under a tefach
+// of plaster, with the upper story on it. With `skin`, a covering thin as garlic skin is plastered
+// under the beams, so the tumah among them is not seen in the house.
+function amongBeams(gap: number, skin: boolean): SceneObject[] {
+  const [house, ...doors] = room({ id: 'lower', label: { en: 'House', he: 'בית' }, at: [0, 0, 0], size: [6, 6, 6], roof: 0.25 + gap + 1, openings: [{ side: 'y-', offset: 2, width: 2, height: 4 }] });
+  const space = skin ? box([0, 0, 6.25], [6, 6, gap]) : box([0, 0, 6], [6, 6, gap + 0.25]);
+  const top = 6 + 0.25 + gap + 1;
+  return [
+    { ...house, parts: boxesMinus(house.parts, [space]) },
+    ...doors,
+    ...[0.5, 2.5, 4.5].map((x, n) => solid(`beam${n + 1}`, { en: 'Beam', he: 'קורה' }, 'structure', 'wood', [x, 0, 6.25], [0.5, 6, gap])),
+    kezayis('tumah', [2, 3, 6.25], 1, [0.5, 0.5, 0.25]),
+    ...room({ id: 'upper', label: { en: 'Upper story', he: 'עלייה' }, at: [0, 0, top], size: [6, 6, 6], openings: [{ side: 'y-', offset: 2, width: 2, height: 4 }] }),
+    kli('kli-lower', [1, 1, 0], 'Vessel in the house'),
+    kli('kli-upper', [1, 1, top], 'Vessel in the upper story'),
   ];
 }
 
@@ -249,6 +267,44 @@ export const ch06: Scenario[] = [
     clause: { en: 'If they are in the middle, they are unclean.' },
     scene: () => ({ objects: vesselInPlaster(0.75, true) }),
     expect: { 'kli-plaster': 'tamei' },
+  },
+  {
+    id: '6:5/tefach',
+    ref: '6:5',
+    title: { en: 'Tumah among the beams, a thin covering under them, a tefach of space', he: 'טומאה בין הקורות' },
+    clause: { en: 'If there is a space within of a cubic handbreadth, everything becomes unclean.' },
+    notes: 'The mishna follows Rabbi Yehuda, for whom all the plaster belongs to the upper story (Bartenura). The space has no opening, so the tumah breaks out of it into the house and the upper story.',
+    shittos: { 'plaster-halves': 'yehuda' },
+    scene: () => ({ objects: amongBeams(1, true) }),
+    expect: { 'kli-lower': 'tamei', 'kli-upper': 'tamei' },
+  },
+  {
+    id: '6:5/small',
+    ref: '6:5',
+    title: { en: 'Tumah among the beams, a thin covering under them, less than a tefach of space' },
+    clause: { en: 'If there is not a space of a cubic handbreadth, the uncleanness is considered plugged up.' },
+    notes: 'It does not go down into the house, but breaks up into the upper story (Bartenura), since the whole ceiling belongs to the upper story (Rabbi Yehuda).',
+    shittos: { 'plaster-halves': 'yehuda' },
+    scene: () => ({ objects: amongBeams(0.5, true) }),
+    expect: { 'kli-lower': 'tahor', 'kli-upper': 'tamei' },
+  },
+  {
+    id: '6:5/seen/tefach',
+    ref: '6:5',
+    title: { en: 'Tumah among the beams, seen from the house, a tefach of space' },
+    clause: { en: 'If the uncleanness was visible within the house, in either case the house becomes unclean.' },
+    shittos: { 'plaster-halves': 'yehuda' },
+    scene: () => ({ objects: amongBeams(1, false) }),
+    expect: { 'kli-lower': 'tamei' },
+  },
+  {
+    id: '6:5/seen/small',
+    ref: '6:5',
+    title: { en: 'Tumah among the beams, seen from the house, less than a tefach of space' },
+    clause: { en: 'If the uncleanness was visible within the house, in either case the house becomes unclean.' },
+    shittos: { 'plaster-halves': 'yehuda' },
+    scene: () => ({ objects: amongBeams(0.5, false) }),
+    expect: { 'kli-lower': 'tamei' },
   },
   {
     id: '6:6/under-pillar',

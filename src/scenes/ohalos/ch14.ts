@@ -1,4 +1,4 @@
-import { kezayis, kli, room, solid } from '../../engine/build';
+import { box, boxesMinus, kezayis, kli, room, solid } from '../../engine/build';
 import type { SceneObject } from '../../engine/types';
 import type { Scenario } from '../types';
 
@@ -34,6 +34,26 @@ function projectionOverDoor(width: number): SceneObject[] {
   ];
 }
 
+// 14:4 — a projection a tefach wide going round the outside of a house, 5 tefachim up; over the
+// open doorway it juts out only three etzbaos (Bartenura).
+function projectionAround(tumahUnder: boolean): SceneObject[] {
+  const ring = box([-2, -2, 5], [12, 10, 0.5]);
+  const overDoorway = box([3, -2, 5], [2, 0.25, 0.5]);
+  return [
+    ...room({ id: 'house', at: [0, 0], size: [8, 6, 6], openings: [{ side: 'y-', offset: 3, width: 2, height: 4 }] }),
+    {
+      id: 'projection',
+      label: { en: 'Projection round the house', he: 'זיז שהוא סובב את כל הבית' },
+      kind: 'structure',
+      material: 'stone',
+      parts: boxesMinus([ring], [box([-1, -1, 5], [10, 8, 0.5]), overDoorway]),
+    },
+    tumahUnder ? kezayis('tumah', [7, -1.75, 0], 1, [0.25, 0.25, 0.25]) : kezayis('tumah', [4, 3, 0]),
+    kli('v-under', [1, -1.75, 0], 'Vessel under the projection', [0.25, 0.25, 0.25]),
+    kli('v-house', [6, 4, 0], 'Vessel in the house'),
+  ];
+}
+
 export const ch14: Scenario[] = [
   {
     id: '14:2/door/tefach',
@@ -51,6 +71,24 @@ export const ch14: Scenario[] = [
     clause: { en: '...when it is one handbreadth wide.' },
     scene: () => ({ objects: projectionOverDoor(0.75) }),
     expect: { 'kli-outside': 'tahor' },
+  },
+  {
+    id: '14:4/tumah-in-house',
+    ref: '14:4',
+    title: { en: 'A projection round the house, three etzbaos over the doorway — tumah in the house', he: 'זיז שהוא סובב את כל הבית' },
+    clause: { en: 'If there is uncleanness in the house, vessels beneath [the projection] become unclean.' },
+    notes: 'Rabbi Yehoshua agrees here, because the way of tumah is to go out (Bartenura): it goes out under the projection, whose tent carries it on.',
+    scene: () => ({ objects: projectionAround(false) }),
+    expect: { 'v-under': 'tamei' },
+  },
+  {
+    id: '14:4/tumah-under',
+    ref: '14:4',
+    title: { en: 'A projection round the house, three etzbaos over the doorway — tumah under it' },
+    clause: { en: 'If the uncleanness is beneath [the projection]: Rabbi Eliezer declares the house unclean, but Rabbi Joshua declares it clean.' },
+    notes: 'The halacha follows Rabbi Yehoshua (Bartenura): tumah outside does not come in. Rabbi Eliezer, for whom a projection brings tumah at any width (14:1), is not yet modeled.',
+    scene: () => ({ objects: projectionAround(true) }),
+    expect: { 'v-under': 'tamei', 'v-house': 'tahor' },
   },
   {
     id: '14:5/tefach-apart/under',

@@ -133,6 +133,17 @@ export const DISPUTES: Dispute[] = [
     modeled: false,
   },
   {
+    id: 'projection-around-house',
+    ref: '14:4',
+    topic: { en: 'Tumah under a projection round a house, three etzbaos over the doorway', he: 'זיז שהוא סובב את כל הבית' },
+    options: [
+      o('yehoshua', 'Rabbi Yehoshua', 'רבי יהושע', 'The house is tahor: tumah goes out, not in.'),
+      o('eliezer', 'Rabbi Eliezer', 'רבי אליעזר', 'The house is tamei: a projection brings tumah at any width.'),
+    ],
+    defaultOption: 'yehoshua',
+    modeled: false,
+  },
+  {
     id: 'pot-over-hatch',
     ref: '5:2',
     topic: { en: 'A perforated pot over a hatch', he: 'קדרה על פי ארובה' },

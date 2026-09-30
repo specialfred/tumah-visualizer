@@ -5,9 +5,9 @@ mishna’s ruling; the engine must reproduce the ruling from its general rules.
 
 🟢 modeled · 🟡 partly modeled · ⚪ not yet modeled · 🔵 not spatial (tracked as data)
 
-**20** modeled, **23** partly modeled, **52** not yet modeled, **39** not spatial — of 134 mishnayos.
+**22** modeled, **23** partly modeled, **50** not yet modeled, **39** not spatial — of 134 mishnayos.
 
-Scenarios: **135** passing, **0** failing, **3** pending.
+Scenarios: **143** passing, **0** failing, **3** pending.
 
 ## Chapter 1
 
@@ -74,7 +74,7 @@ Scenarios: **135** passing, **0** failing, **3** pending.
 | 6:2 | 🟡 partial | ✅ 6:2/door-stands<br>✅ 6:2/door-on-key | A door standing by itself or held up by its key modeled. Not yet: a barrel of figs in a window, and jars plastered into a partition. |
 | 6:3 | 🟢 modeled | ✅ 6:3/inner-half<br>✅ 6:3/outer-half<br>✅ 6:3/middle/chachamim<br>✅ 6:3/middle/meir<br>✅ 6:3/outer-half/yehuda |  |
 | 6:4 | 🟢 modeled | ✅ 6:4/lower-half<br>✅ 6:4/upper-half<br>✅ 6:4/middle<br>✅ 6:4/lower-half/yehuda<br>✅ 6:4/vessel-lower-half/tumah-below<br>✅ 6:4/vessel-lower-half/tumah-above<br>✅ 6:4/vessel-middle/tumah-above | Vessels in a wall between two houses (first half of the mishna) follow the same rule; no separate scenario yet. |
-| 6:5 | ⚪ todo | — | Tumah among roof beams under a covering thin as garlic skin. |
+| 6:5 | 🟢 modeled | ✅ 6:5/tefach<br>✅ 6:5/small<br>✅ 6:5/seen/tefach<br>✅ 6:5/seen/small | Per Rabbi Yehuda (all the plaster belongs to the upper story), as Bartenura reads the mishna. |
 | 6:6 | 🟡 partial | ✅ 6:6/under-pillar | Tumah under a pillar modeled. Not yet: a house serving a wall (tomb niches) with a covering thin as garlic skin. |
 | 6:7 | 🟡 partial | ✅ 6:7/under-pillar<br>✅ 6:7/under-pillar/yochanan-ben-nuri<br>✅ 6:7/under-capital/tefach<br>✅ 6:7/under-capital/small | The capital of a pillar modeled, with Rabbi Yochanan ben Nuri. Not yet: two wall-cupboards, one opened. |
 
@@ -140,7 +140,7 @@ Scenarios: **135** passing, **0** failing, **3** pending.
 | 11:1 | 🟡 partial | ✅ 11:1/tumah-outer<br>✅ 11:1/tumah-inner/beis-hillel | Beis Hillel (a split of any size) modeled. Not yet: Beis Shammai (4 tefachim) and Rabbi Yose (a tefach). |
 | 11:2 | 🟡 partial | ✅ 11:2/split<br>✅ 11:2/leg | The split and a leg over it modeled. Not yet: a reed, which joins only a tefach off the ground. |
 | 11:3 | 🟢 modeled | ✅ 11:3/cloak-low<br>✅ 11:3/cloak-raised<br>✅ 11:3/person/beis-hillel<br>✅ 11:3/person/beis-shammai | Folded garments are modeled under 15:1, which repeats them. |
-| 11:4 | 🟡 partial | ✅ 11:4/beis-hillel<br>✅ 11:4/beis-shammai | Beis Shammai and Beis Hillel modeled. Not yet: where they agree (he is dressed, or two people one above the other). |
+| 11:4 | 🟢 modeled | ✅ 11:4/beis-hillel<br>✅ 11:4/beis-shammai<br>✅ 11:4/dressed/beis-shammai<br>✅ 11:4/two/beis-shammai |  |
 | 11:5 | 🟢 modeled | ✅ 11:5/beis-hillel<br>✅ 11:5/beis-shammai |  |
 | 11:6 | 🟢 modeled | ✅ 11:6/beis-hillel<br>✅ 11:6/beis-shammai |  |
 | 11:7 | ⚪ todo | — | A dog that ate corpse flesh, lying on a threshold. |
@@ -178,7 +178,7 @@ Scenarios: **135** passing, **0** failing, **3** pending.
 | 14:1 | ⚪ todo | — | Projections and balconies above a doorway. |
 | 14:2 | 🟡 partial | ✅ 14:2/door/tefach<br>✅ 14:2/door/narrow | A projection over a closed doorway modeled. Not yet: over a window (any width), and Rabbi Yose. |
 | 14:3 | ⚪ todo | — | A rod above a doorway (Rabbi Yehoshua vs Rabbi Yochanan ben Nuri). |
-| 14:4 | ⚪ todo | — | A projection going round a house. |
+| 14:4 | 🟡 partial | ✅ 14:4/tumah-in-house<br>✅ 14:4/tumah-under | Modeled per Rabbi Yehoshua (the halacha). Not yet: Rabbi Eliezer, and the courtyard surrounded by a portico. |
 | 14:5 | 🟡 partial | ✅ 14:5/tefach-apart/under<br>✅ 14:5/tefach-apart/between<br>✅ 14:5/tefach-apart/above<br>✅ 14:5/overlap-tefach/under<br>✅ 14:5/overlap-tefach/between<br>⏳ 14:5/overlap-less/under | An overlap of less than a tefach (Rabbi Eliezer vs Rabbi Yehoshua) is pending. |
 | 14:6 | 🟢 modeled | ✅ 14:6/no-space/under<br>✅ 14:6/no-space/between |  |
 | 14:7 | 🟡 partial | ✅ 14:7/narrow/under | Two curtains, the lower a tefach off the ground. |
