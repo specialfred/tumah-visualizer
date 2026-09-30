@@ -14,6 +14,8 @@ export function Inspector() {
   const id = useStore((s) => s.selected);
   const scene = useStore((s) => s.scene);
   const evaluation = useStore((s) => s.evaluation);
+  // While the engine catches up with an edit, the verdict below is for the scene as it was.
+  const stale = useStore((s) => s.computing);
   const o = scene.objects.find((x) => x.id === id);
   if (!o) return <p className="p-4 text-[13px] leading-6 text-stone-500">{t('selectHint')}</p>;
   const r = evaluation?.objects[o.id];
@@ -44,10 +46,10 @@ export function Inspector() {
     <div className="space-y-5 p-4">
       <header className="space-y-2">
         <h2 className="text-lg font-semibold text-stone-900">{pick(o.label, lang)}</h2>
-        <span className={`inline-block rounded-full px-2.5 py-0.5 text-[12px] font-medium ring-1 ${pill}`}>{status}</span>
+        <span className={`inline-block rounded-full px-2.5 py-0.5 text-[12px] font-medium ring-1 transition-opacity duration-200 ${pill} ${stale ? 'animate-pulse opacity-50' : ''}`}>{status}</span>
       </header>
       {r && r.reasons.length > 0 && (
-        <section>
+        <section className={`transition-opacity duration-200 ${stale ? 'opacity-50' : ''}`}>
           <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-stone-500">{t('why')}</h3>
           <Reasons reasons={r.reasons} />
         </section>

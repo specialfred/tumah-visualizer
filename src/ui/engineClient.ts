@@ -2,8 +2,17 @@
 // the main thread where workers are unavailable (some sandboxed hosts block them).
 import { evaluate } from '../engine/evaluate';
 import type { Evaluation, Scene, ShittosSelection } from '../engine/types';
+import { greedyBoxes, type MaskBox } from './meshing';
 
-type Listener = (ev: Evaluation | null, error?: string) => void;
+export interface EngineResult {
+  ev: Evaluation | null;
+  /** The tamei air, merged into boxes for drawing. */
+  air: MaskBox[];
+  error?: string;
+}
+
+/** Called with the result of the latest request only; results that a newer request has made stale are dropped. */
+type Listener = (r: EngineResult) => void;
 
 function makeWorker(): Worker | null {
   try {
@@ -11,6 +20,11 @@ function makeWorker(): Worker | null {
   } catch {
     return null;
   }
+}
+
+function afterPaint(f: () => void) {
+  if (typeof requestAnimationFrame === 'function') requestAnimationFrame(() => setTimeout(f, 0));
+  else setTimeout(f, 0);
 }
 
 export class EngineClient {
@@ -21,9 +35,9 @@ export class EngineClient {
 
   constructor(private listener: Listener) {
     if (!this.worker) return;
-    this.worker.onmessage = (e: MessageEvent<{ seq: number; ev?: Evaluation; error?: string }>) => {
+    this.worker.onmessage = (e: MessageEvent<{ seq: number; ev?: Evaluation; air?: MaskBox[]; error?: string }>) => {
       this.busy = false;
-      if (e.data.seq === this.seq) this.listener(e.data.ev ?? null, e.data.error);
+      if (e.data.seq === this.seq && !this.pending) this.listener({ ev: e.data.ev ?? null, air: e.data.air ?? [], error: e.data.error });
       this.flush();
     };
     this.worker.onerror = () => {
@@ -49,17 +63,20 @@ export class EngineClient {
     this.lastSent = job;
     if (!this.worker) {
       this.busy = true;
-      // Yield so the UI can paint before a synchronous evaluation.
-      setTimeout(() => {
+      // Let the UI paint (the drop, the "updating" note) before a synchronous evaluation blocks it.
+      afterPaint(() => {
+        let result: EngineResult;
         try {
-          this.listener(evaluate(job.scene, job.shittos));
+          const ev = evaluate(job.scene, job.shittos);
+          result = { ev, air: greedyBoxes(ev.tameiAir.mask, ev.tameiAir.dims, ev.tameiAir.origin) };
         } catch (err) {
-          this.listener(null, String(err));
+          result = { ev: null, air: [], error: String(err) };
         }
         this.busy = false;
         this.lastSent = null;
         if (this.pending) this.flush();
-      }, 0);
+        else this.listener(result);
+      });
       return;
     }
     this.busy = true;

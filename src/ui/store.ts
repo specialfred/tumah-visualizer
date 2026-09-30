@@ -3,6 +3,7 @@ import { defaultShittos } from '../engine/shittos';
 import { TEFACH, type Evaluation, type Lang, type Scene, type SceneObject, type ShittosSelection, type Vec3 } from '../engine/types';
 import { SCENARIOS } from '../scenes/index';
 import { EngineClient } from './engineClient';
+import type { MaskBox } from './meshing';
 import { TEMPLATES } from './templates';
 
 export type RightTab = 'text' | 'inspect' | 'shittos';
@@ -17,6 +18,10 @@ interface State {
   shittos: ShittosSelection;
   selected: string | null;
   evaluation: Evaluation | null;
+  /** The tamei air of `evaluation`, merged into boxes for drawing. */
+  air: MaskBox[];
+  /** The engine is working on a newer scene than `evaluation` describes. */
+  computing: boolean;
   engineError: string | null;
   tab: RightTab;
   view: { showAir: boolean; xray: boolean; snap: number; labels: boolean };
@@ -36,6 +41,8 @@ interface State {
   /** Move an object (and the rest of its group) by `d` grid units. */
   nudge: (id: string, d: Vec3) => void;
   setDrag: (drag: State['drag']) => void;
+  /** End a drag, moving the dragged objects by its offset. */
+  drop: () => void;
   updateObject: (id: string, f: (o: SceneObject) => SceneObject) => void;
   addTemplate: (templateId: string) => void;
   removeObject: (id: string) => void;
@@ -72,9 +79,13 @@ const first = SCENARIOS[0];
 let client: EngineClient | null = null;
 
 export const useStore = create<State>((set, get) => {
+  const run = (scene: Scene, shittos: ShittosSelection) => {
+    set({ computing: true });
+    client?.request(scene, shittos);
+  };
   const commit = (scene: Scene, extra: Partial<State> = {}) => {
     set({ history: [...get().history.slice(-49), get().scene], scene, modified: true, ...extra });
-    client?.request(scene, get().shittos);
+    run(scene, get().shittos);
   };
 
   return {
@@ -86,6 +97,8 @@ export const useStore = create<State>((set, get) => {
     shittos: { ...defaultShittos(), ...first.shittos },
     selected: null,
     evaluation: null,
+    air: [],
+    computing: true,
     engineError: null,
     tab: 'text',
     view: { showAir: true, xray: true, snap: TEFACH, labels: false },
@@ -104,14 +117,14 @@ export const useStore = create<State>((set, get) => {
       if (!s) return;
       const scene = s.scene();
       const shittos = { ...defaultShittos(), ...s.shittos };
-      set({ mishnaRef: s.ref, scenarioId: id, scene, shittos, modified: false, selected: null, history: [], evaluation: null, tab: 'text', drag: null });
-      client?.request(scene, shittos);
+      set({ mishnaRef: s.ref, scenarioId: id, scene, shittos, modified: false, selected: null, history: [], evaluation: null, air: [], tab: 'text', drag: null });
+      run(scene, shittos);
     },
     newScene: () => commit({ objects: [] }, { scenarioId: null, selected: null }),
     setShitah: (dispute, option) => {
       const shittos = { ...get().shittos, [dispute]: option };
       set({ shittos });
-      client?.request(get().scene, shittos);
+      run(get().scene, shittos);
     },
     select: (selected) => set(selected ? { selected, tab: 'inspect' } : { selected }),
     setView: (v) => set({ view: { ...get().view, ...v } }),
@@ -132,6 +145,13 @@ export const useStore = create<State>((set, get) => {
       get().moveObjectTo(id, [a[0] + d[0], a[1] + d[1], a[2] + d[2]]);
     },
     setDrag: (drag) => set({ drag }),
+    drop: () => {
+      const { drag, scene } = get();
+      if (!drag || drag.offset.every((v) => v === 0)) return set({ drag: null });
+      // Clearing the drag and moving the objects in one update, so they never flash back to where they were.
+      const ids = new Set(drag.ids);
+      commit({ objects: scene.objects.map((x) => (ids.has(x.id) ? shiftObject(x, drag.offset) : x)) }, { drag: null });
+    },
     updateObject: (id, f) => {
       const { scene } = get();
       commit({ objects: scene.objects.map((x) => (x.id === id ? f(x) : x)) });
@@ -176,12 +196,12 @@ export const useStore = create<State>((set, get) => {
       if (!h.length) return;
       const scene = h[h.length - 1];
       set({ scene, history: h.slice(0, -1), selected: null });
-      client?.request(scene, get().shittos);
+      run(scene, get().shittos);
     },
   };
 });
 
-client = new EngineClient((evaluation, error) => useStore.setState({ evaluation, engineError: error ?? null }));
+client = new EngineClient(({ ev, air, error }) => useStore.setState({ evaluation: ev, air, computing: false, engineError: error ?? null }));
 {
   const s = useStore.getState();
   client.request(clone(s.scene), s.shittos);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Inspector } from './Inspector';
 import { ShittosPanel } from './ShittosPanel';
 import { Sidebar } from './Sidebar';
@@ -42,9 +42,9 @@ export function App() {
         <main className="relative min-w-0 flex-1">
           <Viewport />
           <Toolbar />
-          <MoveHint />
+          <StatusPill />
           <Legend />
-          <Status />
+          <EngineError />
         </main>
         <aside className="flex w-[400px] shrink-0 flex-col border-s border-stone-200 bg-[#faf8f4]">
           <div className="flex shrink-0 gap-1 border-b border-stone-200 px-3 pt-2">
@@ -182,13 +182,10 @@ function Legend() {
   );
 }
 
-function Status() {
-  const t = useT();
-  const ev = useStore((s) => s.evaluation);
+function EngineError() {
   const err = useStore((s) => s.engineError);
-  if (err) return <div className="absolute bottom-3 end-3 rounded-lg bg-rose-50 px-3 py-1.5 text-[12px] text-rose-700 ring-1 ring-rose-200">{err}</div>;
-  if (!ev) return <div className="absolute bottom-3 end-3 text-[12px] text-stone-500">{t('computing')}</div>;
-  return null;
+  if (!err) return null;
+  return <div className="absolute bottom-3 end-3 rounded-lg bg-rose-50 px-3 py-1.5 text-[12px] text-rose-700 ring-1 ring-rose-200">{err}</div>;
 }
 
 // Arrow keys slide the selected object along the floor; Page Up / Page Down lift and lower it.
@@ -201,13 +198,50 @@ const NUDGE: Record<string, [number, number, number]> = {
   PageDown: [0, 0, -1],
 };
 
-function MoveHint() {
+type PillMode = 'hint' | 'drop' | 'updating' | 'updated';
+
+/**
+ * One pill over the scene that follows an edit through: how to move the selected object, then
+ * "drop to update" while dragging, "updating" while the engine works, and a brief "updated".
+ */
+function StatusPill() {
   const t = useT();
   const selected = useStore((s) => s.selected);
-  if (!selected) return null;
+  const dragging = useStore((s) => s.drag !== null);
+  const computing = useStore((s) => s.computing);
+  const failed = useStore((s) => s.engineError !== null);
+  const [justUpdated, setJustUpdated] = useState(false);
+  const wasComputing = useRef(computing);
+  useEffect(() => {
+    const finished = wasComputing.current && !computing;
+    wasComputing.current = computing;
+    if (!finished || failed) return setJustUpdated(false);
+    setJustUpdated(true);
+    const timer = setTimeout(() => setJustUpdated(false), 1100);
+    return () => clearTimeout(timer);
+  }, [computing, failed]);
+
+  const mode: PillMode | null = dragging ? 'drop' : computing ? 'updating' : justUpdated ? 'updated' : selected ? 'hint' : null;
+  // Keep showing the last message while the pill fades out.
+  const last = useRef<PillMode>('hint');
+  if (mode) last.current = mode;
+  const shown = mode ?? last.current;
+
   return (
-    <div className="pointer-events-none absolute start-1/2 top-[72px] -translate-x-1/2 rounded-full bg-stone-900/85 px-3 py-1 text-[12px] text-white shadow rtl:translate-x-1/2">
-      {t('moveHint')}
+    <div
+      role="status"
+      aria-live="polite"
+      className={`pointer-events-none absolute start-1/2 top-[72px] flex -translate-x-1/2 items-center gap-2 rounded-full px-3 py-1 text-[12px] shadow transition-[opacity,background-color] duration-200 rtl:translate-x-1/2 ${
+        mode ? 'opacity-100' : 'opacity-0'
+      } ${shown === 'updated' ? 'bg-emerald-700/90 text-white' : 'bg-stone-900/85 text-white'}`}
+    >
+      {shown === 'updating' && <span className="h-3 w-3 animate-spin rounded-full border-2 border-white/30 border-t-white" aria-hidden />}
+      {shown === 'updated' && (
+        <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden>
+          <path d="M2.5 6.5 5 9l4.5-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )}
+      <span>{t(shown === 'hint' ? 'moveHint' : shown === 'drop' ? 'dropToUpdate' : shown === 'updating' ? 'updating' : 'updated')}</span>
     </div>
   );
 }
