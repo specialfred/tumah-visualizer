@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { TEFACH, type SceneObject } from '../engine/types';
 import { objectColor } from './colors';
 import { greedyBoxes } from './meshing';
+import { ShapedBody, shapeOf, type SkinProps } from './shapes';
 import { anchorOf, useStore } from './store';
 
 THREE.Object3D.DEFAULT_UP.set(0, 0, 1);
@@ -127,6 +128,16 @@ function ObjectMesh({ o, selected }: { o: SceneObject; selected: boolean }) {
   const isCavity = o.kind === 'cavity';
   const translucent = isCavity || (xray && (o.kind === 'structure' || o.kind === 'door' || result?.status === 'insusceptible'));
   const opacity = isCavity ? 0.35 : translucent ? 0.28 : 1;
+  const shape = shapeOf(o);
+  const skin: SkinProps = {
+    color: isCavity ? '#1c1917' : color,
+    transparent: translucent,
+    opacity,
+    depthWrite: !translucent,
+    emissive: o.kind === 'tumah' ? '#be123c' : '#000000',
+    emissiveIntensity: o.kind === 'tumah' ? 0.18 : 0,
+    roughness: 0.8,
+  };
 
   // See-through walls let clicks pass to whatever solid thing is behind them.
   const onClick = (e: ThreeEvent<MouseEvent>) => {
@@ -148,26 +159,30 @@ function ObjectMesh({ o, selected }: { o: SceneObject; selected: boolean }) {
         }}
         position={[T(anchor[0]), T(anchor[1]), T(anchor[2])]}
       >
-        {o.parts.map((p, i) => (
-          <mesh
-            key={i}
-            position={[T(p.min[0] - anchor[0] + p.size[0] / 2), T(p.min[1] - anchor[1] + p.size[1] / 2), T(p.min[2] - anchor[2] + p.size[2] / 2)]}
+        {shape === 'box' ? (
+          o.parts.map((p, i) => (
+            <mesh
+              key={i}
+              position={[T(p.min[0] - anchor[0] + p.size[0] / 2), T(p.min[1] - anchor[1] + p.size[1] / 2), T(p.min[2] - anchor[2] + p.size[2] / 2)]}
+              onClick={onClick}
+              userData={{ translucent }}
+            >
+              <boxGeometry args={[T(p.size[0]), T(p.size[1]), T(p.size[2])]} />
+              <meshStandardMaterial {...skin} />
+              <Edges color={selected ? '#2563eb' : o.kind === 'tumah' ? '#be123c' : '#44403c'} lineWidth={selected ? 2.5 : 1} threshold={20} />
+            </mesh>
+          ))
+        ) : (
+          <ShapedBody
+            o={o}
+            shape={shape}
+            origin={[T(anchor[0]), T(anchor[1]), T(anchor[2])]}
+            skin={skin}
+            selected={selected}
             onClick={onClick}
-            userData={{ translucent }}
-          >
-            <boxGeometry args={[T(p.size[0]), T(p.size[1]), T(p.size[2])]} />
-            <meshStandardMaterial
-              color={isCavity ? '#1c1917' : color}
-              transparent={translucent}
-              opacity={opacity}
-              depthWrite={!translucent}
-              emissive={o.kind === 'tumah' ? '#be123c' : '#000000'}
-              emissiveIntensity={o.kind === 'tumah' ? 0.18 : 0}
-              roughness={0.8}
-            />
-            <Edges color={selected ? '#2563eb' : o.kind === 'tumah' ? '#be123c' : '#44403c'} lineWidth={selected ? 2.5 : 1} threshold={20} />
-          </mesh>
-        ))}
+            translucent={translucent}
+          />
+        )}
         {(labels || selected) && o.kind !== 'structure' && (
           <Html position={[cx, cy, top + 0.4]} center distanceFactor={18} style={{ pointerEvents: 'none' }}>
             <div className="whitespace-nowrap rounded-md bg-white/90 px-1.5 py-0.5 text-[11px] font-medium text-stone-800 shadow ring-1 ring-stone-900/10">
