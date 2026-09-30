@@ -1,10 +1,9 @@
-import { Canvas, useThree, type ThreeEvent } from '@react-three/fiber';
+import { Canvas, useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
 import { Edges, Grid, Html, OrbitControls } from '@react-three/drei';
-import { useEffect, useMemo, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { TEFACH, type SceneObject, type Vec3 } from '../engine/types';
 import { objectColor } from './colors';
-import { greedyBoxes } from './meshing';
 import { ShapedBody, shapeOf, type ObjectHandlers, type SkinProps } from './shapes';
 import { anchorOf, groupOf, useStore } from './store';
 
@@ -143,11 +142,12 @@ interface DragState {
   ids: string[];
 }
 
-function ObjectMesh({ o, selected }: { o: SceneObject; selected: boolean }) {
+// Memoized so that dropping one object, or dragging it a step, doesn't redraw all the others.
+const ObjectMesh = memo(function ObjectMesh({ o, selected }: { o: SceneObject; selected: boolean }) {
   const result = useStore((s) => s.evaluation?.objects[o.id]);
   const select = useStore((s) => s.select);
-  const nudge = useStore((s) => s.nudge);
   const setDrag = useStore((s) => s.setDrag);
+  const drop = useStore((s) => s.drop);
   const dragOffset = useStore((s) => (s.drag && s.drag.ids.includes(o.id) ? s.drag.offset : null));
   const xray = useStore((s) => s.view.xray);
   const labels = useStore((s) => s.view.labels);
@@ -180,10 +180,8 @@ function ObjectMesh({ o, selected }: { o: SceneObject; selected: boolean }) {
     if (!drag.current) return;
     drag.current = null;
     orbit(true);
-    const d = useStore.getState().drag;
-    setDrag(null);
     // The rules run once, on the drop, rather than on every step of the drag.
-    if (d && d.offset.some((v) => v !== 0)) nudge(o.id, d.offset);
+    drop();
   };
 
   const handlers: ObjectHandlers = {
@@ -281,19 +279,45 @@ function ObjectMesh({ o, selected }: { o: SceneObject; selected: boolean }) {
       )}
     </group>
   );
-}
+});
 
+const AIR_OPACITY = { 1: 0.16, 2: 0.09 } as const;
+
+/**
+ * The tamei air. It no longer matches the scene while something is being dragged or the engine is
+ * catching up, so then it fades back (and breathes while the engine works), and the new air fades in.
+ */
 function TameiAir() {
-  const ev = useStore((s) => s.evaluation);
+  const boxes = useStore((s) => s.air);
   const show = useStore((s) => s.view.showAir);
-  const boxes = useMemo(() => (ev ? greedyBoxes(ev.tameiAir.mask, ev.tameiAir.dims, ev.tameiAir.origin) : []), [ev]);
+  const mats = useMemo(
+    () => ({
+      1: new THREE.MeshBasicMaterial({ color: '#f43f5e', transparent: true, opacity: AIR_OPACITY[1], depthWrite: false }),
+      2: new THREE.MeshBasicMaterial({ color: '#fb7185', transparent: true, opacity: AIR_OPACITY[2], depthWrite: false }),
+    }),
+    [],
+  );
+  const fade = useRef(1);
+  useEffect(() => () => Object.values(mats).forEach((m) => m.dispose()), [mats]);
+  useFrame(({ clock }, dt) => {
+    const { drag, computing } = useStore.getState();
+    const target = drag ? 0.3 : computing ? 0.3 + 0.2 * Math.sin(clock.elapsedTime * 6) : 1;
+    fade.current += (target - fade.current) * (1 - Math.exp(-dt * 10));
+    mats[1].opacity = AIR_OPACITY[1] * fade.current;
+    mats[2].opacity = AIR_OPACITY[2] * fade.current;
+  });
   if (!show) return null;
   return (
     <group>
       {boxes.map((b, i) => (
-        <mesh key={i} position={[T(b.min[0] + b.size[0] / 2), T(b.min[1] + b.size[1] / 2), T(b.min[2] + b.size[2] / 2)]} renderOrder={2}>
+        <mesh
+          key={i}
+          position={[T(b.min[0] + b.size[0] / 2), T(b.min[1] + b.size[1] / 2), T(b.min[2] + b.size[2] / 2)]}
+          renderOrder={2}
+          material={b.value === 1 ? mats[1] : mats[2]}
+          raycast={() => null}
+        >
           <boxGeometry args={[T(b.size[0]), T(b.size[1]), T(b.size[2])]} />
-          <meshBasicMaterial color={b.value === 1 ? '#f43f5e' : '#fb7185'} transparent opacity={b.value === 1 ? 0.16 : 0.09} depthWrite={false} />
         </mesh>
       ))}
     </group>

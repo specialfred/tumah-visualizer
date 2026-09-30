@@ -49,7 +49,9 @@ const STRINGS = {
   legendTahor: { en: 'Tahor', he: 'טהור' },
   legendSource: { en: 'Tumah', he: 'טומאה' },
   legendAir: { en: 'Tamei space', he: 'אהל טמא' },
-  computing: { en: 'computing…', he: 'מחשב…' },
+  dropToUpdate: { en: 'Let go to update the tumah', he: 'שחרר כדי לעדכן את הטומאה' },
+  updating: { en: 'Updating the tumah…', he: 'מעדכן את הטומאה…' },
+  updated: { en: 'Tumah updated', he: 'הטומאה עודכנה' },
 } satisfies Record<string, Text & { he: string }>;
 
 export type StringKey = keyof typeof STRINGS;

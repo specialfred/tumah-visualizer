@@ -36,6 +36,7 @@ export function TextPanel() {
   const loadScenario = useStore((s) => s.loadScenario);
   const modified = useStore((s) => s.modified);
   const evaluation = useStore((s) => s.evaluation);
+  const stale = useStore((s) => s.computing);
   const scene = useStore((s) => s.scene);
   const [both, setBoth] = useState(false);
   const [showBartenura, setShowBartenura] = useState(false);
@@ -125,7 +126,7 @@ export function TextPanel() {
                   <span className="flex items-center gap-2">
                     <span className={want === 'tahor' ? 'text-teal-700' : 'text-rose-700'}>{want === 'tahor' ? t('tahor') : want === 'tameiErev' ? t('tameiErev') : want === 'tamei7' ? t('tamei7') : lang === 'he' ? 'טמא' : 'Tamei'}</span>
                     {evaluation && !modified && (
-                      <span title={ok ? t('engineAgrees') : t('engineDisagrees')} className={ok ? 'text-emerald-600' : 'text-rose-600'}>
+                      <span title={ok ? t('engineAgrees') : t('engineDisagrees')} className={`transition-opacity duration-200 ${ok ? 'text-emerald-600' : 'text-rose-600'} ${stale ? 'opacity-30' : ''}`}>
                         {ok ? '✓' : '✗'}
                       </span>
                     )}
