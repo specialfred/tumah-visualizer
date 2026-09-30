@@ -199,7 +199,7 @@ class Ctx {
       for (const i of cells) if (a.region[i]) keys.add(`r${a.region[i]}`);
       return [...keys];
     }
-    cells.push(...a.objCells[oi]);
+    for (const i of a.objCells[oi]) cells.push(i);
     const pockets = new Set<number>();
     for (const i of cells) {
       const r = a.region[i];

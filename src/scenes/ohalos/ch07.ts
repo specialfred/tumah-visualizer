@@ -2,15 +2,15 @@ import { corpse, kezayis, kli, room, type OpeningSpec } from '../../engine/build
 import type { SceneObject } from '../../engine/types';
 import type { Scenario } from '../types';
 
-// 3:6, 7:3 — a house (10×10×8) with three doorways, 4 tefachim wide and 6 high, in walls a
+// 3:6, 7:3 — a house four amos square (24×24×8) with three doorways, 4 tefachim wide and 6 high, in walls a
 // tefach thick. Each door sits at the inner face of the wall; a vessel stands in each doorway on
 // the outside, under the lintel.
 type DoorState = 'closed' | 'open' | 'intended';
 function doorsHouse(doors: [DoorState, DoorState, DoorState], tumah: 'meis' | 'kezayis', window?: number): SceneObject[] {
   const specs: OpeningSpec[] = [
-    { side: 'y-', offset: 3, width: 4, height: 6 },
-    { side: 'x+', offset: 3, width: 4, height: 6 },
-    { side: 'y+', offset: 3, width: 4, height: 6 },
+    { side: 'y-', offset: 10, width: 4, height: 6 },
+    { side: 'x+', offset: 10, width: 4, height: 6 },
+    { side: 'y+', offset: 10, width: 4, height: 6 },
   ].map((s, n) => ({
     ...s,
     side: s.side as OpeningSpec['side'],
@@ -19,13 +19,13 @@ function doorsHouse(doors: [DoorState, DoorState, DoorState], tumah: 'meis' | 'k
     id: `door${n + 1}`,
   }));
   // Per Bartenura on 3:6, a window saves the doors when they intend to take the tumah out by it.
-  if (window) specs.push({ side: 'x-', offset: 4, width: window, height: window, sill: 3, door: true, intendedExit: true, id: 'window' });
+  if (window) specs.push({ side: 'x-', offset: 10, width: window, height: window, sill: 3, door: true, intendedExit: true, id: 'window' });
   return [
-    ...room({ id: 'house', at: [0, 0], size: [10, 10, 8], openings: specs }),
-    tumah === 'meis' ? corpse('tumah', [1, 4, 0], 6) : kezayis('tumah', [4, 4, 0]),
-    kli('v1', [4.75, -0.75, 0], 'Vessel in the first doorway'),
-    kli('v2', [10.25, 4.75, 0], 'Vessel in the second doorway'),
-    kli('v3', [4.75, 10.25, 0], 'Vessel in the third doorway'),
+    ...room({ id: 'house', at: [0, 0], size: [24, 24, 8], openings: specs }),
+    tumah === 'meis' ? corpse('tumah', [3, 9, 0]) : kezayis('tumah', [11.75, 11.75, 0]),
+    kli('v1', [11.75, -0.75, 0], 'Vessel in the first doorway'),
+    kli('v2', [24.25, 11.75, 0], 'Vessel in the second doorway'),
+    kli('v3', [11.75, 24.25, 0], 'Vessel in the third doorway'),
   ];
 }
 
