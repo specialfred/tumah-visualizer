@@ -35,7 +35,7 @@ export const DISPUTES: Dispute[] = [
       o('akiva', 'Rabbi Akiva', 'רבי עקיבא', 'The tent counts, giving a fifth link.'),
     ],
     defaultOption: 'chachamim',
-    modeled: false,
+    modeled: true,
   },
   {
     id: 'wall-halves',

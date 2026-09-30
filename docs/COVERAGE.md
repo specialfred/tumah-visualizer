@@ -5,9 +5,9 @@ mishna’s ruling; the engine must reproduce the ruling from its general rules.
 
 🟢 modeled · 🟡 partly modeled · ⚪ not yet modeled · 🔵 not spatial (tracked as data)
 
-**12** modeled, **12** partly modeled, **71** not yet modeled, **39** not spatial — of 134 mishnayos.
+**14** modeled, **14** partly modeled, **67** not yet modeled, **39** not spatial — of 134 mishnayos.
 
-Scenarios: **75** passing, **0** failing, **1** pending.
+Scenarios: **86** passing, **0** failing, **1** pending.
 
 ## Chapter 1
 
@@ -15,7 +15,7 @@ Scenarios: **75** passing, **0** failing, **1** pending.
 | --- | --- | --- | --- |
 | 1:1 | 🟢 modeled | ✅ 1:1/person-person |  |
 | 1:2 | 🟢 modeled | ✅ 1:2/vessels |  |
-| 1:3 | 🟡 partial | ✅ 1:3/person-in-middle | Rabbi Akiva’s fifth link (a peg fixed in a tent over the corpse): connected objects (חיבורין). |
+| 1:3 | 🟡 partial | ✅ 1:3/person-in-middle | The tent does not count as a link (the Sages) is modeled; see 15:2. Not yet: Rabbi Akiva’s peg fixed in the tent (connected objects, חיבורין). |
 | 1:4 | 🟢 modeled | ✅ 1:4/person-first |  |
 | 1:5 | 🔵 catalog | — | Tumas zav (midras) — outside tumas meis; listed for completeness. |
 | 1:6 | 🔵 catalog | — | When a body begins to defile (death). |
@@ -187,13 +187,13 @@ Scenarios: **75** passing, **0** failing, **1** pending.
 
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
-| 15:1 | 🟡 partial | ✅ 15:1/cloak-low<br>✅ 15:1/cloak-raised<br>✅ 15:1/wood<br>✅ 15:1/marble | Tablets and a thick cloak modeled; garments folded one above another need a scenario. |
-| 15:2 | ⚪ todo | — | Tablets touching at their corners; a table. |
+| 15:1 | 🟢 modeled | ✅ 15:1/cloak-low<br>✅ 15:1/cloak-raised<br>✅ 15:1/wood<br>✅ 15:1/marble<br>✅ 15:1/folded-low<br>✅ 15:1/folded-high |  |
+| 15:2 | 🟡 partial | ✅ 15:2/corners | Tablets touching at their corners modeled. Not yet: a table, which brings only if it extends a tefach beyond its frame. |
 | 15:3 | ⚪ todo | — | Jars touching one another in the open. |
-| 15:4 | ⚪ todo | — | A house partitioned by boards or curtains from the sides or the beams. |
+| 15:4 | 🟢 modeled | ✅ 15:4/tumah-in-house<br>✅ 15:4/tumah-behind<br>✅ 15:4/behind/tefach<br>✅ 15:4/behind/small | Modeled with boards from the side; boards or curtains under the beams follow the same rule. |
 | 15:5 | 🟢 modeled | ✅ 15:5/gap-tefach/tumah-below<br>✅ 15:5/gap-small/tumah-below<br>✅ 15:5/gap-tefach/tumah-in-house<br>✅ 15:5/gap-small/tumah-in-house |  |
-| 15:6 | ⚪ todo | — | A house full of straw. |
-| 15:7 | ⚪ todo | — | A house full of earth or pebbles. |
+| 15:6 | 🟡 partial | ✅ 15:6/tumah-in-straw<br>✅ 15:6/vessel-in-space<br>✅ 15:6/vessel-packed | Straw left in the house (nullified) modeled. Not yet: a tefach of space above the straw, which makes it ordinary belongings that do not protect. |
+| 15:7 | 🟡 partial | ✅ 15:7/earth | Earth filling a house modeled. Not yet: a tefach of space around the tumah, which makes it a closed grave defiling all around by touch. |
 | 15:8 | ⚪ todo | — | The courtyard of a tomb; a beam used as a tomb’s covering stone. |
 | 15:9 | ⚪ todo | — | A sealed jar or an animal used as a covering stone. |
 | 15:10 | ⚪ todo | — | Touching and overshadowing combined; hands a tefach wide. |

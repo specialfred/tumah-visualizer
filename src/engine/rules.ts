@@ -113,8 +113,8 @@ export const RULES: Record<string, RuleDef> = Object.fromEntries(
       'maga',
       'Contact',
       'מגע',
-      'Touching a tamei thing passes tumah along the chains of Ohalos chapter 1.',
-      ['1:1', '1:2', '1:3', '1:4'],
+      'Touching a tamei thing passes tumah along the chains of Ohalos chapter 1. The tent over the tumah is not counted as a link: what touches it is as if it touched the dead.',
+      ['1:1', '1:2', '1:3', '1:4', '15:2'],
     ),
   ].map((d) => [d.id, d]),
 );
