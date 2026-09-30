@@ -17,6 +17,10 @@ const STRINGS = {
   engineDisagrees: { en: 'engine disagrees', he: 'המנוע חולק' },
   modified: { en: 'You changed this scene — the mishna’s rulings describe the original setup.', he: 'שינית את המקרה — דין המשנה מתייחס למקרה המקורי.' },
   pending: { en: 'Pending: the engine does not reproduce this ruling yet.', he: 'ממתין: המנוע עוד אינו משחזר דין זה.' },
+  moveHint: {
+    en: 'Drag to slide along the floor · Shift-drag to raise or lower · or use the arrow keys and Page Up/Down',
+    he: 'גרור להזזה על הרצפה · Shift וגרירה להגבהה או הנמכה · או מקשי החצים ו־Page Up/Down',
+  },
   selectHint: { en: 'Click an object to see why it is tamei or tahor, and to edit it.', he: 'לחץ על חפץ כדי לראות מדוע הוא טמא או טהור.' },
   tamei7: { en: 'Tamei — seven days', he: 'טמא טומאת שבעה' },
   tameiErev: { en: 'Tamei — until evening', he: 'טמא טומאת ערב' },

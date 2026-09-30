@@ -21,6 +21,8 @@ interface State {
   tab: RightTab;
   view: { showAir: boolean; xray: boolean; snap: number; labels: boolean };
   history: Scene[];
+  /** An object being dragged: drawn shifted by `offset` (grid units) until it is dropped. */
+  drag: { ids: string[]; offset: Vec3 } | null;
 
   setLang: (l: Lang) => void;
   setTab: (t: RightTab) => void;
@@ -31,6 +33,9 @@ interface State {
   select: (id: string | null) => void;
   setView: (v: Partial<State['view']>) => void;
   moveObjectTo: (id: string, anchor: Vec3) => void;
+  /** Move an object (and the rest of its group) by `d` grid units. */
+  nudge: (id: string, d: Vec3) => void;
+  setDrag: (drag: State['drag']) => void;
   updateObject: (id: string, f: (o: SceneObject) => SceneObject) => void;
   addTemplate: (templateId: string) => void;
   removeObject: (id: string) => void;
@@ -57,7 +62,7 @@ export function shiftObject(o: SceneObject, d: Vec3): SceneObject {
 }
 
 /** Objects that move together with `id` (a room and its doors). */
-function groupOf(scene: Scene, id: string): Set<string> {
+export function groupOf(scene: Scene, id: string): Set<string> {
   const o = scene.objects.find((x) => x.id === id);
   if (!o?.group || o.group !== o.id) return new Set([id]);
   return new Set(scene.objects.filter((x) => x.group === o.group).map((x) => x.id));
@@ -85,6 +90,7 @@ export const useStore = create<State>((set, get) => {
     tab: 'text',
     view: { showAir: true, xray: true, snap: TEFACH, labels: false },
     history: [],
+    drag: null,
 
     setLang: (lang) => set({ lang }),
     setTab: (tab) => set({ tab }),
@@ -98,7 +104,7 @@ export const useStore = create<State>((set, get) => {
       if (!s) return;
       const scene = s.scene();
       const shittos = { ...defaultShittos(), ...s.shittos };
-      set({ mishnaRef: s.ref, scenarioId: id, scene, shittos, modified: false, selected: null, history: [], evaluation: null, tab: 'text' });
+      set({ mishnaRef: s.ref, scenarioId: id, scene, shittos, modified: false, selected: null, history: [], evaluation: null, tab: 'text', drag: null });
       client?.request(scene, shittos);
     },
     newScene: () => commit({ objects: [] }, { scenarioId: null, selected: null }),
@@ -119,6 +125,13 @@ export const useStore = create<State>((set, get) => {
       const members = groupOf(scene, id);
       commit({ objects: scene.objects.map((x) => (members.has(x.id) ? shiftObject(x, d) : x)) });
     },
+    nudge: (id, d) => {
+      const o = get().scene.objects.find((x) => x.id === id);
+      if (!o) return;
+      const a = anchorOf(o);
+      get().moveObjectTo(id, [a[0] + d[0], a[1] + d[1], a[2] + d[2]]);
+    },
+    setDrag: (drag) => set({ drag }),
     updateObject: (id, f) => {
       const { scene } = get();
       commit({ objects: scene.objects.map((x) => (x.id === id ? f(x) : x)) });
