@@ -363,6 +363,9 @@ class Ctx {
   /** How a small gap lets its tumah out. */
   pocketKind(r: number): { kind: 'structural' } | { kind: 'yotzeis'; ohalim: number[] } | { kind: 'boka' } {
     const { a } = this;
+    // A gap open to the outside through a tefach is not enclosed at all: it is part of the
+    // outside, merely roofed over (a doorway outside a closed door).
+    if (this.openTo(r, TEFACH)) return { kind: 'boka' };
     let nonStructural = false;
     const adj = new Set<number>();
     for (const i of this.regionCells[r])
@@ -695,6 +698,7 @@ class Ctx {
       const src = new Uint8Array(a.cells.length);
       for (let i = 0; i < src.length; i++) src[i] = passable(a, a.cells[i]) && !this.isInterior(i) ? 1 : 0;
       const open = openBy(a, src, k);
+      const air = this.openAir();
       const label = new Int32Array(a.cells.length);
       let n = 0;
       const outside = new Set<number>();
@@ -705,8 +709,8 @@ class Ctx {
         label[s] = n;
         while (stack.length) {
           const i = stack.pop()!;
-          // Outside means reaching the sky, not merely a cell a narrow shaft exposes to it.
-          if (Math.floor(i / (a.dims[0] * a.dims[1])) === a.dims[2] - 1) outside.add(n);
+          // Outside means reaching real open air, not merely a cell a narrow shaft exposes to it.
+          if (air[i]) outside.add(n);
           for (const j of neighbors6(a, i))
             if (open[j] && !label[j]) {
               label[j] = n;
@@ -718,6 +722,18 @@ class Ctx {
       this.openMask.set(k, m);
     }
     return this.regionCells[r].some((i) => m!.label[i] && m!.outside.has(m!.label[i]));
+  }
+
+  private openAirMask: Uint8Array | null = null;
+  /** Open air: cells in some tefach cube of uncovered, passable cells. */
+  openAir(): Uint8Array {
+    const { a } = this;
+    if (!this.openAirMask) {
+      const src = new Uint8Array(a.cells.length);
+      for (let i = 0; i < src.length; i++) src[i] = !a.covered[i] && passable(a, a.cells[i]) ? 1 : 0;
+      this.openAirMask = openBy(a, src, TEFACH);
+    }
+    return this.openAirMask;
   }
 
   isInterior(i: number): boolean {

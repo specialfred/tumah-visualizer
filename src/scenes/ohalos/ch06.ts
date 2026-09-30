@@ -62,6 +62,16 @@ function plasterScene(offset: number, thick = 0.25): SceneObject[] {
   ];
 }
 
+// 6:4 — a vessel inside the plaster, with tumah in one of the stories.
+function vesselInPlaster(offset: number, tumahUpstairs: boolean): SceneObject[] {
+  return [
+    kli('kli-plaster', [3, 3, 6 + offset], 'Vessel inside the plaster', [0.5, 0.5, 0.5]),
+    ...room({ id: 'lower', label: { en: 'House', he: 'בית' }, at: [0, 0, 0], size: [6, 6, 6], roof: 2, openings: [{ side: 'y-', offset: 2, width: 2, height: 4 }] }),
+    ...room({ id: 'upper', label: { en: 'Upper story', he: 'עלייה' }, at: [0, 0, 8], size: [6, 6, 6], openings: [{ side: 'y-', offset: 2, width: 2, height: 4 }] }),
+    tumahUpstairs ? kezayis('tumah', [1, 1, 8]) : kezayis('tumah', [1, 1, 0]),
+  ];
+}
+
 export const ch06: Scenario[] = [
   {
     id: '6:1/people/tumah-below',
@@ -178,5 +188,29 @@ export const ch06: Scenario[] = [
     shittos: { 'plaster-halves': 'yehuda' },
     scene: () => ({ objects: plasterScene(0.25) }),
     expect: { 'kli-lower': 'tahor', 'kli-upper': 'tamei' },
+  },
+  {
+    id: '6:4/vessel-lower-half/tumah-below',
+    ref: '6:4',
+    title: { en: 'A vessel in the lower half of the plaster — tumah in the house' },
+    clause: { en: 'If there is uncleanness in either [the house or the upper story] and there are vessels inside the plaster-work, those in the half nearer the uncleanness are unclean.' },
+    scene: () => ({ objects: vesselInPlaster(0.25, false) }),
+    expect: { 'kli-plaster': 'tamei' },
+  },
+  {
+    id: '6:4/vessel-lower-half/tumah-above',
+    ref: '6:4',
+    title: { en: 'A vessel in the lower half of the plaster — tumah in the upper story' },
+    clause: { en: 'And those in the half nearer the clean [space] are clean.' },
+    scene: () => ({ objects: vesselInPlaster(0.25, true) }),
+    expect: { 'kli-plaster': 'tahor' },
+  },
+  {
+    id: '6:4/vessel-middle/tumah-above',
+    ref: '6:4',
+    title: { en: 'A vessel in the middle of the plaster — tumah in the upper story' },
+    clause: { en: 'If they are in the middle, they are unclean.' },
+    scene: () => ({ objects: vesselInPlaster(0.75, true) }),
+    expect: { 'kli-plaster': 'tamei' },
   },
 ];

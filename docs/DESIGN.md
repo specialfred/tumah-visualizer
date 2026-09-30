@@ -151,7 +151,11 @@ either resolved by a distinction the model now encodes, or open.
 5. **Compressed vs. enclosed small gaps** (12:6, 14:7 vs 3:7). Tumah under a narrow beam breaks
    up and down; tumah in a small drain under a house belongs to the house. *Resolved*
    provisionally by the "open air within a tefach" test. A more principled criterion is wanted.
-6. **The way out is rabbinic** (7:3, Bartenura: גזרו חכמים). The doorway rule is modeled
+6. **An open window vs. an open door** (3:6 vs 7:3). An opened door saves the other doors
+   without any intent (7:3), while Bartenura on 3:6 requires intent to take the tumah out by a
+   window. *Open*: the engine currently lets any sufficiently large open opening save the doors;
+   the 3:6 scenarios use declared intent.
+7. **The way out is rabbinic** (7:3, Bartenura: גזרו חכמים). The doorway rule is modeled
    alongside Torah-level rules; a future setting could separate the layers.
 
 ## Roadmap
