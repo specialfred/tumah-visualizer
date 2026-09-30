@@ -265,29 +265,30 @@ export function labelOpening(a: Pick<Analysis, 'dims'>, src: Uint8Array, k: numb
   // to the other; a space is a connected set of corners.
   const label = new Int32Array(n);
   let count = 0;
-  const stack: number[] = [];
+  const stack = new Int32Array(n);
+  const plane = dx * dy;
   for (let s = 0; s < n; s++) {
     if (!corners[s] || label[s]) continue;
     label[s] = ++count;
-    stack.push(s);
-    while (stack.length) {
-      const i = stack.pop()!;
+    let top = 0;
+    stack[top++] = s;
+    while (top) {
+      const i = stack[--top];
       const x = i % dx;
       const y = Math.floor(i / dx) % dy;
-      const z = Math.floor(i / (dx * dy));
-      const nb = [
-        x > 0 ? i - 1 : -1,
-        x < dx - 1 ? i + 1 : -1,
-        y > 0 ? i - dx : -1,
-        y < dy - 1 ? i + dx : -1,
-        z > 0 ? i - dx * dy : -1,
-        z < dz - 1 ? i + dx * dy : -1,
-      ];
-      for (const j of nb)
-        if (j >= 0 && corners[j] && !label[j]) {
+      const z = Math.floor(i / plane);
+      const visit = (j: number) => {
+        if (corners[j] && !label[j]) {
           label[j] = count;
-          stack.push(j);
+          stack[top++] = j;
         }
+      };
+      if (x > 0) visit(i - 1);
+      if (x < dx - 1) visit(i + 1);
+      if (y > 0) visit(i - dx);
+      if (y < dy - 1) visit(i + dx);
+      if (z > 0) visit(i - plane);
+      if (z < dz - 1) visit(i + plane);
     }
   }
 

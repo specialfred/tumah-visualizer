@@ -54,7 +54,7 @@ function cornerTablets(): SceneObject[] {
     kli('kli-b', [4.5, 4, 0], 'Vessel under the second tablet', [0.25, 0.25, 0.25]),
     // A person standing beside the second tablet with a hand on its edge.
     (() => {
-      const p = person('person', [6.25, 3, 0], { en: 'Person touching the second tablet', he: 'הנוגע בשנייה' }, 18, [1.5, 1.5]);
+      const p = person('person', [6.25, 1, 0], { en: 'Person touching the second tablet', he: 'הנוגע בשנייה' });
       return { ...p, parts: [...p.parts, box([6, 3.5, 1], [0.25, 0.5, 0.25])] };
     })(),
   ];

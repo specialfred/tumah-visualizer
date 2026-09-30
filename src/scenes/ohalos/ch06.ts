@@ -70,6 +70,29 @@ function vesselInPlaster(offset: number, tumahUpstairs: boolean): SceneObject[] 
   ];
 }
 
+// 6:6 — a house with a stone pillar in the middle, from floor to roof, and tumah under it.
+function pillarInHouse(): SceneObject[] {
+  return [
+    ...room({ id: 'house', at: [0, 0], size: [8, 8, 6], openings: [{ side: 'y-', offset: 3, width: 2, height: 4 }] }),
+    solid('pillar', { en: 'Pillar', he: 'עמוד' }, 'structure', 'stone', [3, 3, 0], [2, 2, 6]),
+    kezayis('tumah', [3.875, 3.875, 0], 1, [0.25, 0.25, 0.25]),
+    kli('kli-house', [1, 1, 0], 'Vessel in the house'),
+    kli('kli-roof', [3.875, 3.875, 7], 'Vessel on the roof over the pillar', [0.25, 0.25, 0.25]),
+  ];
+}
+
+// 6:7 — a pillar standing in a garden, 2×2 and 6 high, with a capital (פרח) on top that
+// protrudes `overhang` on every side.
+function capital(overhang: number, tumah: 'under-pillar' | 'under-capital'): SceneObject[] {
+  const o = overhang;
+  return [
+    solid('pillar', { en: 'Pillar', he: 'עמוד' }, 'structure', 'stone', [o, o, 0], [2, 2, 6]),
+    solid('capital', { en: 'Capital', he: 'פרח' }, 'structure', 'stone', [0, 0, 6], [2 + 2 * o, 2 + 2 * o, 0.5]),
+    tumah === 'under-pillar' ? kezayis('tumah', [o + 0.875, o + 0.875, 0], 1, [0.25, 0.25, 0.25]) : kezayis('tumah', [0, 0.5, 0], 1, [0.25, 0.25, 0.25]),
+    kli('kli-under', [o + 2 + (o - 0.25) / 2, o + 1, 0], 'Vessel under the capital', [0.25, 0.25, 0.25]),
+  ];
+}
+
 export const ch06: Scenario[] = [
   {
     id: '6:1/people/tumah-below',
@@ -210,5 +233,47 @@ export const ch06: Scenario[] = [
     clause: { en: 'If they are in the middle, they are unclean.' },
     scene: () => ({ objects: vesselInPlaster(0.75, true) }),
     expect: { 'kli-plaster': 'tamei' },
+  },
+  {
+    id: '6:6/under-pillar',
+    ref: '6:6',
+    title: { en: 'Tumah under a pillar in a house', he: 'טומאה תחת העמוד' },
+    clause: { en: 'If there is uncleanness beneath a pillar, the uncleanness cleaves upwards and downwards.' },
+    notes: 'A pillar has the same space on every side, so it is not a wall with halves: the house stays tahor (Bartenura).',
+    scene: () => ({ objects: pillarInHouse() }),
+    expect: { 'kli-house': 'tahor', 'kli-roof': 'tamei' },
+  },
+  {
+    id: '6:7/under-pillar',
+    ref: '6:7',
+    title: { en: 'Tumah under a pillar, vessels under its capital', he: 'כלים שתחת הפרח' },
+    clause: { en: 'Vessels beneath the flowerlike top [of a pillar] remain clean.' },
+    scene: () => ({ objects: capital(1, 'under-pillar') }),
+    expect: { 'kli-under': 'tahor' },
+  },
+  {
+    id: '6:7/under-pillar/yochanan-ben-nuri',
+    ref: '6:7',
+    title: { en: 'Tumah under a pillar, vessels under its capital — Rabbi Yochanan ben Nuri' },
+    clause: { en: 'Rabbi Yohanan ben Nuri declares them unclean.' },
+    shittos: { 'pillar-capital': 'yochanan-ben-nuri' },
+    scene: () => ({ objects: capital(1, 'under-pillar') }),
+    expect: { 'kli-under': 'tamei' },
+  },
+  {
+    id: '6:7/under-capital/tefach',
+    ref: '6:7',
+    title: { en: 'Tumah and vessels under a capital that protrudes a tefach' },
+    clause: { en: '[In the case of] the uncleanness and the vessels being [together] beneath the flowerlike top: if there is a space of one cubic handbreadth there, [the vessels] become unclean.' },
+    scene: () => ({ objects: capital(1, 'under-capital') }),
+    expect: { 'kli-under': 'tamei' },
+  },
+  {
+    id: '6:7/under-capital/small',
+    ref: '6:7',
+    title: { en: 'Tumah and vessels under a capital that protrudes less than a tefach' },
+    clause: { en: 'If not, they remain clean.' },
+    scene: () => ({ objects: capital(0.75, 'under-capital') }),
+    expect: { 'kli-under': 'tahor' },
   },
 ];

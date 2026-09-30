@@ -44,10 +44,10 @@ export const COVERAGE: MishnaCoverage[] = [
   c('6:3', 'modeled'),
   c('6:4', 'modeled', 'Vessels in a wall between two houses (first half of the mishna) follow the same rule; no separate scenario yet.'),
   c('6:5', 'todo', 'Tumah among roof beams under a covering thin as garlic skin.'),
-  c('6:6', 'todo', 'A house serving a wall (garlic skin); tumah under a pillar.'),
-  c('6:7', 'todo', 'Under the capital of a pillar; two wall-cupboards.'),
+  c('6:6', 'partial', 'Tumah under a pillar modeled. Not yet: a house serving a wall (tomb niches) with a covering thin as garlic skin.'),
+  c('6:7', 'partial', 'The capital of a pillar modeled, with Rabbi Yochanan ben Nuri. Not yet: two wall-cupboards, one opened.'),
   // Chapter 7.
-  c('7:1', 'todo', 'Tumah in a tefach space in a wall and the stories above it; a solid monument (closed grave).'),
+  c('7:1', 'partial', 'One upper story over two houses modeled. Not yet: a wall serving many stories (all tamei), a beach wall, and a solid monument (touching a closed grave).'),
   c('7:2', 'todo', 'Sloping tent sides; touching a tent from inside vs outside.'),
   c('7:3', 'partial', 'Doors, an opened door and intent modeled. Not yet: Beis Shammai/Beis Hillel on when intent works, and a blocked doorway being reopened.'),
   c('7:4', 'catalog', 'A woman in difficult labor carried between houses.'),
@@ -70,8 +70,8 @@ export const COVERAGE: MishnaCoverage[] = [
   c('10:1', 'modeled'),
   c('10:2', 'partial', 'The order of placement (the foot before or after the tumah) is not yet modeled.'),
   c('10:3', 'modeled'),
-  c('10:4', 'todo', 'Several hatches one above another; something susceptible vs insusceptible in the hatch.'),
-  c('10:5', 'todo', 'Several small hatches one above another.'),
+  c('10:4', 'partial', 'All rulings have scenarios. Pending: a board in the lower hatch, which Bartenura sees as if it stopped the upper one.'),
+  c('10:5', 'partial', 'All rulings have scenarios. Pending: a board in the lower hatch with tumah under it (as in 10:4).'),
   c('10:6', 'todo', 'A pot under a hatch.'),
   c('10:7', 'todo', 'A pot beside a threshold, touching the lintel if raised.'),
   // Chapter 11.
@@ -102,7 +102,7 @@ export const COVERAGE: MishnaCoverage[] = [
   c('13:6', 'catalog', 'What does not reduce it: “what is pure reduces, what is tamei does not”.'),
   // Chapter 14 — projections.
   c('14:1', 'todo', 'Projections and balconies above a doorway.'),
-  c('14:2', 'todo', 'A projection above a doorway or window forming a passage.'),
+  c('14:2', 'partial', 'A projection over a closed doorway modeled. Not yet: over a window (any width), and Rabbi Yose.'),
   c('14:3', 'todo', 'A rod above a doorway (Rabbi Yehoshua vs Rabbi Yochanan ben Nuri).'),
   c('14:4', 'todo', 'A projection going round a house.'),
   c('14:5', 'partial', 'An overlap of less than a tefach (Rabbi Eliezer vs Rabbi Yehoshua) is pending.'),

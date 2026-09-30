@@ -61,6 +61,17 @@ export const DISPUTES: Dispute[] = [
     modeled: true,
   },
   {
+    id: 'pillar-capital',
+    ref: '6:7',
+    topic: { en: 'Vessels under the capital of a pillar with tumah beneath it', he: 'כלים שתחת הפרח' },
+    options: [
+      o('tanna-kamma', 'Tanna kamma', 'תנא קמא', 'Tahor: the tumah breaks straight up and down through the pillar.'),
+      o('yochanan-ben-nuri', 'Rabbi Yochanan ben Nuri', 'רבי יוחנן בן נורי', 'Tamei: the capital is like the pillar, so the tumah comes back down on what it overshadows.'),
+    ],
+    defaultOption: 'tanna-kamma',
+    modeled: true,
+  },
+  {
     id: 'split-tumah',
     ref: '10:3',
     topic: { en: 'Tumah partly under a roof and partly under an open hatch', he: 'מקצת טומאה בבית ומקצתה תחת הארובה' },

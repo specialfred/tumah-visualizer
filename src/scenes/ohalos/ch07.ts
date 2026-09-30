@@ -1,4 +1,4 @@
-import { corpse, kezayis, kli, room, type OpeningSpec } from '../../engine/build';
+import { box, boxesMinus, corpse, kezayis, kli, room, type OpeningSpec } from '../../engine/build';
 import type { SceneObject } from '../../engine/types';
 import type { Scenario } from '../types';
 
@@ -29,7 +29,35 @@ function doorsHouse(doors: [DoorState, DoorState, DoorState], tumah: 'meis' | 'k
   ];
 }
 
+// 7:1 — two houses side by side, sharing a wall 2 tefachim thick with a tefach-cube space in it
+// holding tumah. One upper story is built over both houses, and a second over it.
+function wallUnderStories(): SceneObject[] {
+  const [left, ...leftDoors] = room({ id: 'left', label: { en: 'House', he: 'בית' }, at: [0, 0], size: [6, 6, 6], roof: 1, openings: [{ side: 'y-', offset: 2, width: 2, height: 4 }] });
+  const right = room({ id: 'right', label: { en: 'Second house', he: 'בית שני' }, at: [8, 0], size: [6, 6, 6], roof: 1, openings: [{ side: 'y-', offset: 2, width: 2, height: 4 }] });
+  const hollow = box([6.5, 2.5, 2], [1, 1, 1]);
+  return [
+    // The left house's x+ wall is the shared wall, widened to fill the gap between the houses.
+    { ...left, parts: boxesMinus([...left.parts, box([6, -1, 0], [2, 8, 6])], [hollow]) },
+    ...leftDoors,
+    ...right.map((o) => (o.kind === 'structure' ? { ...o, parts: boxesMinus(o.parts, [hollow]) } : o)),
+    ...room({ id: 'upper1', label: { en: 'Upper story over both houses', he: 'עלייה' }, at: [0, 0, 7], size: [14, 6, 6], openings: [{ side: 'y-', offset: 2, width: 2, height: 4 }] }),
+    ...room({ id: 'upper2', label: { en: 'Second upper story', he: 'עלייה שנייה' }, at: [0, 0, 14], size: [14, 6, 6], openings: [{ side: 'y-', offset: 2, width: 2, height: 4 }] }),
+    kezayis('tumah', [6.75, 2.75, 2], 1, [0.5, 0.5, 0.25]),
+    kli('kli-upper1', [1, 1, 7], 'Vessel in the upper story'),
+    kli('kli-upper2', [1, 1, 14], 'Vessel in the second upper story'),
+  ];
+}
+
 export const ch07: Scenario[] = [
+  {
+    id: '7:1/one-upper-story',
+    ref: '7:1',
+    title: { en: 'Tumah in a tefach space in a wall, one upper story over two houses', he: 'עלייה אחת בנויה על גבי שני בתים' },
+    clause: { en: 'If there was a single upper story [built] over two houses, that one becomes unclean but all upper stories above it remain clean.' },
+    notes: 'The wall reaches up to the floor of the first upper story; the tumah, with no way out of its space, rises into it (Bartenura). The floor above it separates the stories higher up.',
+    scene: () => ({ objects: wallUnderStories() }),
+    expect: { 'kli-upper1': 'tamei', 'kli-upper2': 'tahor' },
+  },
   {
     id: '7:3/all-closed',
     ref: '7:3',

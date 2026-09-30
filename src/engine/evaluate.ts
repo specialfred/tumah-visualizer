@@ -261,6 +261,7 @@ class Ctx {
     }
     for (const r of new Set(ohelCells.map((i) => a.region[i])))
       defileRegion(r, reason('ohel', 'The tumah is inside this tent.', o.id, 'הטומאה באהל'));
+    if (ohelCells.length) this.riseToRoof(ohelCells, src, o.id, defileRegion, add, ex);
 
     if (restActive && rest.length) {
       const pockets = new Map<number, number[]>();
@@ -328,7 +329,11 @@ class Ctx {
             s.region,
             reason(
               h.rule,
-              h.tie ? 'The tumah is in the exact middle of the building element.' : 'The tumah is nearer this side of the building element.',
+              h.rule === 'retzutzah'
+                ? 'The tumah breaks up through the pillar, and the capital, being like the pillar, brings it back down on what it overshadows.'
+                : h.tie
+                  ? 'The tumah is in the exact middle of the building element.'
+                  : 'The tumah is nearer this side of the building element.',
               via,
             ),
           );
@@ -454,6 +459,22 @@ class Ctx {
     const allSides = [...new Map(found.map((b) => [key(b.side!), b.side!])).values()];
 
     if (!vertical) {
+      // A pillar is not a wall between two spaces: with the same tent on opposite sides, tumah
+      // under it breaks up and down (6:6, 6:7). Rabbi Yochanan ben Nuri: it comes back down on
+      // what the pillar's capital overshadows.
+      const across = (d: number) => best[d].side;
+      for (const [d1, d2] of [
+        [0, 1],
+        [2, 3],
+      ]) {
+        const s1 = across(d1);
+        const s2 = across(d2);
+        if (s1?.kind === 'ohel' && s2?.kind === 'ohel' && s1.region === s2.region) {
+          const open: Side = { kind: 'open', dir: 5 };
+          if (shitah(this.shittos, 'pillar-capital') === 'yochanan-ben-nuri') return { sides: [s1, open], tie: false, rule: 'retzutzah' };
+          return { sides: [open], tie: false, rule: 'retzutzah' };
+        }
+      }
       // A wall (6:3).
       const s = shitah(this.shittos, 'wall-halves');
       const ohalim = allSides.filter((x) => x.kind === 'ohel');
@@ -559,6 +580,48 @@ class Ctx {
           else if (v >= 0 && a.scene.objects[v].kind !== 'tumah') objReason(v, step === 1);
         }
       }
+    }
+  }
+
+  /**
+   * 10:5: tumah looks straight up through whatever does not block (a small hatch, the air of a
+   * space above) to the thing that roofs it. If that roof cannot block, it counts as full of
+   * tumah, like a vessel roofing a tamei tent. A roof that blocks stops it.
+   */
+  riseToRoof(
+    tcells: number[],
+    src: number,
+    via: string,
+    defileRegion: (r: number, why: Reason) => void,
+    add: (t: string, r: Reason) => void,
+    ex: Exposures,
+  ) {
+    const { a } = this;
+    const tops = new Map<string, number>();
+    for (const i of tcells) {
+      const [x, y, z] = coords(a, i);
+      const k = `${x},${y}`;
+      tops.set(k, Math.max(tops.get(k) ?? -1, z));
+    }
+    const filled = new Set<number>();
+    for (const [k, ztop] of tops) {
+      const [x, y] = k.split(',').map(Number);
+      for (let z = ztop + 1; z < a.dims[2]; z++) {
+        const v = a.cells[idx(a, x, y, z)];
+        if (v === src || v === AIR) continue;
+        if (v === GROUND || separatesCell(a, v)) break;
+        if (a.scene.objects[v].kind === 'tumah') continue;
+        if (a.brings[v]) {
+          // A roof that is part of the tumah's own tent is already tamei with it.
+          if (!a.objCells[v].some((i) => a.region[i] && a.region[i] === a.region[tcells[0]])) filled.add(v);
+          break;
+        }
+      }
+    }
+    for (const v of filled) {
+      ex.roofs.add(v);
+      add(`o${v}`, reason('kelim-einam-chotzetzim', 'It roofs the tumah, seen straight up through what does not block, and cannot block itself, so it counts as full of tumah.', via));
+      this.overshadow(a.objCells[v], via, defileRegion, add, ex, v);
     }
   }
 
@@ -731,7 +794,8 @@ class Ctx {
     for (const i of a.objCells[d]) {
       for (const j of neighbors6(a, i)) {
         const r = a.region[j];
-        if (r && r !== from && a.covered[j]) beyond.add(r);
+        // Only a tent carries the way out on: a gap too small to be a tent does not (14:2).
+        if (r && r !== from && r <= a.ohelCount) beyond.add(r);
         const v = a.cells[j];
         if (v >= 0 && v !== d && a.region[j] !== from && a.scene.objects[v].kind !== 'tumah' && !a.ohel[j])
           add(`o${v}`, reason('derech-yetzia', 'It is in the doorway the tumah will be carried out through.', via));
