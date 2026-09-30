@@ -83,6 +83,7 @@ join in the house). The rules, in the order they apply:
 | The tent is not counted | האהל אינו מן המנין | What roofs the tumah is tamei, but what touches it is as if it touched the dead | 1:3, 15:2 |
 | Seen through a hatch | | A roof that cannot block, seen straight up from the tumah through a small hatch, counts as full of tumah | 10:5 |
 | Pillars | | A building element with the same tent on opposite sides is not a wall: tumah under it breaks up and down | 6:6, 6:7 |
+| A person is hollow | אדם חלול | A person's body is open space under his skin, so it can be the tent that brings tumah (Beis Hillel). Beis Shammai: the body is solid; tumah does not pass through it, and he is never "full of tumah", though he still does not block what is above or below him | 11:3–11:6 |
 
 Small gaps are classified by what bounds them:
 

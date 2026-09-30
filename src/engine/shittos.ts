@@ -94,10 +94,10 @@ export const DISPUTES: Dispute[] = [
     topic: { en: 'Does a person lying down make a tent?', he: 'אדם חלול' },
     options: [
       o('beis-hillel', 'Beis Hillel', 'בית הלל', 'A person is hollow: his upper side brings the tumah.'),
-      o('beis-shammai', 'Beis Shammai', 'בית שמאי', 'A person does not bring the tumah.'),
+      o('beis-shammai', 'Beis Shammai', 'בית שמאי', 'A person is not hollow: tumah does not pass through his body.'),
     ],
     defaultOption: 'beis-hillel',
-    modeled: false,
+    modeled: true,
   },
   {
     id: 'drawer-halves',

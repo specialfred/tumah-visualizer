@@ -1,6 +1,7 @@
 // Voxel analysis of a scene. The grid unit is one etzba.
 import { canBring, canSeparate, protectsInterior, resolveProps } from './props';
-import { TEFACH, type ObjectProps, type Scene, type Vec3 } from './types';
+import { shitah } from './shittos';
+import { TEFACH, type ObjectProps, type Scene, type ShittosSelection, type Vec3 } from './types';
 
 export const AIR = -1;
 /** Cells below the ground surface belong to this pseudo-object: earth, structural, blocking. */
@@ -17,7 +18,7 @@ export interface Analysis {
   separates: boolean[];
   /** Per object: its walls keep tumah out of its own inside (9:1, 8:6). */
   guardsInterior: boolean[];
-  /** Per object: its cells are walls for connectivity (separates || guardsInterior). */
+  /** Per object: its cells are walls for connectivity (separates, guardsInterior, or a solid person). */
   blocks: boolean[];
   /** Per object: rests only on people or vessels (6:1). */
   vesselSupported: boolean[];
@@ -74,7 +75,7 @@ function sceneBounds(scene: Scene): { min: Vec3; max: Vec3 } {
   return { min, max };
 }
 
-export function analyze(scene: Scene): Analysis {
+export function analyze(scene: Scene, shittos: ShittosSelection = {}): Analysis {
   const props = scene.objects.map(resolveProps);
   const separates = scene.objects.map((o, i) => canSeparate(o, props[i]));
   const guardsInterior = scene.objects.map((o, i) => protectsInterior(o, props[i]));
@@ -147,7 +148,10 @@ export function analyze(scene: Scene): Analysis {
   for (let i = 0; i < n; i++) if (cells[i] >= 0) a.objCells[cells[i]].push(i);
 
   computeSupport(a);
-  a.blocks = scene.objects.map((_, i) => a.separates[i] || a.guardsInterior[i]);
+  // Beis Shammai (11:3–11:6): a person's body is not hollow, so tumah does not pass through it,
+  // though, like any person, it does not block what is above or below it.
+  const solidPeople = shitah(shittos, 'adam-chalul') === 'beis-shammai';
+  a.blocks = scene.objects.map((o, i) => a.separates[i] || a.guardsInterior[i] || (solidPeople && o.kind === 'person'));
 
   computeCovered(a);
   computeOhel(a);

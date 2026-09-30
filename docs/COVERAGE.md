@@ -5,9 +5,9 @@ mishna’s ruling; the engine must reproduce the ruling from its general rules.
 
 🟢 modeled · 🟡 partly modeled · ⚪ not yet modeled · 🔵 not spatial (tracked as data)
 
-**14** modeled, **20** partly modeled, **61** not yet modeled, **39** not spatial — of 134 mishnayos.
+**17** modeled, **21** partly modeled, **57** not yet modeled, **39** not spatial — of 134 mishnayos.
 
-Scenarios: **109** passing, **0** failing, **3** pending.
+Scenarios: **119** passing, **0** failing, **3** pending.
 
 ## Chapter 1
 
@@ -139,10 +139,10 @@ Scenarios: **109** passing, **0** failing, **3** pending.
 | --- | --- | --- | --- |
 | 11:1 | 🟡 partial | ✅ 11:1/tumah-outer<br>✅ 11:1/tumah-inner/beis-hillel | Beis Hillel (a split of any size) modeled. Not yet: Beis Shammai (4 tefachim) and Rabbi Yose (a tefach). |
 | 11:2 | 🟡 partial | ✅ 11:2/split<br>✅ 11:2/leg | The split and a leg over it modeled. Not yet: a reed, which joins only a tefach off the ground. |
-| 11:3 | ⚪ todo | — | A thick cloak or block a tefach off the ground; a person under the split (אדם חלול). |
-| 11:4 | ⚪ todo | — | A person leaning out of a window over a funeral. |
-| 11:5 | ⚪ todo | — | A person lying on a threshold. |
-| 11:6 | ⚪ todo | — | Pure people overshadowing a person in a house with tumah. |
+| 11:3 | 🟢 modeled | ✅ 11:3/cloak-low<br>✅ 11:3/cloak-raised<br>✅ 11:3/person/beis-hillel<br>✅ 11:3/person/beis-shammai | Folded garments are modeled under 15:1, which repeats them. |
+| 11:4 | 🟡 partial | ✅ 11:4/beis-hillel<br>✅ 11:4/beis-shammai | Beis Shammai and Beis Hillel modeled. Not yet: where they agree (he is dressed, or two people one above the other). |
+| 11:5 | 🟢 modeled | ✅ 11:5/beis-hillel<br>✅ 11:5/beis-shammai |  |
+| 11:6 | 🟢 modeled | ✅ 11:6/beis-hillel<br>✅ 11:6/beis-shammai |  |
 | 11:7 | ⚪ todo | — | A dog that ate corpse flesh, lying on a threshold. |
 | 11:8 | ⚪ todo | — | A cellar, a candlestick and an olive basket. |
 | 11:9 | ⚪ todo | — | Vessels between the rims of the basket and the cellar. |
