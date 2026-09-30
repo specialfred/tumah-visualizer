@@ -1,7 +1,7 @@
 // Recognizable stand-ins for scene objects. The engine reasons about boxes of grid cells; here a
 // person is drawn as a figure, a corpse as a body lying down, an olive-bulk as a lump, a vessel as
 // a cup or jar — each fitted inside the object's box, which is outlined when it is selected.
-import type { ThreeEvent } from '@react-three/fiber';
+import type { ThreeElements } from '@react-three/fiber';
 import { useMemo } from 'react';
 import * as THREE from 'three';
 import { TEFACH, type SceneObject, type Vec3 } from '../engine/types';
@@ -55,6 +55,12 @@ export interface SkinProps {
   roughness: number;
 }
 
+/** Pointer handlers shared by every mesh that makes up an object. */
+export type ObjectHandlers = Pick<
+  ThreeElements['mesh'],
+  'onClick' | 'onPointerDown' | 'onPointerMove' | 'onPointerUp' | 'onLostPointerCapture' | 'onPointerOver' | 'onPointerOut'
+>;
+
 interface BodyProps {
   o: SceneObject;
   shape: Exclude<Shape, 'box'>;
@@ -62,11 +68,11 @@ interface BodyProps {
   origin: Vec3;
   skin: SkinProps;
   selected: boolean;
-  onClick: (e: ThreeEvent<MouseEvent>) => void;
+  handlers: ObjectHandlers;
   translucent: boolean;
 }
 
-export function ShapedBody({ o, shape, origin, skin, selected, onClick, translucent }: BodyProps) {
+export function ShapedBody({ o, shape, origin, skin, selected, handlers, translucent }: BodyProps) {
   const b = boundsOf(o);
   const min: Vec3 = [b.min[0] - origin[0], b.min[1] - origin[1], b.min[2] - origin[2]];
   const [sx, sy, sz] = b.size;
@@ -75,7 +81,7 @@ export function ShapedBody({ o, shape, origin, skin, selected, onClick, transluc
   // Lay the shape's long axis along x or y, whichever the box is longer in.
   const alongY = sy > sx;
   const [L, W] = alongY ? [sy, sx] : [sx, sy];
-  const mesh = { onClick, userData: { translucent } };
+  const mesh = { ...handlers, userData: { translucent } };
   const mat = <meshStandardMaterial {...skin} side={shape === 'cup' || shape === 'jar' ? THREE.DoubleSide : THREE.FrontSide} />;
 
   let body: React.ReactNode;
@@ -104,7 +110,7 @@ export function ShapedBody({ o, shape, origin, skin, selected, onClick, transluc
   );
 }
 
-type MeshProps = { onClick: (e: ThreeEvent<MouseEvent>) => void; userData: { translucent: boolean } };
+type MeshProps = ObjectHandlers & { userData: { translucent: boolean } };
 type PartProps = { mesh: MeshProps; mat: React.ReactNode };
 
 const Y = new THREE.Vector3(0, 1, 0);

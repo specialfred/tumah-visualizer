@@ -42,6 +42,7 @@ export function App() {
         <main className="relative min-w-0 flex-1">
           <Viewport />
           <Toolbar />
+          <MoveHint />
           <Legend />
           <Status />
         </main>
@@ -190,6 +191,27 @@ function Status() {
   return null;
 }
 
+// Arrow keys slide the selected object along the floor; Page Up / Page Down lift and lower it.
+const NUDGE: Record<string, [number, number, number]> = {
+  ArrowLeft: [-1, 0, 0],
+  ArrowRight: [1, 0, 0],
+  ArrowUp: [0, 1, 0],
+  ArrowDown: [0, -1, 0],
+  PageUp: [0, 0, 1],
+  PageDown: [0, 0, -1],
+};
+
+function MoveHint() {
+  const t = useT();
+  const selected = useStore((s) => s.selected);
+  if (!selected) return null;
+  return (
+    <div className="pointer-events-none absolute start-1/2 top-[72px] -translate-x-1/2 rounded-full bg-stone-900/85 px-3 py-1 text-[12px] text-white shadow rtl:translate-x-1/2">
+      {t('moveHint')}
+    </div>
+  );
+}
+
 function useShortcuts() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -204,6 +226,11 @@ function useShortcuts() {
         e.preventDefault();
         s.duplicateObject(s.selected);
       } else if (e.key === 'Escape') s.select(null);
+      else if (s.selected && e.key in NUDGE) {
+        e.preventDefault();
+        const [x, y, z] = NUDGE[e.key];
+        s.nudge(s.selected, [x * s.view.snap, y * s.view.snap, z * s.view.snap]);
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
