@@ -5,9 +5,9 @@ mishna’s ruling; the engine must reproduce the ruling from its general rules.
 
 🟢 modeled · 🟡 partly modeled · ⚪ not yet modeled · 🔵 not spatial (tracked as data)
 
-**12** modeled, **12** partly modeled, **71** not yet modeled, **39** not spatial — of 134 mishnayos.
+**14** modeled, **20** partly modeled, **61** not yet modeled, **39** not spatial — of 134 mishnayos.
 
-Scenarios: **75** passing, **0** failing, **1** pending.
+Scenarios: **109** passing, **0** failing, **3** pending.
 
 ## Chapter 1
 
@@ -15,7 +15,7 @@ Scenarios: **75** passing, **0** failing, **1** pending.
 | --- | --- | --- | --- |
 | 1:1 | 🟢 modeled | ✅ 1:1/person-person |  |
 | 1:2 | 🟢 modeled | ✅ 1:2/vessels |  |
-| 1:3 | 🟡 partial | ✅ 1:3/person-in-middle | Rabbi Akiva’s fifth link (a peg fixed in a tent over the corpse): connected objects (חיבורין). |
+| 1:3 | 🟡 partial | ✅ 1:3/person-in-middle | The tent does not count as a link (the Sages) is modeled; see 15:2. Not yet: Rabbi Akiva’s peg fixed in the tent (connected objects, חיבורין). |
 | 1:4 | 🟢 modeled | ✅ 1:4/person-first |  |
 | 1:5 | 🔵 catalog | — | Tumas zav (midras) — outside tumas meis; listed for completeness. |
 | 1:6 | 🔵 catalog | — | When a body begins to defile (death). |
@@ -75,14 +75,14 @@ Scenarios: **75** passing, **0** failing, **1** pending.
 | 6:3 | 🟢 modeled | ✅ 6:3/inner-half<br>✅ 6:3/outer-half<br>✅ 6:3/middle/chachamim<br>✅ 6:3/middle/meir<br>✅ 6:3/outer-half/yehuda |  |
 | 6:4 | 🟢 modeled | ✅ 6:4/lower-half<br>✅ 6:4/upper-half<br>✅ 6:4/middle<br>✅ 6:4/lower-half/yehuda<br>✅ 6:4/vessel-lower-half/tumah-below<br>✅ 6:4/vessel-lower-half/tumah-above<br>✅ 6:4/vessel-middle/tumah-above | Vessels in a wall between two houses (first half of the mishna) follow the same rule; no separate scenario yet. |
 | 6:5 | ⚪ todo | — | Tumah among roof beams under a covering thin as garlic skin. |
-| 6:6 | ⚪ todo | — | A house serving a wall (garlic skin); tumah under a pillar. |
-| 6:7 | ⚪ todo | — | Under the capital of a pillar; two wall-cupboards. |
+| 6:6 | 🟡 partial | ✅ 6:6/under-pillar | Tumah under a pillar modeled. Not yet: a house serving a wall (tomb niches) with a covering thin as garlic skin. |
+| 6:7 | 🟡 partial | ✅ 6:7/under-pillar<br>✅ 6:7/under-pillar/yochanan-ben-nuri<br>✅ 6:7/under-capital/tefach<br>✅ 6:7/under-capital/small | The capital of a pillar modeled, with Rabbi Yochanan ben Nuri. Not yet: two wall-cupboards, one opened. |
 
 ## Chapter 7
 
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
-| 7:1 | ⚪ todo | — | Tumah in a tefach space in a wall and the stories above it; a solid monument (closed grave). |
+| 7:1 | 🟡 partial | ✅ 7:1/one-upper-story | One upper story over two houses modeled. Not yet: a wall serving many stories (all tamei), a beach wall, and a solid monument (touching a closed grave). |
 | 7:2 | ⚪ todo | — | Sloping tent sides; touching a tent from inside vs outside. |
 | 7:3 | 🟡 partial | ✅ 7:3/all-closed<br>✅ 7:3/one-open<br>✅ 7:3/intent | Doors, an opened door and intent modeled. Not yet: Beis Shammai/Beis Hillel on when intent works, and a blocked doorway being reopened. |
 | 7:4 | 🔵 catalog | — | A woman in difficult labor carried between houses. |
@@ -128,8 +128,8 @@ Scenarios: **75** passing, **0** failing, **1** pending.
 | 10:1 | 🟢 modeled | ✅ 10:1/tumah-in-house<br>✅ 10:1/tumah-under-hatch<br>✅ 10:1/foot-over-hatch |  |
 | 10:2 | 🟡 partial | ✅ 10:2/tumah-in-house<br>✅ 10:2/tumah-under-hatch<br>✅ 10:2/foot/tumah-in-house | The order of placement (the foot before or after the tumah) is not yet modeled. |
 | 10:3 | 🟢 modeled | ✅ 10:3/split/meir<br>✅ 10:3/split/yehuda<br>✅ 10:3/split/yose<br>✅ 10:3/split/yose-two-measures |  |
-| 10:4 | ⚪ todo | — | Several hatches one above another; something susceptible vs insusceptible in the hatch. |
-| 10:5 | ⚪ todo | — | Several small hatches one above another. |
+| 10:4 | 🟡 partial | ✅ 10:4/tumah-in-house/none<br>✅ 10:4/tumah-under/none<br>✅ 10:4/tumah-in-house/board-upper<br>✅ 10:4/tumah-under/board-upper<br>⏳ 10:4/tumah-in-house/board-lower<br>✅ 10:4/tumah-in-house/stone-lower<br>✅ 10:4/tumah-in-house/stone-upper | All rulings have scenarios. Pending: a board in the lower hatch, which Bartenura sees as if it stopped the upper one. |
+| 10:5 | 🟡 partial | ✅ 10:5/tumah-in-house/none<br>✅ 10:5/tumah-under/none<br>✅ 10:5/tumah-in-house/board-upper<br>✅ 10:5/tumah-in-house/board-lower<br>✅ 10:5/tumah-in-house/stone-upper<br>✅ 10:5/tumah-in-house/stone-lower<br>✅ 10:5/tumah-under/board-upper<br>⏳ 10:5/tumah-under/board-lower<br>✅ 10:5/tumah-under/stone-upper<br>✅ 10:5/tumah-under/stone-lower | All rulings have scenarios. Pending: a board in the lower hatch with tumah under it (as in 10:4). |
 | 10:6 | ⚪ todo | — | A pot under a hatch. |
 | 10:7 | ⚪ todo | — | A pot beside a threshold, touching the lintel if raised. |
 
@@ -176,7 +176,7 @@ Scenarios: **75** passing, **0** failing, **1** pending.
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
 | 14:1 | ⚪ todo | — | Projections and balconies above a doorway. |
-| 14:2 | ⚪ todo | — | A projection above a doorway or window forming a passage. |
+| 14:2 | 🟡 partial | ✅ 14:2/door/tefach<br>✅ 14:2/door/narrow | A projection over a closed doorway modeled. Not yet: over a window (any width), and Rabbi Yose. |
 | 14:3 | ⚪ todo | — | A rod above a doorway (Rabbi Yehoshua vs Rabbi Yochanan ben Nuri). |
 | 14:4 | ⚪ todo | — | A projection going round a house. |
 | 14:5 | 🟡 partial | ✅ 14:5/tefach-apart/under<br>✅ 14:5/tefach-apart/between<br>✅ 14:5/tefach-apart/above<br>✅ 14:5/overlap-tefach/under<br>✅ 14:5/overlap-tefach/between<br>⏳ 14:5/overlap-less/under | An overlap of less than a tefach (Rabbi Eliezer vs Rabbi Yehoshua) is pending. |
@@ -187,13 +187,13 @@ Scenarios: **75** passing, **0** failing, **1** pending.
 
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
-| 15:1 | 🟡 partial | ✅ 15:1/cloak-low<br>✅ 15:1/cloak-raised<br>✅ 15:1/wood<br>✅ 15:1/marble | Tablets and a thick cloak modeled; garments folded one above another need a scenario. |
-| 15:2 | ⚪ todo | — | Tablets touching at their corners; a table. |
+| 15:1 | 🟢 modeled | ✅ 15:1/cloak-low<br>✅ 15:1/cloak-raised<br>✅ 15:1/wood<br>✅ 15:1/marble<br>✅ 15:1/folded-low<br>✅ 15:1/folded-high |  |
+| 15:2 | 🟡 partial | ✅ 15:2/corners | Tablets touching at their corners modeled. Not yet: a table, which brings only if it extends a tefach beyond its frame. |
 | 15:3 | ⚪ todo | — | Jars touching one another in the open. |
-| 15:4 | ⚪ todo | — | A house partitioned by boards or curtains from the sides or the beams. |
+| 15:4 | 🟢 modeled | ✅ 15:4/tumah-in-house<br>✅ 15:4/tumah-behind<br>✅ 15:4/behind/tefach<br>✅ 15:4/behind/small | Modeled with boards from the side; boards or curtains under the beams follow the same rule. |
 | 15:5 | 🟢 modeled | ✅ 15:5/gap-tefach/tumah-below<br>✅ 15:5/gap-small/tumah-below<br>✅ 15:5/gap-tefach/tumah-in-house<br>✅ 15:5/gap-small/tumah-in-house |  |
-| 15:6 | ⚪ todo | — | A house full of straw. |
-| 15:7 | ⚪ todo | — | A house full of earth or pebbles. |
+| 15:6 | 🟡 partial | ✅ 15:6/tumah-in-straw<br>✅ 15:6/vessel-in-space<br>✅ 15:6/vessel-packed | Straw left in the house (nullified) modeled. Not yet: a tefach of space above the straw, which makes it ordinary belongings that do not protect. |
+| 15:7 | 🟡 partial | ✅ 15:7/earth | Earth filling a house modeled. Not yet: a tefach of space around the tumah, which makes it a closed grave defiling all around by touch. |
 | 15:8 | ⚪ todo | — | The courtyard of a tomb; a beam used as a tomb’s covering stone. |
 | 15:9 | ⚪ todo | — | A sealed jar or an animal used as a covering stone. |
 | 15:10 | ⚪ todo | — | Touching and overshadowing combined; hands a tefach wide. |

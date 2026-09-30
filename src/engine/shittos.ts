@@ -35,7 +35,7 @@ export const DISPUTES: Dispute[] = [
       o('akiva', 'Rabbi Akiva', 'רבי עקיבא', 'The tent counts, giving a fifth link.'),
     ],
     defaultOption: 'chachamim',
-    modeled: false,
+    modeled: true,
   },
   {
     id: 'wall-halves',
@@ -56,6 +56,17 @@ export const DISPUTES: Dispute[] = [
     options: [
       o('tanna-kamma', 'Tanna kamma', 'תנא קמא', 'Halves: the nearer story; the middle defiles both.'),
       o('yehuda', 'Rabbi Yehuda', 'רבי יהודה', 'All of the plaster belongs to the upper story.'),
+    ],
+    defaultOption: 'tanna-kamma',
+    modeled: true,
+  },
+  {
+    id: 'pillar-capital',
+    ref: '6:7',
+    topic: { en: 'Vessels under the capital of a pillar with tumah beneath it', he: 'כלים שתחת הפרח' },
+    options: [
+      o('tanna-kamma', 'Tanna kamma', 'תנא קמא', 'Tahor: the tumah breaks straight up and down through the pillar.'),
+      o('yochanan-ben-nuri', 'Rabbi Yochanan ben Nuri', 'רבי יוחנן בן נורי', 'Tamei: the capital is like the pillar, so the tumah comes back down on what it overshadows.'),
     ],
     defaultOption: 'tanna-kamma',
     modeled: true,

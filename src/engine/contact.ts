@@ -5,15 +5,18 @@
 //   corpse → vessel (7) → person (7) → vessel (7) → any (evening)   1:3
 //   a person in the middle of the chain passes seven-day tumah to vessels only (1:4)
 //
-// Being in the tent of the dead counts as touching it (the first link).
+// Being in the tent of the dead counts as touching it (the first link). The tent itself (what
+// roofs the tumah) is tamei like a vessel that touched it, but it is not counted as a link: what
+// touches the tent is as if it touched the dead (1:3 "the tent does not count", 15:2).
 import { AIR, GROUND, neighbors6, type Analysis } from './grid';
 import { RULES } from './rules';
 import type { Grade, ObjectResult, Reason } from './types';
 
 type Carrier = 'vessel' | 'person' | 'food';
-type State = 'M' | Grade;
+/** M: the tumah itself. T: the tent over it, tamei as K1 but passing tumah on as M. */
+type State = 'M' | 'T' | Grade;
 
-const RANK: Record<State, number> = { M: -1, K1: 0, A1: 1, K2: 2, A2: 3, K3: 4, E: 5 };
+const RANK: Record<State, number> = { M: -2, T: -1, K1: 0, A1: 1, K2: 2, A2: 3, K3: 4, E: 5 };
 
 /**
  * Next state when `carrier` touches something in state `from`; `null` = no tumas meis passes.
@@ -21,6 +24,7 @@ const RANK: Record<State, number> = { M: -1, K1: 0, A1: 1, K2: 2, A2: 3, K3: 4, 
  */
 const NEXT: Record<State, Record<Carrier, State | null>> = {
   M: { vessel: 'K1', person: 'A1', food: 'E' },
+  T: { vessel: 'K1', person: 'A1', food: 'E' },
   K1: { vessel: 'K2', person: 'A2', food: 'E' },
   A1: { vessel: 'K3', person: 'E', food: 'E' },
   K2: { vessel: 'E', person: 'E', food: 'E' },
@@ -51,6 +55,8 @@ export function contactPropagation(
   a: Analysis,
   exposed: Map<number, Reason[]>,
   objects: Record<string, ObjectResult>,
+  /** Exposed objects that are the tent over the tumah. */
+  roofs: Set<number> = new Set(),
 ) {
   // Object adjacency.
   const touching = new Map<number, Set<number>>();
@@ -83,7 +89,10 @@ export function contactPropagation(
   });
   for (const [oi, rs] of exposed) {
     const c = carrierOf(a, oi);
-    if (c) offer(oi, NEXT.M[c]!, rs);
+    if (!c) continue;
+    // A person is never the tent here: a person overshadowing tumah is himself an av (A1).
+    if (roofs.has(oi) && c === 'vessel') offer(oi, 'T', rs);
+    else offer(oi, NEXT.M[c]!, rs);
   }
 
   while (queue.length) {
@@ -97,11 +106,12 @@ export function contactPropagation(
       const next = NEXT[s][c];
       if (!next) continue;
       const via = a.scene.objects[v];
+      const what = s === 'M' ? ' (the tumah itself)' : s === 'T' ? ' (the tent over the tumah, which is not counted as a link)' : '';
       offer(w, next, [
         {
           rule: 'maga',
           refs: RULES.maga.refs,
-          detail: { en: `Touches ${via.label.en}${s === 'M' ? ' (the tumah itself)' : ''}.` },
+          detail: { en: `Touches ${via.label.en}${what}.` },
           via: via.id,
         },
       ]);
@@ -111,14 +121,13 @@ export function contactPropagation(
   for (const [oi, s] of state) {
     if (s === 'M') continue;
     const o = a.scene.objects[oi];
+    const grade: Grade = s === 'T' ? 'K1' : s;
+    const label = s === 'T' ? 'the tent over the tumah, tamei for seven days; it is not counted as a link (האהל אינו מן המנין)' : LABEL[grade];
     objects[o.id] = {
       status: 'tamei',
-      grade: s,
-      sevenDay: s !== 'E',
-      reasons: [
-        ...(why.get(oi) ?? []),
-        { rule: 'maga', refs: RULES.maga.refs, detail: { en: `Grade: ${LABEL[s]}.` } },
-      ],
+      grade,
+      sevenDay: grade !== 'E',
+      reasons: [...(why.get(oi) ?? []), { rule: 'maga', refs: RULES.maga.refs, detail: { en: `Grade: ${label}.` } }],
     };
   }
 }

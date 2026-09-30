@@ -211,11 +211,31 @@ function computeOhel(a: Analysis) {
   const n = a.cells.length;
   const src = new Uint8Array(n);
   for (let i = 0; i < n; i++) src[i] = a.covered[i] && passable(a, a.cells[i]) ? 1 : 0;
-  a.ohel = openBy(a, src, TEFACH);
+  const { label, count } = labelOpening(a, src, TEFACH);
+  a.ohel = new Uint8Array(n);
+  for (let i = 0; i < n; i++) {
+    if (!label[i]) continue;
+    a.ohel[i] = 1;
+    a.region[i] = label[i];
+  }
+  a.ohelCount = count;
 }
 
 /** Morphological opening of `src` by a k×k×k cube: cells lying inside some cube fully in `src`. */
 export function openBy(a: Pick<Analysis, 'dims'>, src: Uint8Array, k: number): Uint8Array {
+  const { label } = labelOpening(a, src, k);
+  const out = new Uint8Array(label.length);
+  for (let i = 0; i < label.length; i++) out[i] = label[i] ? 1 : 0;
+  return out;
+}
+
+/**
+ * The opening of `src` by a k-cube, split into the spaces a k-cube can move between. Two spaces
+ * whose cubes merely touch, or overlap by less than a cube, stay apart: a tefach cube cannot pass
+ * from one to the other (15:2, tablets touching at their corners). Returns a label per cell
+ * (0 = not in the opening) and the number of labels.
+ */
+export function labelOpening(a: Pick<Analysis, 'dims'>, src: Uint8Array, k: number): { label: Int32Array; count: number } {
   const [dx, dy, dz] = a.dims;
   const n = dx * dy * dz;
   const lines = (axis: 0 | 1 | 2, f: (base: number, stride: number, len: number) => void) => {
@@ -239,22 +259,61 @@ export function openBy(a: Pick<Analysis, 'dims'>, src: Uint8Array, k: number): U
     });
     return out;
   };
-  const dilate = (inp: Uint8Array, axis: 0 | 1 | 2) => {
-    const out = new Uint8Array(n);
+  const corners = erode(erode(erode(src, 0), 1), 2);
+
+  // Cubes whose corners are neighbors overlap in all but one layer, so a cube can slide from one
+  // to the other; a space is a connected set of corners.
+  const label = new Int32Array(n);
+  let count = 0;
+  const stack = new Int32Array(n);
+  const plane = dx * dy;
+  for (let s = 0; s < n; s++) {
+    if (!corners[s] || label[s]) continue;
+    label[s] = ++count;
+    let top = 0;
+    stack[top++] = s;
+    while (top) {
+      const i = stack[--top];
+      const x = i % dx;
+      const y = Math.floor(i / dx) % dy;
+      const z = Math.floor(i / plane);
+      const visit = (j: number) => {
+        if (corners[j] && !label[j]) {
+          label[j] = count;
+          stack[top++] = j;
+        }
+      };
+      if (x > 0) visit(i - 1);
+      if (x < dx - 1) visit(i + 1);
+      if (y > 0) visit(i - dx);
+      if (y < dy - 1) visit(i + dx);
+      if (z > 0) visit(i - plane);
+      if (z < dz - 1) visit(i + plane);
+    }
+  }
+
+  // Dilation: every cell of each cube takes its corner's label. Where cubes of two spaces
+  // overlap, the cell goes to one of them.
+  const dilate = (inp: Int32Array, axis: 0 | 1 | 2) => {
+    const out = new Int32Array(n);
     lines(axis, (base, stride, len) => {
       let last = -Infinity;
+      let lab = 0;
       for (let t = 0; t < len; t++) {
         const i = base + t * stride;
-        if (inp[i]) last = t;
-        if (t - last < k) out[i] = 1;
+        if (inp[i]) {
+          last = t;
+          lab = inp[i];
+        }
+        if (t - last < k) out[i] = lab;
       }
     });
     return out;
   };
-  return dilate(dilate(dilate(erode(erode(erode(src, 0), 1), 2), 0), 1), 2);
+  return { label: dilate(dilate(dilate(label, 0), 1), 2), count };
 }
 
-/** Label connected ohalim, then connected pockets (covered passable air too small to be an ohel). */
+/** Label connected pockets (covered passable air too small to be an ohel). */
 function labelRegions(a: Analysis) {
   const [dx, dy, dz] = a.dims;
   const n = dx * dy * dz;
@@ -282,9 +341,8 @@ function labelRegions(a: Analysis) {
         }
     }
   };
-  let label = 0;
-  for (let i = 0; i < n; i++) if (a.ohel[i] && a.region[i] === 0) flood(i, ++label, (j) => a.ohel[j] === 1);
-  a.ohelCount = label;
+  // Ohalim are already labeled by the spaces a tefach cube can move between (computeOhel).
+  let label = a.ohelCount;
   const isPocket = (j: number) => !a.ohel[j] && a.covered[j] === 1 && passable(a, a.cells[j]);
   for (let i = 0; i < n; i++) if (isPocket(i) && a.region[i] === 0) flood(i, ++label, isPocket);
   a.regionCount = label;

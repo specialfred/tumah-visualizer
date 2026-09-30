@@ -10,6 +10,7 @@ import {
   coords,
   idx,
   isStructural,
+  labelOpening,
   neighbors6,
   openBy,
   passable,
@@ -72,6 +73,8 @@ interface Exposures {
   map: Map<string, Reason[]>;
   /** Air cells this source makes tamei (1 = inside a tamei space, 2 = an overshadowing column). */
   air: Map<number, number>;
+  /** Objects that are the tent over this tumah: they roof it, or overshadow it in the open. */
+  roofs: Set<number>;
 }
 
 export function evaluate(scene: Scene, shittos: ShittosSelection = {}): Evaluation {
@@ -173,7 +176,11 @@ class Ctx {
       objects[o.id] = { status: 'tahor', reasons: [] };
     });
 
-    contactPropagation(a, exposed, objects);
+    // The tent over the tumah is not counted as a link of the chain (1:3, 15:2).
+    const roofs = new Set<number>();
+    if (shitah(this.shittos, 'chain-fifth') !== 'akiva')
+      for (const { ex } of perSource) for (const v of ex.roofs) if (exposed.has(v)) roofs.add(v);
+    contactPropagation(a, exposed, objects, roofs);
 
     return {
       objects,
@@ -224,7 +231,7 @@ class Ctx {
   propagate(src: number): Exposures {
     const { a } = this;
     const o = a.scene.objects[src];
-    const ex: Exposures = { map: new Map(), air: new Map() };
+    const ex: Exposures = { map: new Map(), air: new Map(), roofs: new Set() };
     const add = (t: string, r: Reason) => {
       const cur = ex.map.get(t);
       if (cur) cur.push(r);
@@ -254,6 +261,7 @@ class Ctx {
     }
     for (const r of new Set(ohelCells.map((i) => a.region[i])))
       defileRegion(r, reason('ohel', 'The tumah is inside this tent.', o.id, 'הטומאה באהל'));
+    if (ohelCells.length) this.riseToRoof(ohelCells, src, o.id, defileRegion, add, ex);
 
     if (restActive && rest.length) {
       const pockets = new Map<number, number[]>();
@@ -297,10 +305,11 @@ class Ctx {
         ? ({ kind: 'boka' } as const)
         : this.pocketKind(pocket)
       : this.enclosureKind(tcells);
-    // In an enclosed gap the whole gap is tamei; compressed tumah in the open reaches only what
-    // is directly above and below it.
-    if (pocket && kind.kind !== 'boka') defileRegion(pocket, reason('retzutzah', 'The tumah is in this small closed gap.', via));
+    // Compressed tumah does not fill the gap it is in: it reaches only what is directly above and
+    // below it, even what lies right beside it (15:4, 15:7). What else it reaches depends on what
+    // closes the gap off.
     if (kind.kind === 'yotzeis') {
+      this.retzutzahColumn(tcells, via, add, ex, 'retzutzah');
       for (const r of kind.ohalim)
         defileRegion(
           r,
@@ -320,7 +329,11 @@ class Ctx {
             s.region,
             reason(
               h.rule,
-              h.tie ? 'The tumah is in the exact middle of the building element.' : 'The tumah is nearer this side of the building element.',
+              h.rule === 'retzutzah'
+                ? 'The tumah breaks up through the pillar, and the capital, being like the pillar, brings it back down on what it overshadows.'
+                : h.tie
+                  ? 'The tumah is in the exact middle of the building element.'
+                  : 'The tumah is nearer this side of the building element.',
               via,
             ),
           );
@@ -376,6 +389,7 @@ class Ctx {
         else if (!passable(a, v) && !isStructural(a, v)) nonStructural = true;
       }
     if (!nonStructural) return { kind: 'structural' };
+    for (const s of this.through(this.regionCells[r], r)) adj.add(s);
     if (adj.size) return { kind: 'yotzeis', ohalim: [...adj] };
     return { kind: 'boka' };
   }
@@ -445,6 +459,22 @@ class Ctx {
     const allSides = [...new Map(found.map((b) => [key(b.side!), b.side!])).values()];
 
     if (!vertical) {
+      // A pillar is not a wall between two spaces: with the same tent on opposite sides, tumah
+      // under it breaks up and down (6:6, 6:7). Rabbi Yochanan ben Nuri: it comes back down on
+      // what the pillar's capital overshadows.
+      const across = (d: number) => best[d].side;
+      for (const [d1, d2] of [
+        [0, 1],
+        [2, 3],
+      ]) {
+        const s1 = across(d1);
+        const s2 = across(d2);
+        if (s1?.kind === 'ohel' && s2?.kind === 'ohel' && s1.region === s2.region) {
+          const open: Side = { kind: 'open', dir: 5 };
+          if (shitah(this.shittos, 'pillar-capital') === 'yochanan-ben-nuri') return { sides: [s1, open], tie: false, rule: 'retzutzah' };
+          return { sides: [open], tie: false, rule: 'retzutzah' };
+        }
+      }
       // A wall (6:3).
       const s = shitah(this.shittos, 'wall-halves');
       const ohalim = allSides.filter((x) => x.kind === 'ohel');
@@ -518,7 +548,8 @@ class Ctx {
       const c = cols.get(k);
       cols.set(k, c ? [Math.min(c[0], z), Math.max(c[1], z)] : [z, z]);
     }
-    const objReason = (v: number, up: boolean) =>
+    const objReason = (v: number, up: boolean) => {
+      if (up) ex.roofs.add(v);
       add(
         `o${v}`,
         reason(
@@ -527,6 +558,7 @@ class Ctx {
           via,
         ),
       );
+    };
     for (const [k, [zmin, zmax]] of cols) {
       const [x, y] = k.split(',').map(Number);
       for (const [start, step] of [
@@ -548,6 +580,48 @@ class Ctx {
           else if (v >= 0 && a.scene.objects[v].kind !== 'tumah') objReason(v, step === 1);
         }
       }
+    }
+  }
+
+  /**
+   * 10:5: tumah looks straight up through whatever does not block (a small hatch, the air of a
+   * space above) to the thing that roofs it. If that roof cannot block, it counts as full of
+   * tumah, like a vessel roofing a tamei tent. A roof that blocks stops it.
+   */
+  riseToRoof(
+    tcells: number[],
+    src: number,
+    via: string,
+    defileRegion: (r: number, why: Reason) => void,
+    add: (t: string, r: Reason) => void,
+    ex: Exposures,
+  ) {
+    const { a } = this;
+    const tops = new Map<string, number>();
+    for (const i of tcells) {
+      const [x, y, z] = coords(a, i);
+      const k = `${x},${y}`;
+      tops.set(k, Math.max(tops.get(k) ?? -1, z));
+    }
+    const filled = new Set<number>();
+    for (const [k, ztop] of tops) {
+      const [x, y] = k.split(',').map(Number);
+      for (let z = ztop + 1; z < a.dims[2]; z++) {
+        const v = a.cells[idx(a, x, y, z)];
+        if (v === src || v === AIR) continue;
+        if (v === GROUND || separatesCell(a, v)) break;
+        if (a.scene.objects[v].kind === 'tumah') continue;
+        if (a.brings[v]) {
+          // A roof that is part of the tumah's own tent is already tamei with it.
+          if (!a.objCells[v].some((i) => a.region[i] && a.region[i] === a.region[tcells[0]])) filled.add(v);
+          break;
+        }
+      }
+    }
+    for (const v of filled) {
+      ex.roofs.add(v);
+      add(`o${v}`, reason('kelim-einam-chotzetzim', 'It roofs the tumah, seen straight up through what does not block, and cannot block itself, so it counts as full of tumah.', via));
+      this.overshadow(a.objCells[v], via, defileRegion, add, ex, v);
     }
   }
 
@@ -586,6 +660,7 @@ class Ctx {
       }
     }
     for (const v of filled) {
+      ex.roofs.add(v);
       add(`o${v}`, reason('kelim-einam-chotzetzim', 'It roofs the tamei tent below it but cannot block, so it counts as full of tumah.', via));
       this.overshadow(a.objCells[v], via, defileRegion, add, ex, v);
     }
@@ -632,6 +707,15 @@ class Ctx {
     }
     if (this.openTo(r, TEFACH)) return;
 
+    // A space closed off by something that is not part of the building (boards, a cupboard's
+    // walls): its tumah goes out through it, but tumah outside does not come in (15:4, 4:1).
+    const out = this.through(this.regionCells[r], r);
+    if (out.size) {
+      for (const s of out)
+        defileRegion(s, reason('yotzeis', 'The tumah is in a space closed off by something that is not part of the building; it goes out through it into this space.', via));
+      return;
+    }
+
     // No way out at all: the tumah rises into the space above (3:7).
     const above = new Set<number>();
     for (const i of this.regionCells[r]) {
@@ -649,6 +733,36 @@ class Ctx {
     }
     for (const s of above)
       defileRegion(s, reason('no-exit', 'The space holding the tumah has no opening of a tefach to let it out, so it rises into the space above.', via));
+  }
+
+  /**
+   * Tents reached from `cells` through things that block but are not part of the building
+   * (boards, stones, a cupboard's walls): the way tumah in a space they close off goes out.
+   */
+  through(cells: number[], from: number): Set<number> {
+    const { a } = this;
+    const movable = (v: number) => v >= 0 && a.blocks[v] && !isStructural(a, v) && a.scene.objects[v].kind !== 'door';
+    const seen = new Set<number>();
+    const stack: number[] = [];
+    const out = new Set<number>();
+    for (const i of cells)
+      for (const j of neighbors6(a, i))
+        if (!seen.has(j) && movable(a.cells[j])) {
+          seen.add(j);
+          stack.push(j);
+        }
+    while (stack.length) {
+      const i = stack.pop()!;
+      for (const j of neighbors6(a, i)) {
+        if (seen.has(j)) continue;
+        if (a.ohel[j] && a.region[j] !== from && !this.isInterior(j)) out.add(a.region[j]);
+        else if (movable(a.cells[j])) {
+          seen.add(j);
+          stack.push(j);
+        }
+      }
+    }
+    return out;
   }
 
   adjacentDoors(r: number): number[] {
@@ -680,7 +794,8 @@ class Ctx {
     for (const i of a.objCells[d]) {
       for (const j of neighbors6(a, i)) {
         const r = a.region[j];
-        if (r && r !== from && a.covered[j]) beyond.add(r);
+        // Only a tent carries the way out on: a gap too small to be a tent does not (14:2).
+        if (r && r !== from && r <= a.ohelCount) beyond.add(r);
         const v = a.cells[j];
         if (v >= 0 && v !== d && a.region[j] !== from && a.scene.objects[v].kind !== 'tumah' && !a.ohel[j])
           add(`o${v}`, reason('derech-yetzia', 'It is in the doorway the tumah will be carried out through.', via));
@@ -697,27 +812,11 @@ class Ctx {
     if (!m) {
       const src = new Uint8Array(a.cells.length);
       for (let i = 0; i < src.length; i++) src[i] = passable(a, a.cells[i]) && !this.isInterior(i) ? 1 : 0;
-      const open = openBy(a, src, k);
+      const { label } = labelOpening(a, src, k);
       const air = this.openAir();
-      const label = new Int32Array(a.cells.length);
-      let n = 0;
       const outside = new Set<number>();
-      for (let s = 0; s < open.length; s++) {
-        if (!open[s] || label[s]) continue;
-        n++;
-        const stack = [s];
-        label[s] = n;
-        while (stack.length) {
-          const i = stack.pop()!;
-          // Outside means reaching real open air, not merely a cell a narrow shaft exposes to it.
-          if (air[i]) outside.add(n);
-          for (const j of neighbors6(a, i))
-            if (open[j] && !label[j]) {
-              label[j] = n;
-              stack.push(j);
-            }
-        }
-      }
+      // Outside means reaching real open air, not merely a cell a narrow shaft exposes to it.
+      for (let i = 0; i < label.length; i++) if (label[i] && air[i]) outside.add(label[i]);
       m = { label, outside };
       this.openMask.set(k, m);
     }

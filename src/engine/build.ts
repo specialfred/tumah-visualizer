@@ -134,6 +134,8 @@ export interface OpeningSpec {
   sill?: number;
   /** Put a closed door in the opening. */
   door?: boolean;
+  /** Which face of the wall the door is set in (default the inner face). */
+  doorAt?: 'inner' | 'outer';
   intendedExit?: boolean;
   id?: string;
 }
@@ -188,12 +190,13 @@ export function room(s: RoomSpec): SceneObject[] {
     const hole = box(min, size);
     holes[op.side].push(hole);
     if (op.door) {
-      // A door a quarter-tefach thick, set at the inner face of the wall.
+      // A door a quarter-tefach thick, set at the inner face of the wall (or the outer face).
       const dmin = [...min] as Vec3;
       const dsize = [...size] as Vec3;
       const axis = along === 1 ? 0 : 1;
       const inner = op.side.endsWith('-') ? min[axis] + w - 0.25 : min[axis];
-      dmin[axis] = inner;
+      const outer = op.side.endsWith('-') ? min[axis] : min[axis] + w - 0.25;
+      dmin[axis] = op.doorAt === 'outer' ? outer : inner;
       dsize[axis] = 0.25;
       out.push({
         id: op.id ?? `${s.id}-door${n + 1}`,

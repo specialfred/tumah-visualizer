@@ -58,7 +58,9 @@ The analysis (`src/engine/grid.ts`) computes, for every cell:
    people are passable (they do not block). This one operation encodes both
    *טפח על טפח על רום טפח* and *פותח טפח*: two spaces join only through an opening a tefach
    cube can pass.
-3. **regions**: connected tents, and "pockets": covered gaps too small to be a tent.
+3. **regions**: tents, and "pockets": covered gaps too small to be a tent. Two tents are one only
+   where a tefach cube can slide from one to the other; tents whose cubes merely touch, like
+   the spaces under two tablets meeting at a corner (15:2), stay apart.
 
 Propagation (`src/engine/evaluate.ts`) handles each tumah source on its own, then sums the
 exposures per target, so partial measures combine (8:6: two half-olives in two sealed jars
@@ -78,16 +80,23 @@ join in the house). The rules, in the order they apply:
 | The way out | דרך יציאת הטומאה | The closed doors of a tent with tumah are tamei, unless an opening big enough for this tumah (a tefach for an exact olive's bulk, 4×4 for a corpse) is open or intended | 3:6, 7:3 |
 | Tightly sealed | צמיד פתיל | See "guards its interior" | 5:3, 8:6 |
 | Contact | מגע | Chains of chapter 1, as a state machine over touching objects | 1:1–1:4 |
+| The tent is not counted | האהל אינו מן המנין | What roofs the tumah is tamei, but what touches it is as if it touched the dead | 1:3, 15:2 |
+| Seen through a hatch | | A roof that cannot block, seen straight up from the tumah through a small hatch, counts as full of tumah | 10:5 |
+| Pillars | | A building element with the same tent on opposite sides is not a wall: tumah under it breaks up and down | 6:6, 6:7 |
 
 Small gaps are classified by what bounds them:
 
 - bounded only by the building (walls, plaster, earth) → **halves**, measured through the
   building, with sub-tefach cavities treated as solid ("as if there is no cavity", Bartenura
   on 3:7). The depths are never a side, so a gap under a house belongs to the house.
-- bounded by a movable thing and touching a tent → **goes out, not in** (a gap under a
-  cupboard, 4:1).
+- bounded by a movable thing (a cupboard, boards set up as a partition) → **goes out, not in**,
+  through that thing into the tent beyond it (a gap under a cupboard, 4:1; behind boards, 15:4).
+  The same holds for a whole closed tent behind such a partition.
 - open air within a tefach on its sides → the tumah is effectively in the open, merely
   roofed over → **compressed** (under a narrow beam, 12:6).
+
+In any small gap, compressed tumah reaches only what is directly above and below it, not the
+rest of the gap (15:4, 15:7).
 
 Every result carries its reasons: the rule, a sentence, the object it came through, and the
 mishnayos. The inspector shows this chain, and each reference opens that mishna.
@@ -157,6 +166,15 @@ either resolved by a distinction the model now encodes, or open.
    the 3:6 scenarios use declared intent.
 7. **The way out is rabbinic** (7:3, Bartenura: גזרו חכמים). The doorway rule is modeled
    alongside Torah-level rules; a future setting could separate the layers.
+8. **A board in the lower of two hatches** (10:4, 10:5). Bartenura: something that can become
+   tamei does not block, so it is seen as if it stopped up the upper hatch, and the upper story
+   is tamei too. The engine derives the upper-hatch cases, but a board in the lower hatch
+   leaves the upper story tahor: the tumah filling the board rises through the open upper hatch
+   without entering the story around it. *Open* (scenarios pending).
+9. **Nullified vs. movable fillings** (15:4, 15:6 vs 4:1). Straw or earth left in a house is
+   modeled as part of the building, so a vessel packed in it with no tefach around it belongs to
+   the house (15:6). Boards set up as a partition are modeled as movable, so tumah behind them
+   goes out into the house (15:4). A case where the same filling must be both is not yet known.
 
 ## Roadmap
 

@@ -1,4 +1,4 @@
-import { kezayis, kli, solid } from '../../engine/build';
+import { kezayis, kli, room, solid } from '../../engine/build';
 import type { SceneObject } from '../../engine/types';
 import type { Scenario } from '../types';
 
@@ -23,7 +23,35 @@ function projections(width: number, gap: number, where: Where, overhang = 0): Sc
   ];
 }
 
+// 14:2 — a house with its door closed (set in the outer face of the wall) and tumah inside. A
+// projection juts out from the wall over the doorway, `width` tefachim; a vessel stands under it.
+function projectionOverDoor(width: number): SceneObject[] {
+  return [
+    ...room({ id: 'house', at: [0, 0], size: [8, 6, 6], openings: [{ side: 'y-', offset: 3, width: 2, height: 4, door: true, doorAt: 'outer', id: 'door' }] }),
+    solid('projection', { en: `Projection over the doorway, ${width} tefach wide`, he: 'זיז' }, 'structure', 'stone', [2, -1 - width, 4], [4, width, 0.5]),
+    kezayis('tumah', [4, 3, 0]),
+    kli('kli-outside', [3.875, -1 - width + 0.125, 0], 'Vessel under the projection', [0.25, 0.25, 0.25]),
+  ];
+}
+
 export const ch14: Scenario[] = [
+  {
+    id: '14:2/door/tefach',
+    ref: '14:2',
+    title: { en: 'A projection a tefach wide over a closed doorway', he: 'זיז שעל גבי הפתח' },
+    clause: { en: 'A projection that is above a doorway forms a passage for the uncleanness when it is one handbreadth wide.' },
+    notes: 'The doorway is closed (Bartenura): the tumah will be carried out through it, and the projection makes a tent in its way.',
+    scene: () => ({ objects: projectionOverDoor(1) }),
+    expect: { 'kli-outside': 'tamei' },
+  },
+  {
+    id: '14:2/door/narrow',
+    ref: '14:2',
+    title: { en: 'A projection narrower than a tefach over a closed doorway' },
+    clause: { en: '...when it is one handbreadth wide.' },
+    scene: () => ({ objects: projectionOverDoor(0.75) }),
+    expect: { 'kli-outside': 'tahor' },
+  },
   {
     id: '14:5/tefach-apart/under',
     ref: '14:5',
