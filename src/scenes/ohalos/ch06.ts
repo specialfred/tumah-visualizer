@@ -3,14 +3,14 @@ import type { SceneObject } from '../../engine/types';
 import type { Scenario } from '../types';
 
 // 6:1 — a large flat stone (נדבך, per Bartenura) held up by different supports at its four
-// corners. The stone is 10×10 tefachim, a quarter-tefach thick, twelve tefachim up.
+// corners. The stone is 14×14 tefachim, a quarter-tefach thick, at head height (3 amos).
 type Support = 'people' | 'dung-vessels' | 'stones';
 function stoneOn(support: Support, tumahBelow: boolean): SceneObject[] {
-  const h = 12;
-  const S = 10;
+  const h = 18;
+  const S = 14;
   const supports = [0, 1, 2, 3].map((n): SceneObject => {
     const id = `support${n + 1}`;
-    const [w, d] = support === 'people' ? [4, 1.5] : [1, 1];
+    const [w, d] = support === 'people' ? [6, 6] : [1, 1];
     const x = n % 2 ? S - w : 0;
     const y = n < 2 ? 0 : S - d;
     if (support === 'people') return person(id, [x, y, 0], 'Bearer', h);
@@ -20,8 +20,8 @@ function stoneOn(support: Support, tumahBelow: boolean): SceneObject[] {
   return [
     solid('stone', { en: 'Large stone', he: 'נדבך' }, 'misc', 'stone', [0, 0, h], [S, S, 0.25]),
     ...supports,
-    tumahBelow ? kezayis('tumah', [4.75, 4.75, 0]) : kezayis('tumah', [4.75, 4.75, h + 0.25]),
-    tumahBelow ? kli('kli-top', [7, 5, h + 0.25], 'Vessel on the stone') : kli('kli-below', [7, 5, 0], 'Vessel under the stone'),
+    tumahBelow ? kezayis('tumah', [6.75, 6.75, 0]) : kezayis('tumah', [6.75, 6.75, h + 0.25]),
+    tumahBelow ? kli('kli-top', [10, 7, h + 0.25], 'Vessel on the stone') : kli('kli-below', [10, 7, 0], 'Vessel under the stone'),
   ];
 }
 

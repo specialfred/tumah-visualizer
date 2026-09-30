@@ -11,7 +11,7 @@ export const ch01: Scenario[] = [
       en: 'A person who touches a corpse is defiled with seven days’ defilement and a person who touches him is defiled with a defilement lasting until the evening.',
     },
     scene: () => ({
-      objects: [corpse('corpse', [0, 0, 0], 6), person('a', [6, 0, 0], 'First person'), person('b', [10, 0, 0], 'Second person')],
+      objects: [corpse('corpse', [0, 0, 0]), person('a', [18, 0, 0], 'First person'), person('b', [24, 0, 0], 'Second person')],
     }),
     expect: { a: 'tamei7', b: 'tameiErev' },
   },
@@ -24,11 +24,11 @@ export const ch01: Scenario[] = [
     },
     scene: () => ({
       objects: [
-        corpse('corpse', [0, 0, 0], 6),
-        kli('k1', [6, 0, 0], 'First vessel'),
-        kli('k2', [6.5, 0, 0], 'Second vessel'),
-        person('p', [7, 0, 0], 'Person touching the second vessel'),
-        kli('k3', [6.5, 0.5, 0], 'Vessel touching the second vessel'),
+        corpse('corpse', [0, 0, 0]),
+        kli('k1', [18, 0, 0], 'First vessel'),
+        kli('k2', [18.5, 0, 0], 'Second vessel'),
+        person('p', [19, 0, 0], 'Person touching the second vessel'),
+        kli('k3', [18.5, 0.5, 0], 'Vessel touching the second vessel'),
       ],
     }),
     expect: { k1: 'tamei7', k2: 'tamei7', p: 'tameiErev', k3: 'tameiErev' },
@@ -42,11 +42,11 @@ export const ch01: Scenario[] = [
     },
     scene: () => ({
       objects: [
-        corpse('corpse', [0, 0, 0], 6),
-        kli('k1', [6, 0, 0], 'Vessel touching the corpse'),
-        person('p1', [6.5, 0, 0], 'Person touching the vessel'),
-        kli('k2', [10.5, 0, 0], 'Vessel touching the person'),
-        person('p2', [11, 0, 0], 'Fourth: a person'),
+        corpse('corpse', [0, 0, 0]),
+        kli('k1', [18, 0, 0], 'Vessel touching the corpse'),
+        person('p1', [18.5, 0, 0], 'Person touching the vessel'),
+        kli('k2', [24.5, 0, 0], 'Vessel touching the person'),
+        person('p2', [25, 0, 0], 'Fourth: a person'),
       ],
     }),
     expect: { k1: 'tamei7', p1: 'tamei7', k2: 'tamei7', p2: 'tameiErev' },
@@ -60,10 +60,10 @@ export const ch01: Scenario[] = [
     },
     scene: () => ({
       objects: [
-        corpse('corpse', [0, 0, 0], 6),
-        person('p', [6, 0, 0], 'Person touching the corpse'),
-        kli('k', [10, 0, 0], 'Vessel touching him'),
-        kli('k2', [10.5, 0, 0], 'Third: a vessel'),
+        corpse('corpse', [0, 0, 0]),
+        person('p', [18, 0, 0], 'Person touching the corpse'),
+        kli('k', [24, 0, 0], 'Vessel touching him'),
+        kli('k2', [24.5, 0, 0], 'Third: a vessel'),
       ],
     }),
     expect: { p: 'tamei7', k: 'tamei7', k2: 'tameiErev' },

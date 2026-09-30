@@ -68,11 +68,12 @@ export const kezayis = (id: string, at: Vec3, amount = 1, size: Vec3 = [0.5, 0.5
     tumah: { kind: 'kezayis', amount },
   });
 
+/** A corpse lying along x: three amos long, an amah wide, two tefachim thick. */
 export const corpse = (id: string, at: Vec3, length = 18) =>
-  solid(id, 'Corpse', 'tumah', 'flesh', at, [length, 2, 1], { tumah: { kind: 'meis' } });
+  solid(id, 'Corpse', 'tumah', 'flesh', at, [length, 6, 2], { tumah: { kind: 'meis' } });
 
-/** A standing person: 4 tefachim across the shoulders (x) and 1½ front to back (y). */
-export const person = (id: string, at: Vec3, label: string | Text = 'Person', height = 16, footprint: [number, number] = [4, 1.5]) =>
+/** A standing person: an amah by an amah, three amos tall (6 × 6 × 18 tefachim). */
+export const person = (id: string, at: Vec3, label: string | Text = 'Person', height = 18, footprint: [number, number] = [6, 6]) =>
   solid(id, label, 'person', 'flesh', at, [footprint[0], footprint[1], height]);
 
 export interface ContainerSpec {
