@@ -32,8 +32,8 @@ export const COVERAGE: MishnaCoverage[] = [
   c('4:3', 'todo', 'A cupboard standing in a doorway opening outward; its base under the lintel.'),
   // Chapter 5 — ovens and hatches.
   c('5:1', 'todo', 'An oven in a house with its mouth outside (Beis Shammai, Beis Hillel, Rabbi Akiva).'),
-  c('5:2', 'todo', 'A perforated pot over a hatch.'),
-  c('5:3', 'todo', 'A whole pot over a hatch: what earthenware protects (the retraction of Beis Hillel).'),
+  c('5:2', 'todo', 'A perforated pot over a hatch. Beis Hillel (the halacha): the pot is tamei yet the upper story tahor, a stringency the engine cannot express: in it a tamei vessel does not block.'),
+  c('5:3', 'partial', 'A whole pot over a hatch, its back to the tumah, protects the upper story. Not yet: whose pot it is (Beis Shammai: one not careful about purity protects only food, drink and earthenware).'),
   c('5:4', 'todo', 'A flagon of pure liquid; a woman kneading over the hatch.'),
   c('5:5', 'todo', 'Vessels of dung, stone or earth over a hatch; vessels known to be pure.'),
   c('5:6', 'todo', 'Vessels protect together with the walls of a tent only if they have a wall of a tefach.'),
@@ -72,8 +72,8 @@ export const COVERAGE: MishnaCoverage[] = [
   c('10:3', 'modeled'),
   c('10:4', 'partial', 'All rulings have scenarios. Pending: a board in the lower hatch, which Bartenura sees as if it stopped the upper one.'),
   c('10:5', 'partial', 'All rulings have scenarios. Pending: a board in the lower hatch with tumah under it (as in 10:4).'),
-  c('10:6', 'todo', 'A pot under a hatch.'),
-  c('10:7', 'todo', 'A pot beside a threshold, touching the lintel if raised.'),
+  c('10:6', 'partial', 'The pot on the floor modeled. Pending: the pot a tefach up, which protects together with the walls of the house though smaller than the hatch (DESIGN tension 8).'),
+  c('10:7', 'partial', 'The pot on the floor and a tefach up, reaching a tefach under the lintel, modeled. Pending: less than a tefach under the lintel (DESIGN tension 14). Not yet: a pot stuck to the side of the lintel.'),
   // Chapter 11.
   c('11:1', 'partial', 'Beis Hillel (a split of any size) modeled. Not yet: Beis Shammai (4 tefachim) and Rabbi Yose (a tefach).'),
   c('11:2', 'partial', 'The split, a leg over it and a reed on the floor modeled. Pending: a reed over the split, or under it a tefach up (narrower than a tefach; DESIGN tension 12).'),
@@ -87,7 +87,7 @@ export const COVERAGE: MishnaCoverage[] = [
   // Chapter 12.
   c('12:1', 'partial', 'Modeled per the Sages. Not yet: Rabbi Yochanan ben Nuri, for whom an oven, even old, protects.'),
   c('12:2', 'todo', 'Netting over an oven with a sealed lid.'),
-  c('12:3', 'todo', 'A board projecting from the ends of an old oven; a betach.'),
+  c('12:3', 'partial', 'The board over the oven’s ends modeled, with Rabbi Yose. Not yet: the betach, and its projection (Rabbi Eliezer vs Rabbi Yehoshua).'),
   c('12:4', 'modeled'),
   c('12:5', 'modeled'),
   c('12:6', 'modeled', 'Round beams (circumference three tefachim) not yet: the grid models square cross-sections.'),

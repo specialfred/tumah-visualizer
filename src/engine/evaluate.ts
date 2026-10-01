@@ -78,15 +78,25 @@ interface Exposures {
 }
 
 export function evaluate(scene: Scene, shittos: ShittosSelection = {}): Evaluation {
-  const a = analyze(scene, shittos);
-  const ctx = new Ctx(a, shittos);
-  return ctx.run();
+  // An earthenware vessel blocks tumah coming at it from outside, until the tumah reaches its
+  // inside; then it is tamei and blocks nothing. Evaluate again until no more of them open up.
+  const open = new Set<number>();
+  for (;;) {
+    const a = analyze(scene, shittos, { earthenwareOpen: open });
+    const ctx = new Ctx(a, shittos);
+    const result = ctx.run();
+    const reached = [...ctx.exposed.keys()].filter((v) => a.earthenwareBlocks[v]);
+    if (!reached.length) return result;
+    for (const v of reached) open.add(v);
+  }
 }
 
 class Ctx {
   regionCells: number[][] = [];
   interiorOf: number[] = []; // per region: container object index or -1
   warnings: Evaluation['warnings'] = [];
+  /** Objects the tumah reaches by tent or overshadowing (before contact), with the reasons. */
+  exposed = new Map<number, Reason[]>();
   private openMask = new Map<number, { label: Int32Array; outside: Set<number> }>();
 
   constructor(
@@ -153,7 +163,7 @@ class Ctx {
 
     // Objects exposed by tent / overshadowing.
     const objects: Record<string, ObjectResult> = {};
-    const exposed = new Map<number, Reason[]>();
+    const exposed = this.exposed;
     a.scene.objects.forEach((o, oi) => {
       const p = a.props[oi];
       if (o.kind === 'tumah') {
@@ -174,6 +184,18 @@ class Ctx {
       }
       if (hit) exposed.set(oi, dedupe(rs));
       objects[o.id] = { status: 'tahor', reasons: [] };
+    });
+
+    // Tumah that reaches the inside of an earthenware vessel fills it: everything inside it is
+    // tamei, not only what is in line with the tumah (Bartenura on 10:6).
+    a.scene.objects.forEach((o, oi) => {
+      if (!o.container || !a.props[oi].receivesFromInsideOnly || !exposed.has(oi)) return;
+      const inside = o.container.interior;
+      a.scene.objects.forEach((_q, qi) => {
+        if (qi === oi || exposed.has(qi) || !a.props[qi].susceptible || !a.objCells[qi].length) return;
+        if (!a.objCells[qi].every((i) => this.inBox(i, inside))) return;
+        exposed.set(qi, [reason('kli-cheres', 'It is inside an earthenware vessel the tumah has reached; the tumah fills the vessel.', o.id)]);
+      });
     });
 
     // The tent over the tumah is not counted as a link of the chain (1:3, 15:2).
@@ -603,6 +625,7 @@ class Ctx {
     add: (t: string, r: Reason) => void,
     ex: Exposures,
     self: number,
+    down = true,
   ) {
     const { a } = this;
     const cols = new Map<string, [number, number]>();
@@ -625,10 +648,12 @@ class Ctx {
     };
     for (const [k, [zmin, zmax]] of cols) {
       const [x, y] = k.split(',').map(Number);
-      for (const [start, step] of [
-        [zmax + 1, 1],
-        [zmin - 1, -1],
-      ] as const) {
+      for (const [start, step] of (down
+        ? [
+            [zmax + 1, 1],
+            [zmin - 1, -1],
+          ]
+        : [[zmax + 1, 1]]) as [number, number][]) {
         for (let z = start; z >= 0 && z < a.dims[2]; z += step) {
           const i = idx(a, x, y, z);
           const v = a.cells[i];
@@ -667,28 +692,38 @@ class Ctx {
       const k = `${x},${y}`;
       tops.set(k, Math.max(tops.get(k) ?? -1, z));
     }
-    const filled = new Set<number>();
+    // Each roof found, and whether it is seen through something other than the tumah's own tent.
+    const filled = new Map<number, boolean>();
+    const own = a.region[tcells[0]];
     for (const [k, ztop] of tops) {
       const [x, y] = k.split(',').map(Number);
+      let beyond = false;
       for (let z = ztop + 1; z < a.dims[2]; z++) {
-        const v = a.cells[idx(a, x, y, z)];
-        if (v === src || v === AIR) continue;
+        const i = idx(a, x, y, z);
+        const v = a.cells[i];
+        if (v === src) continue;
+        if (v === AIR) {
+          if (a.region[i] !== own) beyond = true;
+          continue;
+        }
         if (v === GROUND || separatesCell(a, v)) break;
         if (a.scene.objects[v].kind === 'tumah') continue;
         if (a.brings[v]) {
           // A roof that is part of the tumah's own tent is already tamei with it; a vessel guarding
           // its inside is not a roof over it (4:2).
-          const own = a.region[tcells[0]];
           const ownRoof = this.interiorOf[own] === v || a.objCells[v].some((i) => a.region[i] && a.region[i] === own);
-          if (!this.solidPerson(v) && !ownRoof) filled.add(v);
+          if (!this.solidPerson(v) && !ownRoof && !a.earthenwareBlocks[v]) filled.set(v, (filled.get(v) ?? false) || beyond);
           break;
         }
+        beyond = true;
       }
     }
-    for (const v of filled) {
+    for (const [v, beyond] of filled) {
       ex.roofs.add(v);
       add(`o${v}`, reason('kelim-einam-chotzetzim', 'It roofs the tumah, seen straight up through what does not block, and cannot block itself, so it counts as full of tumah.', via));
-      this.overshadow(a.objCells[v], via, defileRegion, add, ex, v);
+      // Seen through a hatch or another space, the tumah it is full of comes down on what is below
+      // it (10:5). As the roof of the tumah's own tent, it only defiles what is on it (12:3).
+      this.overshadow(a.objCells[v], via, defileRegion, add, ex, v, beyond);
     }
   }
 
@@ -722,7 +757,8 @@ class Ctx {
         if (a.scene.objects[v].kind === 'tumah') continue;
         if (a.brings[v]) {
           // A vessel guarding its own inside is not a roof over it: tumah there goes out (4:1, 4:2).
-          if (this.interiorOf[r] !== v && !this.inSmallHole(v)) filled.add(v);
+          // Earthenware that the tumah has not reached inside is not tamei, so it is not full of it.
+          if (this.interiorOf[r] !== v && !this.inSmallHole(v) && !a.earthenwareBlocks[v]) filled.add(v);
           break;
         }
       }
@@ -741,7 +777,9 @@ class Ctx {
         continue;
       }
       add(`o${v}`, reason('kelim-einam-chotzetzim', 'It roofs the tamei tent below it but cannot block, so it counts as full of tumah.', via));
-      this.overshadow(a.objCells[v], via, defileRegion, add, ex, v);
+      // Full of the tumah of the tent below, it defiles what is on it and above it; it does not
+      // carry that tumah down into another space it also roofs (12:3: the oven partitions).
+      this.overshadow(a.objCells[v], via, defileRegion, add, ex, v, false);
     }
   }
 

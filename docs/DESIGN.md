@@ -86,6 +86,7 @@ join in the house). The rules, in the order they apply:
 | Pillars | | A building element with the same tent on opposite sides is not a wall: tumah under it breaks up and down | 6:6, 6:7 |
 | Slopes of tents | כל שפועי אהלים כאהלים | A gap too low for a tefach cube, beside a tent and under that tent's own outer side, is part of the tent; a hole through the thickness of the roof's own object is not (4:1) | 7:2 |
 | Swallowed tumah | רואין את הטומאה | Tumah packed inside something that is not part of the building, with no air around it, is compressed: it breaks straight up and down, and a tent it comes out into is tamei (Rabbi Yose) | 11:7 |
+| Earthenware | כלי חרס אינו מטמא מגבו | An earthenware vessel blocks tumah coming at it from outside and is not full of the tumah it roofs; once tumah reaches its inside it is tamei, blocks nothing, and all inside it is tamei. A vessel full of the tumah of its own tent defiles what is on it, not other spaces under it | 10:6, 10:7, 12:3 |
 | Removable in halves | | Rabbi Yose: tumah in a closed space whose only outlet is small does not go out, since it can be taken out in halves | 4:2 |
 | A person is hollow | אדם חלול | A person's body is open space under his skin, so it can be the tent that brings tumah (Beis Hillel). Beis Shammai: the body is solid; tumah does not spread through it, so he is never "full of tumah" as a whole, but he does not block: tumah under him breaks straight up through him (two people one above the other bring the tumah, 11:4) | 11:3–11:6 |
 
@@ -175,7 +176,10 @@ either resolved by a distinction the model now encodes, or open.
    tamei does not block, so it is seen as if it stopped up the upper hatch, and the upper story
    is tamei too. The engine derives the upper-hatch cases, but a board in the lower hatch
    leaves the upper story tahor: the tumah filling the board rises through the open upper hatch
-   without entering the story around it. *Open* (scenarios pending).
+   without entering the story around it. *Open* (scenarios pending). The same "seen as if"
+   appears in 10:6: a pot a tefach up under a hatch, smaller than the hatch, protects together
+   with the walls of the house, and tumah under it reaches the house (Bartenura); the engine
+   leaves the space under the pot apart from the house, across the open hatch (pending).
 9. **Nullified vs. movable fillings** (15:4, 15:6 vs 4:1). Straw or earth left in a house is
    modeled as part of the building, so a vessel packed in it with no tefach around it belongs to
    the house (15:6). Boards set up as a partition are modeled as movable, so tumah behind them
@@ -201,6 +205,11 @@ either resolved by a distinction the model now encodes, or open.
 13. **Curtains one above the other** (14:7, וכן שתי יריעות). Bartenura: curtains a tefach apart
    have the law of the projections. But a cloth tent is susceptible, and the engine treats it as
    not blocking (7:2), unlike stone projections. *Open*: not modeled.
+14. **Two roofs meeting** (10:7, and 14:5's overhang of less than a tefach). The engine counts a
+   space as covered if anything is above it, so the space under a pot by a doorway joins the
+   doorway wherever the pot and the lintel meet. The mishna joins them only when the pot reaches a
+   tefach in under the lintel: a tefach cube under both roofs. Making tents per roof would model
+   this, but many scenes build one roof out of several pieces. *Open*: 10:7's short pot is pending.
 
 ## Roadmap
 

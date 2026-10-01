@@ -72,6 +72,17 @@ export const DISPUTES: Dispute[] = [
     modeled: true,
   },
   {
+    id: 'oven-partition',
+    ref: '12:3',
+    topic: { en: 'Does an earthenware oven partition?', he: 'רבי יוסי מטמא' },
+    options: [
+      o('tanna-kamma', 'Tanna kamma', 'תנא קמא', 'An earthenware vessel cannot become tamei from outside, so it blocks tumah coming at it from outside.'),
+      o('yose', 'Rabbi Yose', 'רבי יוסי', 'The oven does not partition: tumah under one end of the board reaches the other.'),
+    ],
+    defaultOption: 'tanna-kamma',
+    modeled: true,
+  },
+  {
     id: 'pillar-capital',
     ref: '6:7',
     topic: { en: 'Vessels under the capital of a pillar with tumah beneath it', he: 'כלים שתחת הפרח' },

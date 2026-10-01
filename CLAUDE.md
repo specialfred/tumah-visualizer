@@ -57,10 +57,10 @@ See docs/COVERAGE.md for the full list. Deferred, each needing a new idea in the
   down.
 - **14:1, 14:3** — a projection sloping down over a doorway brings tumah at any width within 12
   tefachim; needs a notion of what roofs a doorway rather than a tefach opening.
-- **Earthenware blocks from outside** — an earthenware wall is not susceptible from its outside,
-  so it blocks tumah coming at it (Bartenura on 6:2, 12:3), but not tumah from its own inside.
-  Blocking is symmetric in the engine today. This one idea unlocks 12:3, 10:6, 10:7, much of
-  chapter 5 and 11:8–11:9.
+- **Two roofs meeting** (DESIGN tension 14) — tents join only through a tefach under both roofs;
+  10:7's short pot and 14:5's small overhang. Tents per roof, but scenes build roofs in pieces.
+- **Rest of chapter 5** — 5:1 (an oven's mouth outside), 5:2 (Beis Hillel: the perforated pot is
+  tamei yet protects), 5:4–5:7; and 11:8–11:9 (protecting together with the walls of a tent, 5:6).
 - **4:3** — a cupboard in a doorway: tumah inside a closed vessel should go out through its own
   door rather than all around; and the text (טמא) and Bartenura (טהור) differ on tumah in the house.
 - **11:1** other shittos — a split of 4 tefachim or a tefach: the inner part's way out runs
@@ -72,5 +72,9 @@ See docs/COVERAGE.md for the full list. Deferred, each needing a new idea in the
   formed before or after death, a blocked doorway being reopened. The engine has no time.
 - **11:2's reed, 14:7's curtains** — DESIGN tensions 12 and 13.
 
-Good next candidates: the earthenware idea above (it unlocks the most), then 16:1's movable
-tumah (16:2's spindle), 4:3.
+Earthenware is modeled (Oct 2026): it blocks tumah coming at it from outside until the tumah
+reaches its inside (`earthenwareBlocks`, re-evaluated in `evaluate`); a vessel full of the tumah of
+its own tent defiles only upward.
+
+Good next candidates: 5:6 (vessels protect with the walls of a tent if they have a wall of a
+tefach), then 11:8–11:9, 16:1's movable tumah (16:2's spindle), 4:3.

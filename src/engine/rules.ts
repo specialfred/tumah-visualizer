@@ -103,6 +103,13 @@ export const RULES: Record<string, RuleDef> = Object.fromEntries(
       ['6:3', '6:4', '6:7', '4:1'],
     ),
     r(
+      'kli-cheres',
+      'Earthenware',
+      'כלי חרס אינו מטמא מגבו',
+      'An earthenware vessel cannot become tamei from its outside, so it blocks tumah coming at it from outside, and it is not counted full of the tumah it roofs. Once tumah reaches its inside it is tamei and blocks nothing, and everything inside it is tamei.',
+      ['10:6', '10:7', '12:3'],
+    ),
+    r(
       'karka-habayis',
       'The floor is the house',
       'ארצו של בית כמוהו עד התהום',
