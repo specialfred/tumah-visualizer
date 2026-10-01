@@ -66,5 +66,9 @@ See docs/COVERAGE.md for the full list. Deferred, each needing a new idea in the
 - **11:1** other shittos — a split of 4 tefachim or a tefach: the inner part's way out runs
   through the outer part.
 
-Good next candidates: 12:4 (a cradle's leg through a hole in the ceiling), 17:5 (a house and
-upper story in a field with a lost grave), 15:8's beam used as a covering stone.
+- **15:8** — a golel (covering stone): tamei like the grave to whoever touches it, but only the
+  part over the opening (or within 4 tefachim of the grave when its end is the golel); the
+  courtyard of a tomb. Needs graves and golel as a kind of tumah.
+
+Good next candidates: 12:2–12:3 (a board over two ovens, once earthenware blocks from outside),
+16:2's spindle (needs 16:1's movable tumah), 4:3.

@@ -722,7 +722,7 @@ class Ctx {
         if (a.scene.objects[v].kind === 'tumah') continue;
         if (a.brings[v]) {
           // A vessel guarding its own inside is not a roof over it: tumah there goes out (4:1, 4:2).
-          if (this.interiorOf[r] !== v) filled.add(v);
+          if (this.interiorOf[r] !== v && !this.inSmallHole(v)) filled.add(v);
           break;
         }
       }
@@ -743,6 +743,47 @@ class Ctx {
       add(`o${v}`, reason('kelim-einam-chotzetzim', 'It roofs the tamei tent below it but cannot block, so it counts as full of tumah.', via));
       this.overshadow(a.objCells[v], via, defileRegion, add, ex, v);
     }
+  }
+
+  /**
+   * A vessel counts as full of tumah because it does not block: it is as if it were not there. So
+   * where it passes through a hole in something that separates (a ceiling), it carries tumah on
+   * only if the hole, without it, would be a tefach square (10:4 against 12:4).
+   */
+  inSmallHole(v: number): boolean {
+    const { a } = this;
+    const [dx, dy] = a.dims;
+    const layers = new Set<number>();
+    for (const i of a.objCells[v]) {
+      const [x, y, z] = coords(a, i);
+      const side = [x > 0 ? i - 1 : -1, x < dx - 1 ? i + 1 : -1, y > 0 ? i - dx : -1, y < dy - 1 ? i + dx : -1];
+      if (side.some((j) => j >= 0 && separatesCell(a, a.cells[j]))) layers.add(z);
+    }
+    const CAP = 64 * TEFACH * TEFACH;
+    for (const z of layers) {
+      // The hole at this height: the cells around the vessel that nothing separating fills.
+      const hole = new Set<number>();
+      const stack = a.objCells[v].filter((i) => coords(a, i)[2] === z);
+      for (const i of stack) hole.add(i);
+      while (stack.length && hole.size <= CAP) {
+        const i = stack.pop()!;
+        const [x, y] = coords(a, i);
+        for (const j of [x > 0 ? i - 1 : -1, x < dx - 1 ? i + 1 : -1, y > 0 ? i - dx : -1, y < dy - 1 ? i + dx : -1]) {
+          if (j < 0 || hole.has(j) || separatesCell(a, a.cells[j])) continue;
+          hole.add(j);
+          stack.push(j);
+        }
+      }
+      if (hole.size > CAP) continue;
+      const fits = [...hole].some((i) => {
+        const [x, y] = coords(a, i);
+        if (x + TEFACH > dx || y + TEFACH > dy) return false;
+        for (let p = 0; p < TEFACH; p++) for (let q = 0; q < TEFACH; q++) if (!hole.has(idx(a, x + p, y + q, z))) return false;
+        return true;
+      });
+      if (!fits) return true;
+    }
+    return false;
   }
 
   /** The way tumah leaves a tent: open openings, closed doors, or nowhere. */

@@ -71,8 +71,8 @@ export const RULES: Record<string, RuleDef> = Object.fromEntries(
       'kelim-einam-chotzetzim',
       'Vessels and people do not block',
       'אדם וכלים עושין אהל לטמא ולא לטהר',
-      'Things that can become tamei make a tent to bring tumah but do not block it; what rests on them is treated as inside their tent. Such a roof over tumah, even seen through a small hatch, counts as full of tumah.',
-      ['6:1', '9:1', '9:2', '10:4', '10:5', '11:3', '11:4'],
+      'Things that can become tamei make a tent to bring tumah but do not block it; what rests on them is treated as inside their tent. Such a roof over tumah, even seen through a small hatch, counts as full of tumah. It is as if not there, so it carries tumah through a hole in a ceiling only if the hole is a tefach square.',
+      ['6:1', '9:1', '9:2', '10:4', '10:5', '11:3', '11:4', '12:4'],
     ),
     r(
       'chatzitzah',

@@ -5,9 +5,9 @@ mishna’s ruling; the engine must reproduce the ruling from its general rules.
 
 🟢 modeled · 🟡 partly modeled · ⚪ not yet modeled · 🔵 not spatial (tracked as data)
 
-**25** modeled, **23** partly modeled, **47** not yet modeled, **39** not spatial — of 134 mishnayos.
+**26** modeled, **24** partly modeled, **45** not yet modeled, **39** not spatial — of 134 mishnayos.
 
-Scenarios: **163** passing, **0** failing, **3** pending.
+Scenarios: **168** passing, **0** failing, **3** pending.
 
 ## Chapter 1
 
@@ -154,7 +154,7 @@ Scenarios: **163** passing, **0** failing, **3** pending.
 | 12:1 | 🟡 partial | ✅ 12:1/new/tumah-under<br>✅ 12:1/new/tumah-above<br>✅ 12:1/old/tumah-under<br>✅ 12:1/old/tumah-above<br>✅ 12:1/two-ovens | Modeled per the Sages. Not yet: Rabbi Yochanan ben Nuri, for whom an oven, even old, protects. |
 | 12:2 | ⚪ todo | — | Netting over an oven with a sealed lid. |
 | 12:3 | ⚪ todo | — | A board projecting from the ends of an old oven; a betach. |
-| 12:4 | ⚪ todo | — | The shoe of a cradle through a hole in the ceiling. |
+| 12:4 | 🟢 modeled | ✅ 12:4/tefach<br>✅ 12:4/small |  |
 | 12:5 | 🟢 modeled | ✅ 12:5/aligned/under<br>✅ 12:5/aligned/between<br>✅ 12:5/staggered/under |  |
 | 12:6 | 🟢 modeled | ✅ 12:6/tefach-wide<br>✅ 12:6/narrow | Round beams (circumference three tefachim) not yet: the grid models square cross-sections. |
 | 12:7 | 🟢 modeled | ✅ 12:7/24-around<br>✅ 12:7/18-around |  |
@@ -216,7 +216,7 @@ Scenarios: **163** passing, **0** failing, **3** pending.
 | 17:2 | 🔵 catalog | — | Where the beis haperas ends. |
 | 17:3 | 🔵 catalog | — | Plowing that does not make a beis haperas. |
 | 17:4 | 🔵 catalog | — | Soil washed down from a beis haperas. |
-| 17:5 | ⚪ todo | — | A house with an upper story in a field with a lost grave (doorways aligned). Soil clods (catalog). |
+| 17:5 | 🟡 partial | ✅ 17:5/aligned/under-house<br>✅ 17:5/aligned/under-threshold<br>✅ 17:5/offset/under-upper-doorway | The house and upper story over a lost grave modeled. Not spatial: soil from a beis haperas or abroad combining to the size of a seal (catalog). |
 
 ## Chapter 18
 

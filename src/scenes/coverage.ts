@@ -88,7 +88,7 @@ export const COVERAGE: MishnaCoverage[] = [
   c('12:1', 'partial', 'Modeled per the Sages. Not yet: Rabbi Yochanan ben Nuri, for whom an oven, even old, protects.'),
   c('12:2', 'todo', 'Netting over an oven with a sealed lid.'),
   c('12:3', 'todo', 'A board projecting from the ends of an old oven; a betach.'),
-  c('12:4', 'todo', 'The shoe of a cradle through a hole in the ceiling.'),
+  c('12:4', 'modeled'),
   c('12:5', 'modeled'),
   c('12:6', 'modeled', 'Round beams (circumference three tefachim) not yet: the grid models square cross-sections.'),
   c('12:7', 'modeled'),
@@ -130,6 +130,6 @@ export const COVERAGE: MishnaCoverage[] = [
   c('17:2', 'catalog', 'Where the beis haperas ends.'),
   c('17:3', 'catalog', 'Plowing that does not make a beis haperas.'),
   c('17:4', 'catalog', 'Soil washed down from a beis haperas.'),
-  c('17:5', 'todo', 'A house with an upper story in a field with a lost grave (doorways aligned). Soil clods (catalog).'),
+  c('17:5', 'partial', 'The house and upper story over a lost grave modeled. Not spatial: soil from a beis haperas or abroad combining to the size of a seal (catalog).'),
   ...Array.from({ length: 10 }, (_, i) => c(`18:${i + 1}`, 'catalog', 'Beis haperas, gentile dwellings and places deemed pure: rules of status, not of space.')),
 ];
