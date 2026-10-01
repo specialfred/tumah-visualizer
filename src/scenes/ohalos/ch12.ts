@@ -1,4 +1,4 @@
-import { container, kezayis, kli, solid } from '../../engine/build';
+import { container, kezayis, kli, person, room, solid } from '../../engine/build';
 import { ETZBA, TEFACH, type Box } from '../../engine/types';
 import type { SceneObject } from '../../engine/types';
 import type { Scenario } from '../types';
@@ -92,7 +92,42 @@ function boardOnTwoOvens(): SceneObject[] {
   ];
 }
 
+// 12:4 — a cradle in an upper story stands over a hole in the floor, and its metal shoe (the foot
+// fitted under it, Bartenura) pokes down through the hole into the house below, where there is
+// tumah. A baby lies in the cradle.
+function cradleOverHole(hole: number): SceneObject[] {
+  const door = [{ side: 'y-' as const, offset: 5, width: 2, height: 4 }];
+  return [
+    ...room({ id: 'house', at: [0, 0], size: [8, 8, 6], hatches: [[3, 3, hole, hole]], openings: door }),
+    ...room({ id: 'upper', label: { en: 'Upper story', he: 'עלייה' }, at: [0, 0, 7], size: [8, 8, 6], openings: door }),
+    solid('shoe', { en: 'Shoe of the cradle', he: 'סנדל של עריסה' }, 'vessel', 'metal', [3, 3, 5.5], [0.25, 0.25, 1.75]),
+    container({ id: 'cradle', label: { en: 'Cradle', he: 'עריסה' }, material: 'wood', at: [2, 2.5, 7.25], size: [3, 2, 1.5] }),
+    person('baby', [2.5, 3, 7.5], { en: 'Baby', he: 'תינוק' }, 0.5, [2, 1]),
+    kezayis('tumah', [6, 6, 0]),
+    kli('kli-upper', [6, 6, 7], 'Vessel in the upper story'),
+  ];
+}
+
 export const ch12: Scenario[] = [
+  {
+    id: '12:4/tefach',
+    ref: '12:4',
+    title: { en: 'A cradle’s shoe through a hole a tefach square in the ceiling', he: 'סנדל של עריסה' },
+    clause: { en: 'If [the hole] is one handbreadth square, everything becomes unclean.' },
+    notes: 'The hole is open a tefach beside the shoe, so it brings the tumah of the house up into the upper story (Bartenura).',
+    scene: () => ({ objects: cradleOverHole(1.25) }),
+    expect: { 'kli-upper': 'tamei', cradle: 'tamei7', baby: 'tamei7' },
+  },
+  {
+    id: '12:4/small',
+    ref: '12:4',
+    title: { en: 'A cradle’s shoe through a hole less than a tefach in the ceiling' },
+    clause: { en: 'But if it was not [one handbreadth square] its [uncleanness] is reckoned as one reckons with [cases of contact with] a corpse.' },
+    notes:
+      'Bartenura: the shoe is in the house with the tumah; the cradle, touching it, is tamei for seven days, and the baby, touching the cradle, until evening (1:2). The shoe does not block, but it does not widen the hole either, so the upper story stays tahor.',
+    scene: () => ({ objects: cradleOverHole(0.75) }),
+    expect: { 'kli-upper': 'tahor', shoe: 'tamei7', cradle: 'tamei7', baby: 'tameiErev' },
+  },
   {
     id: '12:1/new/tumah-under',
     ref: '12:1',
