@@ -5,9 +5,9 @@ mishna’s ruling; the engine must reproduce the ruling from its general rules.
 
 🟢 modeled · 🟡 partly modeled · ⚪ not yet modeled · 🔵 not spatial (tracked as data)
 
-**27** modeled, **23** partly modeled, **45** not yet modeled, **39** not spatial — of 134 mishnayos.
+**27** modeled, **27** partly modeled, **41** not yet modeled, **39** not spatial — of 134 mishnayos.
 
-Scenarios: **175** passing, **0** failing, **5** pending.
+Scenarios: **189** passing, **0** failing, **8** pending.
 
 ## Chapter 1
 
@@ -59,8 +59,8 @@ Scenarios: **175** passing, **0** failing, **5** pending.
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
 | 5:1 | ⚪ todo | — | An oven in a house with its mouth outside (Beis Shammai, Beis Hillel, Rabbi Akiva). |
-| 5:2 | ⚪ todo | — | A perforated pot over a hatch. |
-| 5:3 | ⚪ todo | — | A whole pot over a hatch: what earthenware protects (the retraction of Beis Hillel). |
+| 5:2 | ⚪ todo | — | A perforated pot over a hatch. Beis Hillel (the halacha): the pot is tamei yet the upper story tahor, a stringency the engine cannot express: in it a tamei vessel does not block. |
+| 5:3 | 🟡 partial | ✅ 5:3/whole-pot<br>✅ 5:3/pot-mouth-down | A whole pot over a hatch, its back to the tumah, protects the upper story. Not yet: whose pot it is (Beis Shammai: one not careful about purity protects only food, drink and earthenware). |
 | 5:4 | ⚪ todo | — | A flagon of pure liquid; a woman kneading over the hatch. |
 | 5:5 | ⚪ todo | — | Vessels of dung, stone or earth over a hatch; vessels known to be pure. |
 | 5:6 | ⚪ todo | — | Vessels protect together with the walls of a tent only if they have a wall of a tefach. |
@@ -130,8 +130,8 @@ Scenarios: **175** passing, **0** failing, **5** pending.
 | 10:3 | 🟢 modeled | ✅ 10:3/split/meir<br>✅ 10:3/split/yehuda<br>✅ 10:3/split/yose<br>✅ 10:3/split/yose-two-measures |  |
 | 10:4 | 🟡 partial | ✅ 10:4/tumah-in-house/none<br>✅ 10:4/tumah-under/none<br>✅ 10:4/tumah-in-house/board-upper<br>✅ 10:4/tumah-under/board-upper<br>⏳ 10:4/tumah-in-house/board-lower<br>✅ 10:4/tumah-in-house/stone-lower<br>✅ 10:4/tumah-in-house/stone-upper | All rulings have scenarios. Pending: a board in the lower hatch, which Bartenura sees as if it stopped the upper one. |
 | 10:5 | 🟡 partial | ✅ 10:5/tumah-in-house/none<br>✅ 10:5/tumah-under/none<br>✅ 10:5/tumah-in-house/board-upper<br>✅ 10:5/tumah-in-house/board-lower<br>✅ 10:5/tumah-in-house/stone-upper<br>✅ 10:5/tumah-in-house/stone-lower<br>✅ 10:5/tumah-under/board-upper<br>⏳ 10:5/tumah-under/board-lower<br>✅ 10:5/tumah-under/stone-upper<br>✅ 10:5/tumah-under/stone-lower | All rulings have scenarios. Pending: a board in the lower hatch with tumah under it (as in 10:4). |
-| 10:6 | ⚪ todo | — | A pot under a hatch. |
-| 10:7 | ⚪ todo | — | A pot beside a threshold, touching the lintel if raised. |
+| 10:6 | 🟡 partial | ✅ 10:6/floor/below<br>✅ 10:6/floor/within<br>✅ 10:6/floor/above<br>⏳ 10:6/raised/below<br>⏳ 10:6/raised/within | The pot on the floor modeled. Pending: the pot a tefach up, which protects together with the walls of the house though smaller than the hatch (DESIGN tension 8). |
+| 10:7 | 🟡 partial | ✅ 10:7/floor/below<br>✅ 10:7/floor/within<br>✅ 10:7/floor/above<br>✅ 10:7/raised/below<br>✅ 10:7/raised/house<br>✅ 10:7/raised/within<br>✅ 10:7/raised/above<br>⏳ 10:7/short/below | The pot on the floor and a tefach up, reaching a tefach under the lintel, modeled. Pending: less than a tefach under the lintel (DESIGN tension 14). Not yet: a pot stuck to the side of the lintel. |
 
 ## Chapter 11
 
@@ -153,7 +153,7 @@ Scenarios: **175** passing, **0** failing, **5** pending.
 | --- | --- | --- | --- |
 | 12:1 | 🟡 partial | ✅ 12:1/new/tumah-under<br>✅ 12:1/new/tumah-above<br>✅ 12:1/old/tumah-under<br>✅ 12:1/old/tumah-above<br>✅ 12:1/two-ovens | Modeled per the Sages. Not yet: Rabbi Yochanan ben Nuri, for whom an oven, even old, protects. |
 | 12:2 | ⚪ todo | — | Netting over an oven with a sealed lid. |
-| 12:3 | ⚪ todo | — | A board projecting from the ends of an old oven; a betach. |
+| 12:3 | 🟡 partial | ✅ 12:3/ends<br>✅ 12:3/ends/yose | The board over the oven’s ends modeled, with Rabbi Yose. Not yet: the betach, and its projection (Rabbi Eliezer vs Rabbi Yehoshua). |
 | 12:4 | 🟢 modeled | ✅ 12:4/tefach<br>✅ 12:4/small |  |
 | 12:5 | 🟢 modeled | ✅ 12:5/aligned/under<br>✅ 12:5/aligned/between<br>✅ 12:5/staggered/under |  |
 | 12:6 | 🟢 modeled | ✅ 12:6/tefach-wide<br>✅ 12:6/narrow | Round beams (circumference three tefachim) not yet: the grid models square cross-sections. |

@@ -20,6 +20,12 @@ export interface Analysis {
   guardsInterior: boolean[];
   /** Per object: its cells are walls for connectivity (separates, guardsInterior, or a solid person). */
   blocks: boolean[];
+  /**
+   * Per object: an earthenware vessel that blocks tumah coming at it from outside, since it cannot
+   * become tamei from its outside (Bartenura on 10:6, 12:3). Not a separator: compressed tumah still
+   * breaks through it, and then it is tamei.
+   */
+  earthenwareBlocks: boolean[];
   /** Per object: rests only on people or vessels (6:1). */
   vesselSupported: boolean[];
   /** Per object: can be a roof. */
@@ -77,11 +83,19 @@ function sceneBounds(scene: Scene): { min: Vec3; max: Vec3 } {
   return { min, max };
 }
 
-export function analyze(scene: Scene, shittos: ShittosSelection = {}): Analysis {
+export interface AnalyzeOptions {
+  /** Earthenware vessels whose inside the tumah has reached: they are tamei and no longer block. */
+  earthenwareOpen?: ReadonlySet<number>;
+}
+
+export function analyze(scene: Scene, shittos: ShittosSelection = {}, opts: AnalyzeOptions = {}): Analysis {
   const props = scene.objects.map(resolveProps);
   const separates = scene.objects.map((o, i) => canSeparate(o, props[i]));
   const guardsInterior = scene.objects.map((o, i) => protectsInterior(o, props[i]));
   const brings = scene.objects.map((o, i) => canBring(o, props[i]));
+
+  // Rabbi Yose (12:3): an oven does not partition.
+  const earthenwarePartitions = shitah(shittos, 'oven-partition') !== 'yose';
 
   const b = sceneBounds(scene);
   const origin: Vec3 = [b.min[0] - MARGIN, b.min[1] - MARGIN, Math.min(b.min[2], 0) - GROUND_DEPTH];
@@ -98,6 +112,15 @@ export function analyze(scene: Scene, shittos: ShittosSelection = {}): Analysis 
     separates,
     guardsInterior,
     blocks: [],
+    earthenwareBlocks: scene.objects.map(
+      (o, i) =>
+        earthenwarePartitions &&
+        !!o.container &&
+        props[i].receivesFromInsideOnly &&
+        props[i].susceptible &&
+        !guardsInterior[i] &&
+        !opts.earthenwareOpen?.has(i),
+    ),
     vesselSupported: scene.objects.map(() => false),
     brings,
     origin,
@@ -154,7 +177,9 @@ export function analyze(scene: Scene, shittos: ShittosSelection = {}): Analysis 
   // Beis Shammai (11:3–11:6): a person's body is not hollow, so tumah does not pass through it,
   // though, like any person, it does not block what is above or below it.
   const solidPeople = shitah(shittos, 'adam-chalul') === 'beis-shammai';
-  a.blocks = scene.objects.map((o, i) => a.separates[i] || a.guardsInterior[i] || (solidPeople && o.kind === 'person'));
+  a.blocks = scene.objects.map(
+    (o, i) => a.separates[i] || a.guardsInterior[i] || a.earthenwareBlocks[i] || (solidPeople && o.kind === 'person'),
+  );
 
   computeCovered(a);
   computeOhel(a);

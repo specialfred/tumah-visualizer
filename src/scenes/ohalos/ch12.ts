@@ -108,6 +108,18 @@ function cradleOverHole(hole: number): SceneObject[] {
   ];
 }
 
+// 12:3 — a long, narrow board over the mouth of an old oven, overhanging a tefach at either end but
+// not at the sides. Tumah is under one end; a vessel is under the other.
+function boardOverOvenEnds(): SceneObject[] {
+  return [
+    oven('oven', 1, false),
+    solid('board', { en: 'Board over the oven', he: 'נסר' }, 'misc', 'wood', [0, 1, 4], [6, 4, 0.25]),
+    kezayis('tumah', [0.25, 2.75, 0], 1, SMALL),
+    kli('kli-other-end', [5.5, 2.75, 0], 'Vessel under the other end', SMALL),
+    kli('kli-in-oven', [2.5, 2.5, 0.5], 'Vessel in the oven', SMALL),
+  ];
+}
+
 export const ch12: Scenario[] = [
   {
     id: '12:4/tefach',
@@ -169,6 +181,25 @@ export const ch12: Scenario[] = [
     clause: { en: 'If there is uncleanness between them, they become unclean.' },
     scene: () => ({ objects: boardOnTwoOvens() }),
     expect: { 'kli-above': 'tamei' },
+  },
+  {
+    id: '12:3/ends',
+    ref: '12:3',
+    title: { en: 'A board over an old oven, overhanging only at the ends — tumah under one end', he: 'נסר שהוא נתון על פי תנור ישן' },
+    clause: { en: 'If there is uncleanness under one end [of the board], vessels [under] the other end remain clean.' },
+    notes: 'The oven partitions: earthenware cannot become tamei from outside, so it blocks the tumah coming at it (Bartenura).',
+    scene: () => ({ objects: boardOverOvenEnds() }),
+    expect: { 'kli-other-end': 'tahor', 'kli-in-oven': 'tahor' },
+  },
+  {
+    id: '12:3/ends/yose',
+    ref: '12:3',
+    title: { en: 'A board over an old oven, overhanging only at the ends — Rabbi Yose' },
+    clause: { en: 'Rabbi Yose declares them unclean.' },
+    notes: 'For Rabbi Yose the oven does not partition. The halacha does not follow him (Bartenura).',
+    shittos: { 'oven-partition': 'yose' },
+    scene: () => ({ objects: boardOverOvenEnds() }),
+    expect: { 'kli-other-end': 'tamei' },
   },
   {
     id: '12:5/aligned/under',
