@@ -5,9 +5,9 @@ mishna’s ruling; the engine must reproduce the ruling from its general rules.
 
 🟢 modeled · 🟡 partly modeled · ⚪ not yet modeled · 🔵 not spatial (tracked as data)
 
-**25** modeled, **20** partly modeled, **50** not yet modeled, **39** not spatial — of 134 mishnayos.
+**25** modeled, **23** partly modeled, **47** not yet modeled, **39** not spatial — of 134 mishnayos.
 
-Scenarios: **152** passing, **0** failing, **3** pending.
+Scenarios: **163** passing, **0** failing, **3** pending.
 
 ## Chapter 1
 
@@ -50,7 +50,7 @@ Scenarios: **152** passing, **0** failing, **3** pending.
 
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
-| 4:1 | 🟡 partial | ✅ 4:1/in-house/tumah-inside<br>✅ 4:1/in-house/tumah-in-house<br>✅ 4:1/gap-tefach/vessels-under<br>✅ 4:1/gap-small/vessels-under<br>✅ 4:1/gap-small/tumah-under | Modeled: cupboard in a house, gaps under it. Not yet: niches in its walls, the cupboard in the open, Rabbi Yose’s halves. |
+| 4:1 | 🟡 partial | ✅ 4:1/in-open/tumah-inside<br>✅ 4:1/in-open/tumah-in-niche<br>✅ 4:1/in-house/tumah-inside<br>✅ 4:1/in-house/tumah-in-house<br>✅ 4:1/gap-tefach/vessels-under<br>✅ 4:1/gap-small/vessels-under<br>✅ 4:1/gap-small/tumah-under | Modeled: the cupboard in the open with niches in its walls, the cupboard in a house, gaps under it. Not yet: Rabbi Yose’s halves. |
 | 4:2 | 🟢 modeled | ✅ 4:2/tumah-inside<br>✅ 4:2/tumah-in-house<br>✅ 4:2/tumah-inside/yose |  |
 | 4:3 | ⚪ todo | — | A cupboard standing in a doorway opening outward; its base under the lintel. |
 
@@ -143,7 +143,7 @@ Scenarios: **152** passing, **0** failing, **3** pending.
 | 11:4 | 🟢 modeled | ✅ 11:4/beis-hillel<br>✅ 11:4/beis-shammai<br>✅ 11:4/dressed/beis-shammai<br>✅ 11:4/two/beis-shammai |  |
 | 11:5 | 🟢 modeled | ✅ 11:5/beis-hillel<br>✅ 11:5/beis-shammai |  |
 | 11:6 | 🟢 modeled | ✅ 11:6/beis-hillel<br>✅ 11:6/beis-shammai |  |
-| 11:7 | ⚪ todo | — | A dog that ate corpse flesh, lying on a threshold. |
+| 11:7 | 🟡 partial | ✅ 11:7/under-lintel/yose<br>✅ 11:7/outside/yose | Rabbi Yose (the halacha) modeled. Not yet: Rabbi Meir (a neck a tefach wide), Rabbi Eliezer (the way out through its hind), Rabbi Yehuda ben Beseira; how long flesh stays in the belly (catalog). |
 | 11:8 | ⚪ todo | — | A cellar, a candlestick and an olive basket. |
 | 11:9 | ⚪ todo | — | Vessels between the rims of the basket and the cellar. |
 
@@ -151,7 +151,7 @@ Scenarios: **152** passing, **0** failing, **3** pending.
 
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
-| 12:1 | ⚪ todo | — | A board over the mouth of an oven, new vs old. |
+| 12:1 | 🟡 partial | ✅ 12:1/new/tumah-under<br>✅ 12:1/new/tumah-above<br>✅ 12:1/old/tumah-under<br>✅ 12:1/old/tumah-above<br>✅ 12:1/two-ovens | Modeled per the Sages. Not yet: Rabbi Yochanan ben Nuri, for whom an oven, even old, protects. |
 | 12:2 | ⚪ todo | — | Netting over an oven with a sealed lid. |
 | 12:3 | ⚪ todo | — | A board projecting from the ends of an old oven; a betach. |
 | 12:4 | ⚪ todo | — | The shoe of a cradle through a hole in the ceiling. |
@@ -203,7 +203,7 @@ Scenarios: **152** passing, **0** failing, **3** pending.
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
 | 16:1 | ⚪ todo | — | Movable things convey tumah: to one carrying them at an ox-goad’s thickness, to others at a tefach (Rabbi Akiva). |
-| 16:2 | ⚪ todo | — | A spindle stuck in a wall; a yoke over a grave. Mounds near a city (catalog). |
+| 16:2 | 🟡 partial | ✅ 16:2/yoke/narrow<br>✅ 16:2/yoke/tefach | The yoke over a grave modeled. Not yet: the spindle between two half-olives (a movable thing brings tumah onto itself at any thickness, 16:1). Mounds near a city (catalog). |
 | 16:3 | 🔵 catalog | — | Finding corpses; when a place is a graveyard. |
 | 16:4 | 🔵 catalog | — | How to search. |
 | 16:5 | 🔵 catalog | — | Ending the search; gathering bones. |

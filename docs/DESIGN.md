@@ -84,7 +84,8 @@ join in the house). The rules, in the order they apply:
 | The tent is not counted | האהל אינו מן המנין | What roofs the tumah is tamei, but what touches it is as if it touched the dead | 1:3, 15:2 |
 | Seen through a hatch | | A roof that cannot block, seen straight up from the tumah through a small hatch, counts as full of tumah | 10:5 |
 | Pillars | | A building element with the same tent on opposite sides is not a wall: tumah under it breaks up and down | 6:6, 6:7 |
-| Slopes of tents | כל שפועי אהלים כאהלים | A gap too low for a tefach cube, beside a tent and under that tent's own outer side, is part of the tent | 7:2 |
+| Slopes of tents | כל שפועי אהלים כאהלים | A gap too low for a tefach cube, beside a tent and under that tent's own outer side, is part of the tent; a hole through the thickness of the roof's own object is not (4:1) | 7:2 |
+| Swallowed tumah | רואין את הטומאה | Tumah packed inside something that is not part of the building, with no air around it, is compressed: it breaks straight up and down, and a tent it comes out into is tamei (Rabbi Yose) | 11:7 |
 | Removable in halves | | Rabbi Yose: tumah in a closed space whose only outlet is small does not go out, since it can be taken out in halves | 4:2 |
 | A person is hollow | אדם חלול | A person's body is open space under his skin, so it can be the tent that brings tumah (Beis Hillel). Beis Shammai: the body is solid; tumah does not spread through it, so he is never "full of tumah" as a whole, but he does not block: tumah under him breaks straight up through him (two people one above the other bring the tumah, 11:4) | 11:3–11:6 |
 

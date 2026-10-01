@@ -21,6 +21,21 @@ function cupboardInHouse(gap: number, extra: SceneObject[]): SceneObject[] {
   ];
 }
 
+// 4:1 — the same kind of cupboard standing in the open (in a courtyard), its walls a tefach thick
+// with a niche half a tefach square running through one of them, open inside and out, where small
+// things are kept (Bartenura). One thing is inside the cupboard and the other in the niche.
+function cupboardInOpen(tumahInNiche: boolean): SceneObject[] {
+  const c = container({ id: 'cupboard', label: { en: 'Cupboard (40 se’ah)', he: 'מגדל' }, material: 'wood', at: [0, 0, 0], size: [6, 6, 6], wall: 1, mouth: 'none', volumeSeah: 40 });
+  const inNiche: [number, number, number] = [5.5, 3, 3];
+  const inside: [number, number, number] = [2, 2, 1];
+  const small: [number, number, number] = [0.25, 0.25, 0.25];
+  return [
+    { ...c, parts: boxesMinus(c.parts, [box([5, 2.75, 2.75], [1, 0.5, 0.5])]) },
+    kezayis('tumah', tumahInNiche ? inNiche : inside, 1, small),
+    tumahInNiche ? kli('kli-inside', inside, 'Vessel inside the cupboard', small) : kli('kli-niche', inNiche, 'Needle in the niche', small),
+  ];
+}
+
 // 4:2 — a drawer of the cupboard: a closed box of 40 se'ah holding a tefach cube of space, whose
 // only outlet is a half-tefach hole facing into the house.
 function drawer(tumahInside: boolean): SceneObject[] {
@@ -34,6 +49,23 @@ function drawer(tumahInside: boolean): SceneObject[] {
 }
 
 export const ch04: Scenario[] = [
+  {
+    id: '4:1/in-open/tumah-inside',
+    ref: '4:1',
+    title: { en: 'A cupboard in the open — tumah inside it, a vessel in a niche in its wall', he: 'מגדל שהוא עומד באויר' },
+    clause: { en: 'If there is uncleanness within it, vessels in the [niches in the] thickness [of its walls] remain clean.' },
+    scene: () => ({ objects: cupboardInOpen(false) }),
+    expect: { 'kli-niche': 'tahor' },
+  },
+  {
+    id: '4:1/in-open/tumah-in-niche',
+    ref: '4:1',
+    title: { en: 'A cupboard in the open — tumah in a niche in its wall, a vessel inside' },
+    clause: { en: 'If there is uncleanness in [the niches in] its thickness, vessels inside [the cupboard] remain clean.' },
+    notes: 'The niche is too small to be a tent; the cupboard, which cannot become tamei, keeps the tumah out of its inside, so it breaks up and down.',
+    scene: () => ({ objects: cupboardInOpen(true) }),
+    expect: { 'kli-inside': 'tahor' },
+  },
   {
     id: '4:1/in-house/tumah-inside',
     ref: '4:1',

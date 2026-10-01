@@ -1,4 +1,4 @@
-import { kezayis, kli, solid } from '../../engine/build';
+import { container, kezayis, kli, solid } from '../../engine/build';
 import { ETZBA, TEFACH, type Box } from '../../engine/types';
 import type { SceneObject } from '../../engine/types';
 import type { Scenario } from '../types';
@@ -57,7 +57,84 @@ function lyingPillar(diameter: number): SceneObject[] {
   ];
 }
 
+// 12:1 — an earthenware oven standing in a courtyard, 4 tefachim square and high. A new oven has
+// not yet been fired, so it is not yet a vessel and cannot become tamei (Bartenura). A flat board
+// (no receptacle, so not a vessel) lies over its mouth, overhanging a tefach on every side.
+function oven(id: string, x: number, isNew: boolean): SceneObject {
+  return container({
+    id,
+    label: { en: isNew ? 'New oven' : 'Old oven', he: isNew ? 'תנור חדש' : 'תנור ישן' },
+    material: 'earthenware',
+    at: [x, 1, 0],
+    size: [4, 4, 4],
+    wall: 0.5,
+    props: isNew ? { susceptible: false, vessel: false } : undefined,
+  });
+}
+const SMALL: [number, number, number] = [0.25, 0.25, 0.25];
+function boardOnOven(isNew: boolean, tumahAbove: boolean): SceneObject[] {
+  return [
+    oven('oven', 1, isNew),
+    solid('board', { en: 'Board over the oven', he: 'נסר' }, 'misc', 'wood', [0, 0, 4], [6, 6, 0.25]),
+    kezayis('tumah', tumahAbove ? [0.25, 2.75, 4.25] : [0.25, 2.75, 0], 1, SMALL),
+    tumahAbove ? kli('kli-below', [5.5, 2.75, 0], 'Vessel under the board', SMALL) : kli('kli-above', [5.5, 2.75, 4.25], 'Vessel on the board', SMALL),
+  ];
+}
+
+// 12:1 — the board laid across two old ovens, with tumah on the ground between them.
+function boardOnTwoOvens(): SceneObject[] {
+  return [
+    oven('oven1', 0, false),
+    oven('oven2', 6, false),
+    solid('board', { en: 'Board across the ovens', he: 'נסר' }, 'misc', 'wood', [0, 1, 4], [10, 4, 0.25]),
+    kezayis('tumah', [4.75, 2.75, 0], 1, SMALL),
+    kli('kli-above', [8, 2.75, 4.25], 'Vessel on the board', SMALL),
+  ];
+}
+
 export const ch12: Scenario[] = [
+  {
+    id: '12:1/new/tumah-under',
+    ref: '12:1',
+    title: { en: 'A board over a new oven — tumah under its edge', he: 'נסר על פי תנור חדש' },
+    clause: { en: 'If there is uncleanness beneath [the board], vessels above it remain clean.' },
+    notes: 'The new oven is not a vessel, so the board resting on it blocks (Bartenura).',
+    scene: () => ({ objects: boardOnOven(true, false) }),
+    expect: { 'kli-above': 'tahor' },
+  },
+  {
+    id: '12:1/new/tumah-above',
+    ref: '12:1',
+    title: { en: 'A board over a new oven — tumah on it' },
+    clause: { en: 'If there is uncleanness above it, vessels beneath it remain clean.' },
+    scene: () => ({ objects: boardOnOven(true, true) }),
+    expect: { 'kli-below': 'tahor' },
+  },
+  {
+    id: '12:1/old/tumah-under',
+    ref: '12:1',
+    title: { en: 'A board over an old oven — tumah under its edge', he: 'תנור ישן' },
+    clause: { en: 'In the case of an old oven, they become unclean.' },
+    notes: 'A fired oven is a vessel, and what rests on vessels does not block (6:1).',
+    scene: () => ({ objects: boardOnOven(false, false) }),
+    expect: { 'kli-above': 'tamei' },
+  },
+  {
+    id: '12:1/old/tumah-above',
+    ref: '12:1',
+    title: { en: 'A board over an old oven — tumah on it' },
+    clause: { en: 'In the case of an old oven, they become unclean.' },
+    scene: () => ({ objects: boardOnOven(false, true) }),
+    expect: { 'kli-below': 'tamei' },
+  },
+  {
+    id: '12:1/two-ovens',
+    ref: '12:1',
+    title: { en: 'A board across two old ovens — tumah between them', he: 'על פי שני תנורים' },
+    clause: { en: 'If there is uncleanness between them, they become unclean.' },
+    scene: () => ({ objects: boardOnTwoOvens() }),
+    expect: { 'kli-above': 'tamei' },
+  },
   {
     id: '12:5/aligned/under',
     ref: '12:5',

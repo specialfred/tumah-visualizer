@@ -9,9 +9,10 @@ import { ch11 } from './ohalos/ch11';
 import { ch12 } from './ohalos/ch12';
 import { ch14 } from './ohalos/ch14';
 import { ch15 } from './ohalos/ch15';
+import { ch16 } from './ohalos/ch16';
 import type { Scenario } from './types';
 
-export const SCENARIOS: Scenario[] = [...ch01, ...ch03, ...ch04, ...ch06, ...ch07, ...ch08, ...ch10, ...ch11, ...ch12, ...ch14, ...ch15];
+export const SCENARIOS: Scenario[] = [...ch01, ...ch03, ...ch04, ...ch06, ...ch07, ...ch08, ...ch10, ...ch11, ...ch12, ...ch14, ...ch15, ...ch16];
 
 export function scenariosFor(ref: string): Scenario[] {
   return SCENARIOS.filter((s) => s.ref === ref);

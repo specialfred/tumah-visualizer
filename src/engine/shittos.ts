@@ -100,6 +100,30 @@ export const DISPUTES: Dispute[] = [
     modeled: true,
   },
   {
+    id: 'cupboard-niche-halves',
+    ref: '4:1',
+    topic: { en: 'Niches in the walls of a cupboard in the open', he: 'כלים שבעוביו' },
+    options: [
+      o('tanna-kamma', 'Tanna kamma', 'תנא קמא', 'The niches are apart from the inside: tumah in one does not reach the other.'),
+      o('yose', 'Rabbi Yose', 'רבי יוסי', 'Halves: the inner half of the wall is like the inside, the outer half like the outside.'),
+    ],
+    defaultOption: 'tanna-kamma',
+    modeled: false,
+  },
+  {
+    id: 'dog-on-threshold',
+    ref: '11:7',
+    topic: { en: 'A dead dog that ate corpse flesh, lying on the threshold', he: 'כלב שאכל בשר המת' },
+    options: [
+      o('yose', 'Rabbi Yose', 'רבי יוסי', 'We look at where the flesh lies: under the lintel and inward, the house is tamei.'),
+      o('meir', 'Rabbi Meir', 'רבי מאיר', 'Its body brings the tumah in if its neck is a tefach wide.'),
+      o('eliezer', 'Rabbi Eliezer', 'רבי אליעזר', 'The tumah goes out through its hind: the house is tamei if its hind is inside.'),
+      o('yehuda-ben-beseira', 'Rabbi Yehuda ben Beseira', 'רבי יהודה בן בתירא', 'Either way the house is tamei.'),
+    ],
+    defaultOption: 'yose',
+    modeled: false,
+  },
+  {
     id: 'drawer-halves',
     ref: '4:2',
     topic: { en: 'A drawer with a tefach space but a small opening', he: 'חלון המגדל' },

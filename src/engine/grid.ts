@@ -396,6 +396,9 @@ function joinSlopes(a: Analysis) {
     }
     const roofs = new Set(cells.map((i) => a.roofOf[i]));
     if (roofs.has(GROUND) || [...roofs].some((o) => inTent.has(o))) continue;
+    // A hole through the thickness of the roof's own object (a niche in a cupboard's wall, 4:1)
+    // is not a slope: a slope comes down over the ground.
+    if (cells.some((i) => i >= dx * dy && a.cells[i - dx * dy] === a.roofOf[i])) continue;
     // A gap between two tents is a small opening between them, not the slope of either.
     const around = new Set<number>();
     for (const i of cells) for (const j of neighbors6(a, i)) if (a.ohel[j]) around.add(a.region[j]);
