@@ -57,7 +57,14 @@ See docs/COVERAGE.md for the full list. Deferred, each needing a new idea in the
   down.
 - **14:1, 14:3** — a projection sloping down over a doorway brings tumah at any width within 12
   tefachim; needs a notion of what roofs a doorway rather than a tefach opening.
+- **Earthenware blocks from outside** — an earthenware wall is not susceptible from its outside,
+  so it blocks tumah coming at it (Bartenura on 6:2, 12:3), but not tumah from its own inside.
+  Blocking is symmetric in the engine today. This one idea unlocks 12:3, 10:6, 10:7, much of
+  chapter 5 and 11:8–11:9.
+- **4:3** — a cupboard in a doorway: tumah inside a closed vessel should go out through its own
+  door rather than all around; and the text (טמא) and Bartenura (טהור) differ on tumah in the house.
+- **11:1** other shittos — a split of 4 tefachim or a tefach: the inner part's way out runs
+  through the outer part.
 
-Good next candidates: 4:3 (a cupboard in a doorway opening outward; its wheeled base), 11:1's
-other shittos (a split of 4 tefachim or a tefach, which need the inner part's way out to run
-through the outer part), 4:1's remaining cases (niches, the cupboard in the open).
+Good next candidates: 12:4 (a cradle's leg through a hole in the ceiling), 17:5 (a house and
+upper story in a field with a lost grave), 15:8's beam used as a covering stone.

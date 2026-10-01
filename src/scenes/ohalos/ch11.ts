@@ -141,7 +141,35 @@ function onThreshold(tumahInHouse: boolean): SceneObject[] {
   return out;
 }
 
+// 11:7 — a dog that ate corpse flesh died lying across the threshold of an open doorway, its
+// neck inside. The flesh is in its belly, under the lintel or outside it.
+function deadDog(underLintel: boolean): SceneObject[] {
+  return [
+    ...room({ id: 'house', at: [0, 0], size: [8, 6, 6], openings: [{ side: 'y-', offset: 3, width: 2, height: 4 }] }),
+    solid('dog', { en: 'A dead dog on the threshold', he: 'כלב שאכל בשר המת' }, 'animal', 'flesh', [3.25, -4, 0], [1.5, 7, 1]),
+    kezayis('tumah', [3.75, underLintel ? -0.75 : -2.5, 0.25], 1, [0.5, 0.5, 0.25]),
+    kli('kli-house', [1, 4, 0], 'Vessel in the house'),
+  ];
+}
+
 export const ch11: Scenario[] = [
+  {
+    id: '11:7/under-lintel/yose',
+    ref: '11:7',
+    title: { en: 'A dead dog on the threshold — the flesh in its belly under the lintel (Rabbi Yose)', he: 'כלב שאכל בשר המת' },
+    clause: { en: 'Rabbi Yose says: we [examine to] see where the uncleanness is. If it is beneath the lintel and inwards, the house becomes unclean.' },
+    notes: 'The halacha follows Rabbi Yose (Bartenura): hidden tumah breaks up through the dog, and the house overshadows it.',
+    scene: () => ({ objects: deadDog(true) }),
+    expect: { 'kli-house': 'tamei' },
+  },
+  {
+    id: '11:7/outside/yose',
+    ref: '11:7',
+    title: { en: 'A dead dog on the threshold — the flesh in its belly outside the lintel (Rabbi Yose)' },
+    clause: { en: 'If from the lintel and outwards, the house remains clean.' },
+    scene: () => ({ objects: deadDog(false) }),
+    expect: { 'kli-house': 'tahor' },
+  },
   {
     id: '11:1/tumah-outer',
     ref: '11:1',

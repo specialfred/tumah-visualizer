@@ -311,6 +311,36 @@ class Ctx {
     // Compressed tumah does not fill the gap it is in: it reaches only what is directly above and
     // below it, even what lies right beside it (15:4, 15:7). What else it reaches depends on what
     // closes the gap off.
+    if (kind.kind === 'packed') {
+      // It breaks straight up and down through what holds it; a tent it comes out into is
+      // tamei, since we see the tumah as lying right there under that tent's roof.
+      this.retzutzahColumn(tcells, via, add, ex, 'retzutzah');
+      const { a } = this;
+      const self = a.cells[tcells[0]];
+      for (const i of tcells) {
+        const [x, y, z0] = coords(a, i);
+        for (const dz of [1, -1])
+          for (let z = z0 + dz; z >= 0 && z < a.dims[2]; z += dz) {
+            const j = idx(a, x, y, z);
+            const v = a.cells[j];
+            if (v === self) continue;
+            if (a.ohel[j]) {
+              if (!this.isInterior(j))
+                defileRegion(
+                  a.region[j],
+                  reason(
+                    'retzutzah',
+                    'The tumah is swallowed inside something with no space around it; it breaks straight through it into this tent, as if it lay here.',
+                    via,
+                  ),
+                );
+              break;
+            }
+            if (v < 0 || isStructural(a, v) || a.scene.objects[v].kind === 'tumah') break;
+          }
+      }
+      return;
+    }
     if (kind.kind === 'yotzeis') {
       this.retzutzahColumn(tcells, via, add, ex, 'retzutzah');
       for (const r of kind.ohalim)
@@ -377,21 +407,27 @@ class Ctx {
   }
 
   /** How a small gap lets its tumah out. */
-  pocketKind(r: number): { kind: 'structural' } | { kind: 'yotzeis'; ohalim: number[] } | { kind: 'boka' } {
+  pocketKind(r: number): { kind: 'structural' } | { kind: 'yotzeis'; ohalim: number[] } | { kind: 'boka' } | { kind: 'packed' } {
     const { a } = this;
     // A gap open to the outside through a tefach is not enclosed at all: it is part of the
     // outside, merely roofed over (a doorway outside a closed door).
     if (this.openTo(r, TEFACH)) return { kind: 'boka' };
     let nonStructural = false;
+    // Tumah swallowed whole inside something that is not part of the building, with no air
+    // around it at all, is compressed: we look at where it lies (11:7, Rabbi Yose).
+    const packed = this.regionCells[r].every((i) => a.cells[i] >= 0 && a.scene.objects[a.cells[i]].kind === 'tumah');
     const adj = new Set<number>();
     for (const i of this.regionCells[r])
       for (const j of neighbors6(a, i)) {
         if (a.region[j] === r) continue;
         const v = a.cells[j];
-        if (a.ohel[j]) adj.add(a.region[j]);
-        else if (!passable(a, v) && !isStructural(a, v)) nonStructural = true;
+        // Tumah goes out of the gap, but not into a vessel that guards its own inside (4:1).
+        if (a.ohel[j]) {
+          if (!this.isInterior(j)) adj.add(a.region[j]);
+        } else if (!passable(a, v) && !isStructural(a, v)) nonStructural = true;
       }
     if (!nonStructural) return { kind: 'structural' };
+    if (packed) return { kind: 'packed' };
     for (const s of this.through(this.regionCells[r], r)) adj.add(s);
     if (adj.size) return { kind: 'yotzeis', ohalim: [...adj] };
     return { kind: 'boka' };

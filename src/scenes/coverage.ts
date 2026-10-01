@@ -27,7 +27,7 @@ export const COVERAGE: MishnaCoverage[] = [
   c('3:6', 'partial', 'Modeled with intent to take the tumah out by a window (Bartenura). Not yet: an open window without intent, which the engine treats like an open door.'),
   c('3:7', 'partial', 'Drain cases modeled. Natural cavities and Rabbi Yehuda’s dispute not yet.'),
   // Chapter 4 — cupboards.
-  c('4:1', 'partial', 'Modeled: cupboard in a house, gaps under it. Not yet: niches in its walls, the cupboard in the open, Rabbi Yose’s halves.'),
+  c('4:1', 'partial', 'Modeled: the cupboard in the open with niches in its walls, the cupboard in a house, gaps under it. Not yet: Rabbi Yose’s halves.'),
   c('4:2', 'modeled'),
   c('4:3', 'todo', 'A cupboard standing in a doorway opening outward; its base under the lintel.'),
   // Chapter 5 — ovens and hatches.
@@ -81,11 +81,11 @@ export const COVERAGE: MishnaCoverage[] = [
   c('11:4', 'modeled'),
   c('11:5', 'modeled'),
   c('11:6', 'modeled'),
-  c('11:7', 'todo', 'A dog that ate corpse flesh, lying on a threshold.'),
+  c('11:7', 'partial', 'Rabbi Yose (the halacha) modeled. Not yet: Rabbi Meir (a neck a tefach wide), Rabbi Eliezer (the way out through its hind), Rabbi Yehuda ben Beseira; how long flesh stays in the belly (catalog).'),
   c('11:8', 'todo', 'A cellar, a candlestick and an olive basket.'),
   c('11:9', 'todo', 'Vessels between the rims of the basket and the cellar.'),
   // Chapter 12.
-  c('12:1', 'todo', 'A board over the mouth of an oven, new vs old.'),
+  c('12:1', 'partial', 'Modeled per the Sages. Not yet: Rabbi Yochanan ben Nuri, for whom an oven, even old, protects.'),
   c('12:2', 'todo', 'Netting over an oven with a sealed lid.'),
   c('12:3', 'todo', 'A board projecting from the ends of an old oven; a betach.'),
   c('12:4', 'todo', 'The shoe of a cradle through a hole in the ceiling.'),
@@ -121,7 +121,7 @@ export const COVERAGE: MishnaCoverage[] = [
   c('15:10', 'modeled'),
   // Chapter 16.
   c('16:1', 'todo', 'Movable things convey tumah: to one carrying them at an ox-goad’s thickness, to others at a tefach (Rabbi Akiva).'),
-  c('16:2', 'todo', 'A spindle stuck in a wall; a yoke over a grave. Mounds near a city (catalog).'),
+  c('16:2', 'partial', 'The yoke over a grave modeled. Not yet: the spindle between two half-olives (a movable thing brings tumah onto itself at any thickness, 16:1). Mounds near a city (catalog).'),
   c('16:3', 'catalog', 'Finding corpses; when a place is a graveyard.'),
   c('16:4', 'catalog', 'How to search.'),
   c('16:5', 'catalog', 'Ending the search; gathering bones.'),
