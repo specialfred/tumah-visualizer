@@ -68,6 +68,9 @@ See docs/COVERAGE.md for the full list. Deferred, each needing a new idea in the
 - **15:8** — a golel (covering stone): tamei like the grave to whoever touches it, but only the
   part over the opening (or within 4 tefachim of the grave when its end is the golel); the
   courtyard of a tomb. Needs graves and golel as a kind of tumah.
+- **10:2, 7:3** — the order of events: a foot over a small hatch before or after the tumah, intent
+  formed before or after death, a blocked doorway being reopened. The engine has no time.
+- **11:2's reed, 14:7's curtains** — DESIGN tensions 12 and 13.
 
-Good next candidates: 12:2–12:3 (a board over two ovens, once earthenware blocks from outside),
-16:2's spindle (needs 16:1's movable tumah), 4:3.
+Good next candidates: the earthenware idea above (it unlocks the most), then 16:1's movable
+tumah (16:2's spindle), 4:3.
