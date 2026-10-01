@@ -65,7 +65,6 @@ See docs/COVERAGE.md for the full list. Deferred, each needing a new idea in the
   door rather than all around; and the text (טמא) and Bartenura (טהור) differ on tumah in the house.
 - **11:1** other shittos — a split of 4 tefachim or a tefach: the inner part's way out runs
   through the outer part.
-
 - **15:8** — a golel (covering stone): tamei like the grave to whoever touches it, but only the
   part over the opening (or within 4 tefachim of the grave when its end is the golel); the
   courtyard of a tomb. Needs graves and golel as a kind of tumah.
