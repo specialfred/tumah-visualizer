@@ -4,17 +4,18 @@ import type { Scenario } from '../types';
 
 // 6:1 — a large flat stone (נדבך, per Bartenura) held up by different supports at its four
 // corners. The stone is 14×14 tefachim, a quarter-tefach thick, at head height (3 amos).
-type Support = 'people' | 'dung-vessels' | 'stones';
+type Support = 'people' | 'dung-vessels' | 'stones' | 'animals';
 function stoneOn(support: Support, tumahBelow: boolean): SceneObject[] {
   const h = 18;
   const S = 14;
   const supports = [0, 1, 2, 3].map((n): SceneObject => {
     const id = `support${n + 1}`;
-    const [w, d] = support === 'people' ? [6, 6] : [1, 1];
+    const [w, d] = support === 'people' ? [6, 6] : support === 'animals' ? [2, 2] : [1, 1];
     const x = n % 2 ? S - w : 0;
     const y = n < 2 ? 0 : S - d;
     if (support === 'people') return person(id, [x, y, 0], 'Bearer', h);
     if (support === 'stones') return solid(id, 'Stone', 'misc', 'stone', [x, y, 0], [1, 1, h]);
+    if (support === 'animals') return solid(id, { en: 'Animal', he: 'בהמה' }, 'animal', 'flesh', [x, y, 0], [w, d, h]);
     return container({ id, label: 'Dung vessel', material: 'dung', at: [x, y, 0], size: [1, 1, h], wall: 0.25 });
   });
   return [
@@ -206,6 +207,25 @@ export const ch06: Scenario[] = [
     expect: { 'kli-below': 'tamei' },
   },
   {
+    id: '6:1/people/tumah-below/eliezer',
+    ref: '6:1',
+    title: { en: 'A stone carried by people — tumah beneath it (Rabbi Eliezer)' },
+    clause: { en: 'Rabbi Eliezer declares them clean.' },
+    notes: 'The halacha does not follow Rabbi Eliezer (Bartenura).',
+    shittos: { 'ohel-adam': 'eliezer' },
+    scene: () => ({ objects: stoneOn('people', true) }),
+    expect: { 'kli-top': 'tahor' },
+  },
+  {
+    id: '6:1/people/tumah-above/eliezer',
+    ref: '6:1',
+    title: { en: 'A stone carried by people — tumah on it (Rabbi Eliezer)' },
+    clause: { en: 'Rabbi Eliezer declares them clean.' },
+    shittos: { 'ohel-adam': 'eliezer' },
+    scene: () => ({ objects: stoneOn('people', false) }),
+    expect: { 'kli-below': 'tahor' },
+  },
+  {
     id: '6:1/dung-vessels/tumah-below',
     ref: '6:1',
     title: { en: 'A stone on four dung vessels — tumah beneath it' },
@@ -227,6 +247,23 @@ export const ch06: Scenario[] = [
     title: { en: 'A stone on four stones — tumah on it' },
     clause: { en: 'If there is uncleanness upon it vessels beneath it remain clean.' },
     scene: () => ({ objects: stoneOn('stones', false) }),
+    expect: { 'kli-below': 'tahor' },
+  },
+  {
+    id: '6:1/animals/tumah-below',
+    ref: '6:1',
+    title: { en: 'A stone resting on four animals — tumah beneath it', he: 'דבר שיש בו רוח חיים' },
+    clause: { en: '[If it] is placed on four stones or on any living creature, If there is uncleanness beneath it, vessels upon it remain clean.' },
+    notes: 'Bartenura: any living creature except a person. An animal cannot become tamei and is not a vessel, so what rests on it blocks.',
+    scene: () => ({ objects: stoneOn('animals', true) }),
+    expect: { 'kli-top': 'tahor' },
+  },
+  {
+    id: '6:1/animals/tumah-above',
+    ref: '6:1',
+    title: { en: 'A stone resting on four animals — tumah on it' },
+    clause: { en: 'If there is uncleanness upon it vessels beneath it remain clean.' },
+    scene: () => ({ objects: stoneOn('animals', false) }),
     expect: { 'kli-below': 'tahor' },
   },
   {

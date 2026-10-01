@@ -150,7 +150,7 @@ export function analyze(scene: Scene, shittos: ShittosSelection = {}): Analysis 
   a.objCells = scene.objects.map(() => []);
   for (let i = 0; i < n; i++) if (cells[i] >= 0) a.objCells[cells[i]].push(i);
 
-  computeSupport(a);
+  computeSupport(a, shitah(shittos, 'ohel-adam') === 'eliezer');
   // Beis Shammai (11:3–11:6): a person's body is not hollow, so tumah does not pass through it,
   // though, like any person, it does not block what is above or below it.
   const solidPeople = shitah(shittos, 'adam-chalul') === 'beis-shammai';
@@ -169,9 +169,10 @@ export function passable(a: Analysis, v: number): boolean {
 
 /**
  * 6:1: a tent resting on people or on vessels (even vessels that cannot become tamei) defiles but
- * does not purify. An object whose every support is a person or a vessel cannot separate.
+ * does not purify. An object whose every support is a person or a vessel cannot separate. Rabbi
+ * Eliezer: a tent held up by people does purify, so only vessels count here.
  */
-function computeSupport(a: Analysis) {
+function computeSupport(a: Analysis, peopleSupport: boolean) {
   a.scene.objects.forEach((o, oi) => {
     if (!a.separates[oi] || o.kind === 'structure') return;
     const supporters = new Set<number>();
@@ -186,7 +187,7 @@ function computeSupport(a: Analysis) {
         }
     if (supporters.size === 0) return;
     const allVesselsOrPeople = [...supporters].every(
-      (v) => v >= 0 && (a.props[v].vessel || a.scene.objects[v].kind === 'person'),
+      (v) => v >= 0 && (a.props[v].vessel || (!peopleSupport && a.scene.objects[v].kind === 'person')),
     );
     if (allVesselsOrPeople) {
       a.vesselSupported[oi] = true;

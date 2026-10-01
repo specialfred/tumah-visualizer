@@ -15,8 +15,11 @@ function splitHouse(tumahOuter: boolean): SceneObject[] {
   ];
 }
 
-// 11:2 — a portico (a roof on pillars) split across its roof.
-function splitPortico(leg: boolean): SceneObject[] {
+// 11:2 — a portico (a roof on pillars) split across its roof. Something may lie across the split:
+// a leg or a reed on the roof over it, or a reed on the floor under it (Bartenura), flat or raised.
+type AcrossSplit = 'none' | 'leg' | 'reed-above' | 'reed-floor' | 'reed-raised';
+function splitPortico(across: AcrossSplit): SceneObject[] {
+  const reed = (z: number) => solid('reed', { en: 'A reed across the split', he: 'קנה' }, 'plant', 'reed', [3.5, 2.75, z], [3.25, 0.25, 0.25]);
   const pillar = (id: string, x: number, y: number) => solid(id, 'Pillar', 'structure', 'stone', [x, y, 0], [1, 1, 6]);
   const roof = box([0, 0, 6], [10, 6, 1]);
   const crack = box([5, 0, 6], [0.25, 6, 1]);
@@ -28,7 +31,8 @@ function splitPortico(leg: boolean): SceneObject[] {
     pillar('p4', 9, 5),
     kezayis('tumah', [2, 3, 0]),
     kli('v-far', [8, 3, 0], 'Vessel on the other side of the split'),
-    ...(leg ? [solid('leg', { en: 'A leg across the split', he: 'רגלו' }, 'person', 'flesh', [4.5, 2.5, 7], [1.25, 1, 0.5])] : []),
+    ...(across === 'leg' ? [solid('leg', { en: 'A leg across the split', he: 'רגלו' }, 'person', 'flesh', [4.5, 2.5, 7], [1.25, 1, 0.5])] : []),
+    ...(across === 'reed-above' ? [reed(7)] : across === 'reed-floor' ? [reed(0)] : across === 'reed-raised' ? [reed(1)] : []),
   ];
 }
 
@@ -191,7 +195,7 @@ export const ch11: Scenario[] = [
     ref: '11:2',
     title: { en: 'A split portico', he: 'אכסדרה שנסדקה' },
     clause: { en: 'If there is uncleanness on the one side, vessels on the other side remain clean.' },
-    scene: () => ({ objects: splitPortico(false) }),
+    scene: () => ({ objects: splitPortico('none') }),
     expect: { 'v-far': 'tahor' },
   },
   {
@@ -199,7 +203,35 @@ export const ch11: Scenario[] = [
     ref: '11:2',
     title: { en: 'A split portico — a leg across the split' },
     clause: { en: 'If a person placed his leg or a reed above [the split], he has combined [with the roof to bring the] uncleanness.' },
-    scene: () => ({ objects: splitPortico(true) }),
+    scene: () => ({ objects: splitPortico('leg') }),
+    expect: { 'v-far': 'tamei' },
+  },
+  {
+    id: '11:2/reed-above',
+    ref: '11:2',
+    title: { en: 'A split portico — a reed laid over the split' },
+    clause: { en: 'If a person placed his leg or a reed above [the split], he has combined [with the roof to bring the] uncleanness.' },
+    status: 'pending',
+    notes: 'A reed is narrower than a tefach, and the engine joins the halves only through a passage a tefach wide (DESIGN tension 12).',
+    scene: () => ({ objects: splitPortico('reed-above') }),
+    expect: { 'v-far': 'tamei' },
+  },
+  {
+    id: '11:2/reed-floor',
+    ref: '11:2',
+    title: { en: 'A split portico — a reed lying on the floor under the split' },
+    clause: { en: 'If he placed the reed on the ground, it does not form a passage for the uncleanness until it is one handbreadth off the ground.' },
+    scene: () => ({ objects: splitPortico('reed-floor') }),
+    expect: { 'v-far': 'tahor' },
+  },
+  {
+    id: '11:2/reed-raised',
+    ref: '11:2',
+    title: { en: 'A split portico — a reed under the split, a tefach off the floor' },
+    clause: { en: '...until it is one handbreadth off the ground.' },
+    status: 'pending',
+    notes: 'Like 11:3’s thick cloak, but a reed is narrower than a tefach; the engine does not join the halves through it (DESIGN tension 12).',
+    scene: () => ({ objects: splitPortico('reed-raised') }),
     expect: { 'v-far': 'tamei' },
   },
   {

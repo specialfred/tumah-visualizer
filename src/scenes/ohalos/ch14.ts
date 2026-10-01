@@ -164,4 +164,20 @@ export const ch14: Scenario[] = [
     scene: () => ({ objects: projections(0.75, 1, 'under') }),
     expect: { 'v-under': 'tahor', 'v-above': 'tamei' },
   },
+  {
+    id: '14:7/narrow/between',
+    ref: '14:7',
+    title: { en: 'Projections narrower than a tefach — tumah between them' },
+    clause: { en: 'If there is uncleanness beneath, between or above them, the uncleanness cleaves upwards and downwards.' },
+    scene: () => ({ objects: projections(0.75, 1, 'between') }),
+    expect: { 'v-above': 'tamei', 'v-between': 'tahor', 'v-under': 'tahor' },
+  },
+  {
+    id: '14:7/narrow/above',
+    ref: '14:7',
+    title: { en: 'Projections narrower than a tefach — tumah above them' },
+    clause: { en: 'If there is uncleanness beneath, between or above them, the uncleanness cleaves upwards and downwards.' },
+    scene: () => ({ objects: projections(0.75, 1, 'above') }),
+    expect: { 'v-above': 'tamei', 'v-between': 'tahor', 'v-under': 'tahor' },
+  },
 ];
