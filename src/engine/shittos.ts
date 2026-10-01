@@ -61,6 +61,17 @@ export const DISPUTES: Dispute[] = [
     modeled: true,
   },
   {
+    id: 'ohel-adam',
+    ref: '6:1',
+    topic: { en: 'A tent held up by people', he: 'אדם וכלים עושין אהלים לטמא' },
+    options: [
+      o('tanna-kamma', 'Tanna kamma', 'תנא קמא', 'People and vessels make tents to defile but not to purify: what they hold up does not block.'),
+      o('eliezer', 'Rabbi Eliezer', 'רבי אליעזר', 'A tent held up by people blocks as well: vessels on the other side are tahor.'),
+    ],
+    defaultOption: 'tanna-kamma',
+    modeled: true,
+  },
+  {
     id: 'pillar-capital',
     ref: '6:7',
     topic: { en: 'Vessels under the capital of a pillar with tumah beneath it', he: 'כלים שתחת הפרח' },

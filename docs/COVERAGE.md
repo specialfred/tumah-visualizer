@@ -5,9 +5,9 @@ mishna’s ruling; the engine must reproduce the ruling from its general rules.
 
 🟢 modeled · 🟡 partly modeled · ⚪ not yet modeled · 🔵 not spatial (tracked as data)
 
-**26** modeled, **24** partly modeled, **45** not yet modeled, **39** not spatial — of 134 mishnayos.
+**27** modeled, **23** partly modeled, **45** not yet modeled, **39** not spatial — of 134 mishnayos.
 
-Scenarios: **168** passing, **0** failing, **3** pending.
+Scenarios: **175** passing, **0** failing, **5** pending.
 
 ## Chapter 1
 
@@ -70,7 +70,7 @@ Scenarios: **168** passing, **0** failing, **3** pending.
 
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
-| 6:1 | 🟡 partial | ✅ 6:1/people/tumah-below<br>✅ 6:1/people/tumah-above<br>✅ 6:1/dung-vessels/tumah-below<br>✅ 6:1/stones/tumah-below<br>✅ 6:1/stones/tumah-above | Supports modeled. Not yet: Rabbi Eliezer; “any living creature” as support. |
+| 6:1 | 🟢 modeled | ✅ 6:1/people/tumah-below<br>✅ 6:1/people/tumah-above<br>✅ 6:1/people/tumah-below/eliezer<br>✅ 6:1/people/tumah-above/eliezer<br>✅ 6:1/dung-vessels/tumah-below<br>✅ 6:1/stones/tumah-below<br>✅ 6:1/stones/tumah-above<br>✅ 6:1/animals/tumah-below<br>✅ 6:1/animals/tumah-above |  |
 | 6:2 | 🟢 modeled | ✅ 6:2/figs-stand<br>✅ 6:2/figs-in-barrel<br>✅ 6:2/jars-plaster-stands<br>✅ 6:2/jars-plaster-on-jars<br>✅ 6:2/door-stands<br>✅ 6:2/door-on-key | The straw basket follows the barrel of figs. |
 | 6:3 | 🟢 modeled | ✅ 6:3/inner-half<br>✅ 6:3/outer-half<br>✅ 6:3/middle/chachamim<br>✅ 6:3/middle/meir<br>✅ 6:3/outer-half/yehuda |  |
 | 6:4 | 🟢 modeled | ✅ 6:4/lower-half<br>✅ 6:4/upper-half<br>✅ 6:4/middle<br>✅ 6:4/lower-half/yehuda<br>✅ 6:4/vessel-lower-half/tumah-below<br>✅ 6:4/vessel-lower-half/tumah-above<br>✅ 6:4/vessel-middle/tumah-above | Vessels in a wall between two houses (first half of the mishna) follow the same rule; no separate scenario yet. |
@@ -138,7 +138,7 @@ Scenarios: **168** passing, **0** failing, **3** pending.
 | Mishna | Status | Scenarios | Notes |
 | --- | --- | --- | --- |
 | 11:1 | 🟡 partial | ✅ 11:1/tumah-outer<br>✅ 11:1/tumah-inner/beis-hillel | Beis Hillel (a split of any size) modeled. Not yet: Beis Shammai (4 tefachim) and Rabbi Yose (a tefach). |
-| 11:2 | 🟡 partial | ✅ 11:2/split<br>✅ 11:2/leg | The split and a leg over it modeled. Not yet: a reed, which joins only a tefach off the ground. |
+| 11:2 | 🟡 partial | ✅ 11:2/split<br>✅ 11:2/leg<br>⏳ 11:2/reed-above<br>✅ 11:2/reed-floor<br>⏳ 11:2/reed-raised | The split, a leg over it and a reed on the floor modeled. Pending: a reed over the split, or under it a tefach up (narrower than a tefach; DESIGN tension 12). |
 | 11:3 | 🟢 modeled | ✅ 11:3/cloak-low<br>✅ 11:3/cloak-raised<br>✅ 11:3/person/beis-hillel<br>✅ 11:3/person/beis-shammai | Folded garments are modeled under 15:1, which repeats them. |
 | 11:4 | 🟢 modeled | ✅ 11:4/beis-hillel<br>✅ 11:4/beis-shammai<br>✅ 11:4/dressed/beis-shammai<br>✅ 11:4/two/beis-shammai |  |
 | 11:5 | 🟢 modeled | ✅ 11:5/beis-hillel<br>✅ 11:5/beis-shammai |  |
@@ -181,7 +181,7 @@ Scenarios: **168** passing, **0** failing, **3** pending.
 | 14:4 | 🟡 partial | ✅ 14:4/tumah-in-house<br>✅ 14:4/tumah-under | Modeled per Rabbi Yehoshua (the halacha). Not yet: Rabbi Eliezer, and the courtyard surrounded by a portico. |
 | 14:5 | 🟡 partial | ✅ 14:5/tefach-apart/under<br>✅ 14:5/tefach-apart/between<br>✅ 14:5/tefach-apart/above<br>✅ 14:5/overlap-tefach/under<br>✅ 14:5/overlap-tefach/between<br>⏳ 14:5/overlap-less/under | An overlap of less than a tefach (Rabbi Eliezer vs Rabbi Yehoshua) is pending. |
 | 14:6 | 🟢 modeled | ✅ 14:6/no-space/under<br>✅ 14:6/no-space/between |  |
-| 14:7 | 🟡 partial | ✅ 14:7/narrow/under | Two curtains, the lower a tefach off the ground. |
+| 14:7 | 🟡 partial | ✅ 14:7/narrow/under<br>✅ 14:7/narrow/between<br>✅ 14:7/narrow/above | Narrow projections modeled. Not yet: two curtains, the lower a tefach off the ground (DESIGN tension 13). |
 
 ## Chapter 15
 

@@ -39,7 +39,7 @@ export const COVERAGE: MishnaCoverage[] = [
   c('5:6', 'todo', 'Vessels protect together with the walls of a tent only if they have a wall of a tefach.'),
   c('5:7', 'todo', 'A basket on pegs outside a wall; a pot hanging from a beam (Rabbi Akiva vs Sages).'),
   // Chapter 6.
-  c('6:1', 'partial', 'Supports modeled. Not yet: Rabbi Eliezer; “any living creature” as support.'),
+  c('6:1', 'modeled'),
   c('6:2', 'modeled', 'The straw basket follows the barrel of figs.'),
   c('6:3', 'modeled'),
   c('6:4', 'modeled', 'Vessels in a wall between two houses (first half of the mishna) follow the same rule; no separate scenario yet.'),
@@ -76,7 +76,7 @@ export const COVERAGE: MishnaCoverage[] = [
   c('10:7', 'todo', 'A pot beside a threshold, touching the lintel if raised.'),
   // Chapter 11.
   c('11:1', 'partial', 'Beis Hillel (a split of any size) modeled. Not yet: Beis Shammai (4 tefachim) and Rabbi Yose (a tefach).'),
-  c('11:2', 'partial', 'The split and a leg over it modeled. Not yet: a reed, which joins only a tefach off the ground.'),
+  c('11:2', 'partial', 'The split, a leg over it and a reed on the floor modeled. Pending: a reed over the split, or under it a tefach up (narrower than a tefach; DESIGN tension 12).'),
   c('11:3', 'modeled', 'Folded garments are modeled under 15:1, which repeats them.'),
   c('11:4', 'modeled'),
   c('11:5', 'modeled'),
@@ -107,7 +107,7 @@ export const COVERAGE: MishnaCoverage[] = [
   c('14:4', 'partial', 'Modeled per Rabbi Yehoshua (the halacha). Not yet: Rabbi Eliezer, and the courtyard surrounded by a portico.'),
   c('14:5', 'partial', 'An overlap of less than a tefach (Rabbi Eliezer vs Rabbi Yehoshua) is pending.'),
   c('14:6', 'modeled'),
-  c('14:7', 'partial', 'Two curtains, the lower a tefach off the ground.'),
+  c('14:7', 'partial', 'Narrow projections modeled. Not yet: two curtains, the lower a tefach off the ground (DESIGN tension 13).'),
   // Chapter 15.
   c('15:1', 'modeled'),
   c('15:2', 'modeled', 'Not yet: Bartenura’s note that tumah inside the square is kept in (DESIGN tension 11).'),

@@ -191,6 +191,16 @@ either resolved by a distinction the model now encodes, or open.
    bottomless frame a table sits on is kept in by it. But the table top over it is a vessel,
    which counts as full of tumah and brings it down under its overhang (6:1, 9:2). *Open*: the
    engine follows 6:1; no scenario asserts Bartenura's reading.
+12. **A reed across a split** (11:2 vs 11:3). A split portico's two halves are joined by a leg or a
+   reed laid over the split, and by a reed lying under it a tefach off the floor. The engine joins
+   tents only through a passage a tefach cube fits, so a tefach-wide leg joins but a reed (narrower)
+   does not, and a thick cloak a tefach up joins (11:3) but a reed does not. One reading: a split
+   bridged anywhere is no longer a split but a small hole, and what is under a small hole in a
+   roof is under the roof. That would touch every small-hatch case (10:2, 10:5, 12:4). *Open*: the
+   reed scenarios are pending.
+13. **Curtains one above the other** (14:7, וכן שתי יריעות). Bartenura: curtains a tefach apart
+   have the law of the projections. But a cloth tent is susceptible, and the engine treats it as
+   not blocking (7:2), unlike stone projections. *Open*: not modeled.
 
 ## Roadmap
 
